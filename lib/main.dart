@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:medisafe/screens/Menu.dart';
+import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/homeScreen/HomeScreen.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 import 'package:medisafe/screens/recomScreen/RecomScreen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+ 
+  runApp(
+     MultiProvider(
+      providers: [
+       ChangeNotifierProvider(
+          create: (_) => HomeProvider()
+        ),],
+    child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -42,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  final screens = [HomeScreen(),RecomScreen(),MedicamentScreen(),ProfilScreen()];
+  final screens = [const HomeScreen(),RecomScreen(),MedicamentScreen(),ProfilScreen()];
 
   @override
   Widget build(BuildContext context) {
