@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ScrollController _controller = ScrollController();
+  bool _init = true;
+  void _animateToIndex(int index, double _width) {
+    _controller.animateTo(
+      (index-1) * _width,
+      duration: Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   Widget getAgn(int day, double size, BuildContext context) {
     var selectedDay = Provider.of<HomeProvider>(context, listen: true);
     return Container(
@@ -52,23 +63,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("zozo");
     var size = MediaQuery.of(context).size;
+    var selectedDay = Provider.of<HomeProvider>(context, listen: true);
+
     return Scaffold(
         appBar: AppBar(
-            title: TextButton(
-                style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size(0, 0)),
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  splashFactory: NoSplash.splashFactory,
-                ),
-                onPressed: () {
-                  print("test");
-                },
-                child: CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 38, 58, 167),
-                  child: const Text('HE'),
-                )),
+            title: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                  borderRadius: BorderRadius.circular(90),
+                  onTap: (() {
+                    //TODO:
+                  }),
+                  splashColor: Colors.white24,
+                  child: CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 38, 58, 167),
+                    child: const Text('HE'),
+                  )),
+            ),
             shadowColor: Colors.transparent,
             backgroundColor: Color.fromARGB(255, 246, 246, 246),
             automaticallyImplyLeading: false,
@@ -88,41 +100,103 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         body: Column(children: [
           SizedBox(
-            height: 80,
+            height: 150,
             child: Container(
-                child: Container(
-              margin: EdgeInsets.only(top: 8, bottom: 8),
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: days.length,
-                itemBuilder: (ctx, index) {
-                  return Column(children: [
-                    Container(
-                      height: 20,
-                      width: size.width / 7.0,
-                      child: Text(
-                        names[index % 7],
-                        textAlign: TextAlign.center,
-                      ),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 246, 246, 246),
+                boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(62, 117, 117, 117),
+                      spreadRadius: 1,
+                      blurRadius: 8,
+                      offset: const Offset(0, 4)
+                    )
+                  ]
+              ),
+                
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                            margin:
+                                EdgeInsets.only(left: 20, top: 12, bottom: 16),
+                            child: Text("Calender",
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold))),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            DatePicker.showDatePicker(context,
+                                showTitleActions: true,
+                                minTime: DateTime(2023, 1, 1),
+                                maxTime: DateTime(2024, 12, 30),
+                                onConfirm: (date) {
+                              selectedDay.setSelectedDay(date.day);
+                              _animateToIndex(date.day, size.width / 7.0);
+                            },
+                                currentTime: DateTime.now(),
+                                locale: LocaleType.fr);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(right: 20),
+                            child: Icon(
+                              IconData(0xf06ae, fontFamily: 'MaterialIcons'),
+                              size: 30,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                     Container(
-                      height: size.width / 7.0 * (1 - 4 / 10) + 4,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 4),
-                        width: size.width / 7.0,
-                        child: Center(
-                          child: getAgn(days[index],
-                              size.width / 7.0 * (1 - 4 / 10), context),
-                        ),
+                      height: 70,
+                      margin: EdgeInsets.only(top: 8, bottom: 8),
+                      child: ListView.builder(
+                        controller: _controller,
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: days.length,
+                        itemBuilder: (ctx, index) {
+                          _init
+                              ? _animateToIndex(
+                                  DateTime.now().day - 1, size.width / 7.0)
+                              : null;
+                          _init = false;
+                          return Column(children: [
+                            Container(
+                              height: 20,
+                              width: size.width / 7.0,
+                              child: Text(
+                                names[index % 7],
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Container(
+                              height: size.width / 7.0 * (1 - 4 / 10) + 4,
+                              child: Container(
+                                margin: EdgeInsets.only(top: 4),
+                                width: size.width / 7.0,
+                                child: Center(
+                                  child: getAgn(days[index],
+                                      size.width / 7.0 * (1 - 4 / 10), context),
+                                ),
+                              ),
+                            )
+                          ]);
+                        },
                       ),
-                    )
-                  ]);
-                },
-              ),
-            )),
+                    ),
+                    
+                  ],
+                )),
           ),
-          Expanded(child: HomeScreenContent())
+          Expanded(child:Container(
+            margin: EdgeInsets.only(top: 16),
+            child:  HomeScreenContent(),
+          ))
         ]));
   }
 }
@@ -200,8 +274,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                           -size.width * (1.0 - animation.value), 0.0, 0.0)
                       : Matrix4.translationValues(
                           size.width * (1.0 - animation.value), 0.0, 0.0),
-              child: Center(
-                  child: GestureDetector(
+              child:  GestureDetector(
                 // onPanUpdate: (details) {
                 //   if (details.delta.dx > 0)
                 //     selectedDay.setSelectedDay(selectedDay.getSelectedDay() + 1);
@@ -211,11 +284,59 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                 //   }
                 // },
                 child: Container(
+                  decoration: BoxDecoration(
+                   color: Color.fromARGB(255, 175, 139, 21),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                     width: size.width,
-                    height: 200,
-                    color: Colors.amberAccent[400],
-                    child: Text("azaza")),
-              )));
+                    height: 100,
+                    margin: EdgeInsets.only(left: 16,right: 16,bottom: 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 21, 49, 175),
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(8),
+                              topLeft: Radius.circular(8)
+                            )
+                          ),
+                          height: 50,
+                          child: Center(
+                            child: Text("8 PM",
+                             style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.w500)),
+                          ),),
+                          Container( 
+                             margin: EdgeInsets.only(left: 16,right: 16,bottom: 8),
+                             child: Row(
+                             crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  Image.asset(
+                                      'assets/images/med1.png',
+                                      scale: 2.5
+                                    
+                                  ),
+                                  Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text("med name"),
+                                      Text("Lorem ipsum"),
+                                      Text("Lorem ipsum")
+                                    ],
+                                  )
+                                
+                              ],
+                             ),
+                          )
+                      ],
+                    )),
+              ));
         });
   }
 }
