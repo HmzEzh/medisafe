@@ -16,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _init = true;
   void _animateToIndex(int index, double _width) {
     _controller.animateTo(
-      (index-1) * _width,
+      (index - 1) * _width,
       duration: Duration(seconds: 1),
       curve: Curves.fastOutSlowIn,
     );
@@ -102,18 +102,15 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 150,
             child: Container(
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 246, 246, 246),
-                boxShadow: [
-                    BoxShadow(
-                      color: Color.fromARGB(62, 117, 117, 117),
-                      spreadRadius: 1,
-                      blurRadius: 8,
-                      offset: const Offset(0, 4)
-                    )
-                  ]
-              ),
-                
+                decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 246, 246, 246),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color.fromARGB(62, 117, 117, 117),
+                          spreadRadius: 1,
+                          blurRadius: 8,
+                          offset: const Offset(0, 4))
+                    ]),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,19 +186,27 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                     ),
-                    
                   ],
                 )),
           ),
-          Expanded(child:Container(
-            margin: EdgeInsets.only(top: 16),
-            child:  HomeScreenContent(),
-          ))
+          Expanded(
+            child: Container(
+                margin: EdgeInsets.only(top: 16), child: HomeScreenContent()),
+          )
         ]));
   }
 }
 
+List<String> meds = [
+  "assets/images/med1.png",
+  "assets/images/med2.png",
+  "assets/images/med3.png",
+  "assets/images/med4.png",
+  "assets/images/med5.png",
+  "assets/images/med6.png"
+];
 List<String> names = ["lun", "mar", "mer", "jeu", "ven", "sam", "dim"];
+
 List<int> days = [
   1,
   2,
@@ -274,7 +279,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                           -size.width * (1.0 - animation.value), 0.0, 0.0)
                       : Matrix4.translationValues(
                           size.width * (1.0 - animation.value), 0.0, 0.0),
-              child:  GestureDetector(
+              child: GestureDetector(
                 // onPanUpdate: (details) {
                 //   if (details.delta.dx > 0)
                 //     selectedDay.setSelectedDay(selectedDay.getSelectedDay() + 1);
@@ -283,60 +288,197 @@ class _HomeScreenContentState extends State<HomeScreenContent>
 
                 //   }
                 // },
-                child: Container(
-                  decoration: BoxDecoration(
-                   color: Color.fromARGB(255, 175, 139, 21),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                    width: size.width,
-                    height: 100,
-                    margin: EdgeInsets.only(left: 16,right: 16,bottom: 8),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 21, 49, 175),
-                            borderRadius: BorderRadius.only(
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: meds.length,
+                  itemBuilder: (ctx, index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 246, 246, 246),
+                          borderRadius: BorderRadius.only(
                               topRight: Radius.circular(8),
-                              topLeft: Radius.circular(8)
-                            )
+                              topLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8),
+                              bottomLeft: Radius.circular(8)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: Color.fromRGBO(58, 81, 96, 1)
+                                  .withOpacity(0.4),
+                              offset: Offset(-4, 5),
+                              blurRadius: 4.0,
+                            ),
+                            BoxShadow(
+                              color: Color.fromARGB(0, 255, 255, 255)
+                                  .withOpacity(0.4),
+                              offset: Offset(4, -5),
+                              blurRadius: 4.0,
+                            ),
+                          ]),
+                      margin: EdgeInsets.only(bottom: 20, left: 24, right: 24),
+                      padding: EdgeInsets.only(bottom: 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 12),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 0, 87, 209),
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(8),
+                                topLeft: Radius.circular(8),
+                              ),
+                            ),
+                            height: 45,
+                            child: Center(
+                              child: Text("8 PM",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w500)),
+                            ),
                           ),
-                          height: 50,
-                          child: Center(
-                            child: Text("8 PM",
-                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w500)),
-                          ),),
-                          Container( 
-                             margin: EdgeInsets.only(left: 16,right: 16,bottom: 8),
-                             child: Row(
-                             crossAxisAlignment: CrossAxisAlignment.center,
+                          Container(
+                            margin: EdgeInsets.only(
+                                left: 16, right: 16, bottom: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                  Image.asset(
-                                      'assets/images/med1.png',
-                                      scale: 2.5
-                                    
-                                  ),
-                                  Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text("med name"),
-                                      Text("Lorem ipsum"),
-                                      Text("Lorem ipsum")
-                                    ],
-                                  )
-                                
+                                Container(
+                                  //color: Colors.black,
+                                  margin: EdgeInsets.only(right: 16),
+                                  child: Image.asset(meds[index], scale: 3),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                        //color: Colors.blue,
+                                        margin: EdgeInsets.only(bottom: 4),
+                                        child: Text(
+                                          "med name",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500),
+                                        )),
+                                    Container(
+                                        //color: Colors.red,
+                                        child: Text("med discription")),
+                                    // Container(
+                                    //   color: Colors.green,
+                                    //   child: Text("med etat"))
+                                  ],
+                                )
                               ],
-                             ),
+                            ),
+                          ),
+                          Divider(
+                            indent: 64,
+                            thickness: 0.5,
+                            color: Colors.black,
+                            endIndent: 24,
+                          ),
+                          Container(
+                            margin:
+                                EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  //color: Colors.black,
+                                  margin: EdgeInsets.only(right: 16),
+                                  child: Image.asset(meds[index], scale: 3),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                        //color: Colors.blue,
+                                        margin: EdgeInsets.only(bottom: 4),
+                                        child: Text(
+                                          "med name",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500),
+                                        )),
+                                    Container(
+                                        //color: Colors.red,
+                                        child: Text("med discription")),
+                                    // Container(
+                                    //   color: Colors.green,
+                                    //   child: Text("med etat"))
+                                  ],
+                                )
+                              ],
+                            ),
                           )
-                      ],
-                    )),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ));
         });
   }
 }
+// Container(
+//                   decoration: BoxDecoration(
+//                    color: Color.fromARGB(255, 175, 139, 21),
+//                     borderRadius: BorderRadius.circular(8),
+//                   ),
+//                     width: size.width,
+//                     height: 100,
+//                     margin: EdgeInsets.only(left: 16,right: 16,bottom: 8),
+//                     child: Column(
+//                       mainAxisSize: MainAxisSize.min,
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       mainAxisAlignment: MainAxisAlignment.start,
+//                       children: [
+//                         Container(
+//                           decoration: BoxDecoration(
+//                           color: Color.fromARGB(255, 21, 49, 175),
+//                             borderRadius: BorderRadius.only(
+//                               topRight: Radius.circular(8),
+//                               topLeft: Radius.circular(8)
+//                             )
+//                           ),
+//                           height: 50,
+//                           child: Center(
+//                             child: Text("8 PM",
+//                              style: TextStyle(
+//                               color: Colors.white,
+//                               fontSize: 24,
+//                               fontWeight: FontWeight.w500)),
+//                           ),),
+//                           Container( 
+//                              margin: EdgeInsets.only(left: 16,right: 16,bottom: 8),
+//                              child: Row(
+//                              crossAxisAlignment: CrossAxisAlignment.center,
+//                               children: [
+//                                   Image.asset(
+//                                       'assets/images/med1.png',
+//                                       scale: 2.5
+                                    
+//                                   ),
+//                                   Column(
+//                                       mainAxisSize: MainAxisSize.min,
+//                                     children: [
+//                                       Text("med name"),
+//                                       Text("Lorem ipsum"),
+//                                       Text("Lorem ipsum")
+//                                     ],
+//                                   )
+                                
+//                               ],
+//                              ),
+//                           )
+//                       ],
+//                     ))
