@@ -73,12 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: InkWell(
                   borderRadius: BorderRadius.circular(90),
                   onTap: (() {
-                    //TODO:
+                    debugPrint('test');
                   }),
                   splashColor: Colors.white24,
-                  child: CircleAvatar(
+                  child: const CircleAvatar(
                     backgroundColor: Color.fromARGB(255, 38, 58, 167),
-                    child: const Text('HE'),
+                    child: Text('HE'),
                   )),
             ),
             shadowColor: Colors.transparent,
