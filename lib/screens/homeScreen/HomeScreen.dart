@@ -75,18 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(90),
                   onTap: (() {
                     //TODO:
-                    Navigator.push<dynamic>(
-                                      context,
-                                      MaterialPageRoute<dynamic>(
-                                        builder: (BuildContext context) =>
-                                           IntroductionAnimationScreen()
-                                      ),
-                                    );
                   }),
                   splashColor: Colors.white24,
-                  child: CircleAvatar(
+                  child: const CircleAvatar(
                     backgroundColor: Color.fromARGB(255, 38, 58, 167),
-                    child: const Text('HE'),
+                    child: Text('HE'),
                   )),
             ),
             shadowColor: Colors.transparent,
