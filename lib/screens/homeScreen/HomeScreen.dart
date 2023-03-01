@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
+import 'package:medisafe/screens/introduction_animation/introduction_animation_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -74,6 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(90),
                   onTap: (() {
                     //TODO:
+                    Navigator.push<dynamic>(
+                                      context,
+                                      MaterialPageRoute<dynamic>(
+                                        builder: (BuildContext context) =>
+                                           IntroductionAnimationScreen()
+                                      ),
+                                    );
                   }),
                   splashColor: Colors.white24,
                   child: CircleAvatar(
