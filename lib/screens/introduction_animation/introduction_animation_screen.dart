@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import 'components/care_view.dart';
@@ -22,8 +21,8 @@ class _IntroductionAnimationScreenState
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 8));
-    _animationController?.animateTo(0.2);
+        AnimationController(vsync: this, duration: Duration(seconds: 4));
+
     super.initState();
   }
 
@@ -33,38 +32,84 @@ class _IntroductionAnimationScreenState
     super.dispose();
   }
 
+  Widget listOfMesurs() {
+    return Center(
+      child: Container(
+        child: Text("List Of Mesurs"),
+      ),
+    );
+  }
+
+  Widget AddNewMesure() {
+    return ClipRect(
+      child: Stack(
+        children: [
+          RelaxView(
+            animationController: _animationController!,
+          ),
+          CareView(
+            animationController: _animationController!,
+          ),
+          MoodDiaryVew(
+            animationController: _animationController!,
+          ),
+          TopBackSkipView(
+            onBackClick: _onBackClick,
+            onSkipClick: _onSkipClick,
+            animationController: _animationController!,
+          ),
+          CenterNextButton(
+            animationController: _animationController!,
+            onNextClick: _onNextClick,
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     print(_animationController?.value);
     return Scaffold(
-      backgroundColor: Color(0xffF7EBE1),
-      body: ClipRect(
-        child: Stack(
-          children: [
-           
-            RelaxView(
-              animationController: _animationController!,
+        appBar: AppBar(
+            toolbarHeight: _animationController!.value == 0.2
+                ? 0
+                : AppBar().preferredSize.height,
+            title: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                  borderRadius: BorderRadius.circular(90),
+                  onTap: (() {
+                    //TODO:
+                  }),
+                  splashColor: Colors.white24,
+                  child: const CircleAvatar(
+                    backgroundColor: Color.fromARGB(255, 38, 58, 167),
+                    child: Text('HE'),
+                  )),
             ),
-            CareView(
-              animationController: _animationController!,
-            ),
-            MoodDiaryVew(
-              animationController: _animationController!,
-            ),
-            
-            TopBackSkipView(
-              onBackClick: _onBackClick,
-              onSkipClick: _onSkipClick,
-              animationController: _animationController!,
-            ),
-            CenterNextButton(
-              animationController: _animationController!,
-              onNextClick: _onNextClick,
-            ),
-          ],
-        ),
-      ),
-    );
+            shadowColor: Colors.transparent,
+            backgroundColor: Color.fromARGB(255, 246, 246, 246),
+            automaticallyImplyLeading: false,
+            centerTitle: false,
+            actions: [
+              TextButton(
+                  style: ButtonStyle(
+                    // minimumSize : MaterialStateProperty.all(Size(0,0)),
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    splashFactory: NoSplash.splashFactory,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _animationController?.animateTo(0.2);
+                      _animationController?.value = 0.2;
+                    });
+                  },
+                  child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
+            ]),
+        backgroundColor: Color(0xffF7EBE1),
+        body:
+            _animationController?.value == 0 ? listOfMesurs() : AddNewMesure());
   }
 
   void _onSkipClick() {
@@ -75,6 +120,10 @@ class _IntroductionAnimationScreenState
   void _onBackClick() {
     if (_animationController!.value >= 0 &&
         _animationController!.value <= 0.2) {
+      setState(() {
+        _animationController?.value = 0;
+      });
+
       _animationController?.animateTo(0.0);
     } else if (_animationController!.value > 0.2 &&
         _animationController!.value <= 0.4) {
@@ -108,6 +157,7 @@ class _IntroductionAnimationScreenState
   }
 
   void _signUpClick() {
-    Navigator.pop(context);
+    _animationController?.value = 0;
+    setState(() {});
   }
 }

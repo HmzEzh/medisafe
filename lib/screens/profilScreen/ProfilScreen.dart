@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../introduction_animation/introduction_animation_screen.dart';
+
 class ProfilScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      
       appBar: AppBar(
           title: TextButton(
               style: ButtonStyle(
@@ -139,7 +142,15 @@ class ProfilScreen extends StatelessWidget {
               child: ListView(
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                       Navigator.push<dynamic>(
+                                      context,
+                                      MaterialPageRoute<dynamic>(
+                                        builder: (BuildContext context) =>
+                                           IntroductionAnimationScreen()
+                                      ),
+                                    );
+                    },
                     child: Container(
                       margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
