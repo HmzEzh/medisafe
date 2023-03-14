@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
-import 'package:medisafe/screens/introduction_animation/introduction_animation_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,6 +13,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late int numberOfDaysInMonth;
+
+  int getTheNumberOfDaysInMonth(int year, int month) {
+    DateTime firstDayOfMonth = DateTime(year, month, 1);
+    // Add one month to get the first day of the next month
+    DateTime firstDayOfNextMonth = DateTime(year, month + 1, 1);
+    // Subtract one day from the first day of the next month to get the last day of the current month
+    DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+    // Get the day of the month for the last day of the current month
+    int numberOfDaysInMonth = lastDayOfMonth.day;
+    print(numberOfDaysInMonth); // Output: 31 (for March 2023)
+    return numberOfDaysInMonth;
+  }
+
+  @override
+  void initState() {
+    // Create a DateTime object for the first day of the month
+    numberOfDaysInMonth =
+        getTheNumberOfDaysInMonth(DateTime.now().year, DateTime.now().month);
+    super.initState();
+  }
+
   final ScrollController _controller = ScrollController();
   bool _init = true;
   void _animateToIndex(int index, double _width) {
@@ -73,9 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.transparent,
               child: InkWell(
                   borderRadius: BorderRadius.circular(90),
-                  onTap: (() {
-                    
-                  }),
+                  onTap: (() {}),
                   splashColor: Colors.white24,
                   child: const CircleAvatar(
                     backgroundColor: Color.fromARGB(255, 38, 58, 167),
@@ -131,9 +151,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             DatePicker.showDatePicker(context,
                                 showTitleActions: true,
                                 minTime: DateTime(2023, 1, 1),
-                                maxTime: DateTime(2024, 12, 30),
+                                maxTime: DateTime(2024, 12, 31),
                                 onConfirm: (date) {
                               selectedDay.setSelectedDay(date.day);
+                              selectedDay.setSelectedMonth(date.month);
+                              selectedDay.setSelectedYear(date.year);
+                              numberOfDaysInMonth = getTheNumberOfDaysInMonth(
+                                  date.year, date.month);
                               _animateToIndex(date.day, size.width / 7.0);
                             },
                                 currentTime: DateTime.now(),
@@ -156,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         controller: _controller,
                         physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
-                        itemCount: days.length,
+                        itemCount: numberOfDaysInMonth,
                         itemBuilder: (ctx, index) {
                           _init
                               ? _animateToIndex(
@@ -168,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 20,
                               width: size.width / 7.0,
                               child: Text(
-                                names[index % 7],
+                                DateFormat('EEEE').format(new DateTime(selectedDay.getSelectedYear(),selectedDay.getSelectedMonth(),index+1)).substring(0,3),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -178,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 margin: EdgeInsets.only(top: 4),
                                 width: size.width / 7.0,
                                 child: Center(
-                                  child: getAgn(days[index],
+                                  child: getAgn(index + 1,
                                       size.width / 7.0 * (1 - 4 / 10), context),
                                 ),
                               ),
