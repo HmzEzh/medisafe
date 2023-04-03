@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'MedecinScreen/MedcinsListScreen.dart';
 import '../introduction_animation/introduction_animation_screen.dart';
 
 class ProfilScreen extends StatelessWidget {
@@ -200,7 +200,15 @@ class ProfilScreen extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                       Navigator.push<dynamic>(
+                                      context,
+                                      MaterialPageRoute<dynamic>(
+                                        builder: (BuildContext context) =>
+                                           MedcinsListScreen()
+                                      ),
+                                    );
+                    },
                     child: Container(
                       margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
