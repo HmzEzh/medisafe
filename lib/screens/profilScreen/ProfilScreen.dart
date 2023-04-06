@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
 import 'MedecinScreen/MedcinsListScreen.dart';
+import 'AccountScreen/AccountScreen.dart';
 import '../introduction_animation/introduction_animation_screen.dart';
 
 class ProfilScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final double waille = MediaQuery.of(context).size.width;
+    final double haille = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      
       appBar: AppBar(
-          title: TextButton(
-              style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all(Size(0, 0)),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                splashFactory: NoSplash.splashFactory,
-              ),
-              onPressed: () {
-                print("test");
-              },
-              child: CircleAvatar(
-                backgroundColor: Color.fromARGB(255, 38, 58, 167),
-                child: const Text('HE'),
-              )),
+          title: const Text(
+            "Profil",
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.w500,
+              color: Color.fromARGB(255, 104, 118, 124),
+            ),
+          ),
           shadowColor: Colors.transparent,
           backgroundColor: Color.fromARGB(255, 246, 246, 246),
           automaticallyImplyLeading: false,
@@ -43,7 +41,11 @@ class ProfilScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                debugPrint("Presses");
+                Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                      builder: (BuildContext context) => AccountScreen()),
+                );
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -56,14 +58,16 @@ class ProfilScreen extends StatelessWidget {
                           blurRadius: 8,
                           offset: Offset(1, 4))
                     ]),
-                margin: const EdgeInsets.fromLTRB(15, 30, 15, 15),
-                padding: const EdgeInsets.all(10),
-                width: 500,
-                height: 100,
+                margin: EdgeInsets.fromLTRB(
+                    waille * 0.03, haille * 0.02, waille * 0.03, haille * 0.02),
+                padding: const EdgeInsets.all(5),
+                width: waille,
+                height: haille * 0.15,
                 child: Row(
                   children: [
                     Container(
-                      height: 80,
+                      height: haille * 0.12,
+                      width: waille * 0.25,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(color: Colors.white),
@@ -84,9 +88,9 @@ class ProfilScreen extends StatelessWidget {
                           )),
                     ),
                     Container(
-                      height: 80,
-                      width: 240,
-                      padding: const EdgeInsets.all(10),
+                      height: haille * 0.12,
+                      width: waille * 0.58,
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.white)),
                       child: Column(
@@ -96,7 +100,7 @@ class ProfilScreen extends StatelessWidget {
                             "Amine Mhani",
                             style: TextStyle(
                               fontSize: 23,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                               color: Color.fromARGB(255, 61, 77, 85),
                             ),
                           ),
@@ -104,7 +108,7 @@ class ProfilScreen extends StatelessWidget {
                             "nom, prenom, age, poids...",
                             style: TextStyle(
                               fontSize: 15,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                               color: Color.fromARGB(255, 102, 120, 129),
                             ),
                           ),
@@ -112,7 +116,7 @@ class ProfilScreen extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      height: 80,
+                      height: haille * 0.12,
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.white)),
                       child: const Icon(
@@ -126,7 +130,8 @@ class ProfilScreen extends StatelessWidget {
               ),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+              margin: EdgeInsets.fromLTRB(
+                  waille * 0.03, haille * 0.01, waille * 0.03, haille * 0.02),
               padding: const EdgeInsets.all(10),
               height: 270,
               decoration: BoxDecoration(
@@ -143,17 +148,16 @@ class ProfilScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                       Navigator.push<dynamic>(
-                                      context,
-                                      MaterialPageRoute<dynamic>(
-                                        builder: (BuildContext context) =>
-                                           IntroductionAnimationScreen()
-                                      ),
-                                    );
+                      Navigator.push<dynamic>(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                IntroductionAnimationScreen()),
+                      );
                     },
                     child: Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
                       decoration: const BoxDecoration(
                         border: Border(
                             bottom: BorderSide(
@@ -174,15 +178,15 @@ class ProfilScreen extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            width: 300,
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.white)),
                             child: const Text(
                               "Settings",
                               style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
                                   color: Color.fromARGB(255, 81, 93, 99)),
                             ),
                           ),
@@ -201,17 +205,16 @@ class ProfilScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                       Navigator.push<dynamic>(
-                                      context,
-                                      MaterialPageRoute<dynamic>(
-                                        builder: (BuildContext context) =>
-                                           MedcinsListScreen()
-                                      ),
-                                    );
+                      Navigator.push<dynamic>(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                MedcinsListScreen()),
+                      );
                     },
                     child: Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
                       decoration: const BoxDecoration(
                         border: Border(
                             bottom: BorderSide(
@@ -232,15 +235,15 @@ class ProfilScreen extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            width: 300,
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.white)),
                             child: const Text(
                               "Search",
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                                 color: Color.fromARGB(255, 81, 93, 99),
                               ),
                             ),
@@ -261,8 +264,8 @@ class ProfilScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {},
                     child: Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
                       decoration: const BoxDecoration(
                         border: Border(
                             bottom: BorderSide(
@@ -283,15 +286,15 @@ class ProfilScreen extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            width: 300,
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.white)),
                             child: const Text(
                               "Share",
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                                 color: Color.fromARGB(255, 81, 93, 99),
                               ),
                             ),
@@ -312,8 +315,8 @@ class ProfilScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {},
                     child: Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
                       decoration: const BoxDecoration(
                         border: Border(
                             bottom: BorderSide(
@@ -334,15 +337,15 @@ class ProfilScreen extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            width: 300,
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.white)),
                             child: const Text(
                               "Contacts",
                               style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                                 color: Color.fromARGB(255, 81, 93, 99),
                               ),
                             ),
@@ -363,8 +366,8 @@ class ProfilScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {},
                     child: Container(
-                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
                       child: Row(
                         children: [
                           Container(
@@ -378,15 +381,15 @@ class ProfilScreen extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                            width: 300,
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.white)),
                             child: const Text(
                               "Report",
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                                 color: Color.fromARGB(255, 81, 93, 99),
                               ),
                             ),
