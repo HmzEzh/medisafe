@@ -37,7 +37,7 @@ class ProfilScreen extends StatelessWidget {
                 child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
           ]),
       body: Center(
-        child: Column(
+        child: ListView(
           children: [
             GestureDetector(
               onTap: () {
@@ -119,10 +119,10 @@ class ProfilScreen extends StatelessWidget {
                       height: haille * 0.12,
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.white)),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_forward_ios,
                         color: Colors.blueGrey,
-                        size: 15,
+                        size: haille * 0.023,
                       ),
                     ),
                   ],
@@ -133,7 +133,7 @@ class ProfilScreen extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(
                   waille * 0.03, haille * 0.01, waille * 0.03, haille * 0.02),
               padding: const EdgeInsets.all(10),
-              height: 270,
+              height: haille * 0.33,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
@@ -144,7 +144,231 @@ class ProfilScreen extends StatelessWidget {
                         blurRadius: 8,
                         offset: Offset(1, 4)),
                   ]),
-              child: ListView(
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                          color: Color.fromARGB(255, 81, 93, 99),
+                          width: 0.5,
+                        )),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: const Icon(
+                              Icons.area_chart_outlined,
+                              size: 20,
+                              color: Color.fromARGB(255, 81, 93, 99),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: const Text(
+                              "Trackers",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 81, 93, 99),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.blueGrey,
+                              size: haille * 0.023,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                          color: Color.fromARGB(255, 81, 93, 99),
+                          width: 0.5,
+                        )),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: const Icon(
+                              Icons.search,
+                              size: 20,
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: const Text(
+                              "Search",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 81, 93, 99),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.blueGrey,
+                              size: haille * 0.023,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push<dynamic>(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                MedcinsListScreen()),
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                          color: Color.fromARGB(255, 81, 93, 99),
+                          width: 0.5,
+                        )),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: const Icon(
+                              Icons.contact_mail_outlined,
+                              size: 20,
+                              color: Color.fromARGB(255, 81, 93, 99),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: const Text(
+                              "Doctors",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 81, 93, 99),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.blueGrey,
+                              size: haille * 0.023,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.transparent)),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.transparent)),
+                            child: const Icon(
+                              Icons.analytics_outlined,
+                              size: 20,
+                              color: Color.fromARGB(255, 81, 93, 99),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.transparent)),
+                            child: const Text(
+                              "Report",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 81, 93, 99),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.transparent)),
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.blueGrey,
+                              size: haille * 0.023,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(
+                  waille * 0.03, haille * 0.01, waille * 0.03, haille * 0.02),
+              padding: const EdgeInsets.all(10),
+              height: haille * 0.17,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                        color: Color.fromARGB(62, 117, 117, 117),
+                        spreadRadius: 1,
+                        blurRadius: 8,
+                        offset: Offset(1, 4)),
+                  ]),
+              child: Column(
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -193,68 +417,10 @@ class ProfilScreen extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.white)),
-                            child: const Icon(
+                            child: Icon(
                               Icons.arrow_forward_ios,
                               color: Colors.blueGrey,
-                              size: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push<dynamic>(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                            builder: (BuildContext context) =>
-                                MedcinsListScreen()),
-                      );
-                    },
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
-                      decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                          color: Color.fromARGB(255, 81, 93, 99),
-                          width: 0.5,
-                        )),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white)),
-                            child: const Icon(
-                              Icons.search,
-                              size: 20,
-                              color: Colors.blueGrey,
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
-                            width: waille * 0.71,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white)),
-                            child: const Text(
-                              "Search",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 81, 93, 99),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white)),
-                            child: const Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.blueGrey,
-                              size: 15,
+                              size: haille * 0.023,
                             ),
                           ),
                         ],
@@ -264,15 +430,8 @@ class ProfilScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {},
                     child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
-                      decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                          color: Color.fromARGB(255, 81, 93, 99),
-                          width: 0.5,
-                        )),
-                      ),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.transparent)),
                       child: Row(
                         children: [
                           Container(
@@ -282,7 +441,7 @@ class ProfilScreen extends StatelessWidget {
                             child: const Icon(
                               Icons.share,
                               size: 20,
-                              color: Colors.blueGrey,
+                              color: Color.fromARGB(255, 81, 93, 99),
                             ),
                           ),
                           Container(
@@ -302,105 +461,10 @@ class ProfilScreen extends StatelessWidget {
                           Container(
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.white)),
-                            child: const Icon(
+                            child: Icon(
                               Icons.arrow_forward_ios,
                               color: Colors.blueGrey,
-                              size: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
-                      decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                          color: Color.fromARGB(255, 81, 93, 99),
-                          width: 0.5,
-                        )),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white)),
-                            child: const Icon(
-                              Icons.contact_mail_outlined,
-                              size: 20,
-                              color: Color.fromARGB(255, 81, 93, 99),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
-                            width: waille * 0.71,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white)),
-                            child: const Text(
-                              "Contacts",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 81, 93, 99),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white)),
-                            child: const Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.blueGrey,
-                              size: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white)),
-                            child: const Icon(
-                              Icons.analytics_outlined,
-                              size: 20,
-                              color: Color.fromARGB(255, 81, 93, 99),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
-                            width: waille * 0.71,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white)),
-                            child: const Text(
-                              "Report",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 81, 93, 99),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white)),
-                            child: const Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.blueGrey,
-                              size: 15,
+                              size: haille * 0.023,
                             ),
                           ),
                         ],
