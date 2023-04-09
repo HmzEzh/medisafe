@@ -5,10 +5,14 @@ import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 import 'package:medisafe/screens/recomScreen/RecomScreen.dart';
 import 'package:provider/provider.dart';
+import 'db/DatabaseHelper.dart';
 
-void main() {
 
- 
+final dbHelper = DatabaseHelper();
+Future<void> main() async {
+WidgetsFlutterBinding.ensureInitialized();
+  // initialize the database
+  await dbHelper.init();
   runApp(
      MultiProvider(
       providers: [

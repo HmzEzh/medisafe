@@ -5,30 +5,47 @@ class HomeProvider with ChangeNotifier {
   int selectedMonth = DateTime.now().month;
   int selectedYear = DateTime.now().year;
   int oldSelectedDay = DateTime.now().day;
+
+  bool anyChange = false;
   void setSelectedDay(int x) {
     oldSelectedDay = selectedDay;
     selectedDay = x;
     notifyListeners();
   }
+
   void setSelectedMonth(int x) {
-  
     selectedMonth = x;
     notifyListeners();
   }
+
   void setSelectedYear(int x) {
     selectedYear = x;
     notifyListeners();
   }
+
+  void setChanges() {
+    anyChange = !anyChange;
+    notifyListeners();
+  }
+
   int getSelectedDay() {
+    print(selectedDay);
     return selectedDay;
   }
+
   int getSelectedMonth() {
     return selectedMonth;
   }
+
   int getSelectedYear() {
     return selectedYear;
   }
+
   int getOldSelectedDay() {
     return oldSelectedDay;
+  }
+
+  bool getChanges() {
+    return anyChange;
   }
 }
