@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'home_design_course.dart';
+
 class MedicamentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -35,8 +37,7 @@ class MedicamentScreen extends StatelessWidget {
                   child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
             ]),
       backgroundColor: Colors.white,
-      body: const Center(
-          child: Text("medicament")),
+      body: DesignCourseHomeScreen(),
     );
   }
 }
