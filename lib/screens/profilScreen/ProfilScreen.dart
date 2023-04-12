@@ -357,7 +357,7 @@ class ProfilScreen extends StatelessWidget {
               margin: EdgeInsets.fromLTRB(
                   waille * 0.03, haille * 0.01, waille * 0.03, haille * 0.02),
               padding: const EdgeInsets.all(10),
-              height: haille * 0.17,
+              height: haille * 0.25,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
@@ -428,10 +428,24 @@ class ProfilScreen extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push<dynamic>(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                IntroductionAnimationScreen()),
+                      );
+                    },
                     child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.transparent)),
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
+                      decoration: const BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(
+                          color: Color.fromARGB(255, 102, 120, 129),
+                          width: 0.5,
+                        )),
+                      ),
                       child: Row(
                         children: [
                           Container(
@@ -451,6 +465,49 @@ class ProfilScreen extends StatelessWidget {
                                 border: Border.all(color: Colors.white)),
                             child: const Text(
                               "Share",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromARGB(255, 81, 93, 99)),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.blueGrey,
+                              size: haille * 0.023,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.transparent)),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: const Icon(
+                              Icons.logout,
+                              size: 20,
+                              color: Color.fromARGB(255, 81, 93, 99),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(waille * 0.02, 0, 0, 0),
+                            width: waille * 0.71,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.white)),
+                            child: const Text(
+                              "Logout",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,

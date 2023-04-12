@@ -41,19 +41,19 @@ class _AccountScreenState extends State<AccountScreen> {
             child: const Icon(
               Icons.edit_square,
               size: 20,
-              color: Color.fromARGB(255, 38, 58, 167),
+              color: Color.fromARGB(255, 104, 118, 124),
             ),
           ),
         ],
       ),
       body: Container(
-        color: Color.fromARGB(218, 38, 57, 167),
-        child: Column(
+        color: Colors.blue[100],
+        child: ListView(
           children: [
             /// -- IMAGE
             Container(
               padding: EdgeInsets.only(top: haille * 0.03),
-              height: haille * 0.3,
+              height: haille * 0.35,
               child: Column(
                 children: [
                   Stack(
@@ -103,14 +103,48 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                     ),
                   ),
+                  Padding(padding: EdgeInsets.all(5)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "74 Kg",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        height: 20,
+                        width: 2,
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "175 cm",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
             Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  height: haille * 0.575,
+                  padding: EdgeInsets.fromLTRB(waille * 0.07, haille * 0.03,
+                      waille * 0.07, haille * 0.03),
+                  height: haille * 0.8,
                   width: waille,
                   decoration: const BoxDecoration(
                       borderRadius: BorderRadius.vertical(
@@ -125,23 +159,110 @@ class _AccountScreenState extends State<AccountScreen> {
                             blurRadius: 8,
                             offset: Offset(1, 4)),
                       ]),
-                  child: ListView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Padding(padding: EdgeInsets.all(haille * 0.01)),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                             margin: EdgeInsets.only(bottom: 10),
-                            child: Text("description : "),
+                            child: const Text(
+                              "Email : ",
+                              style: TextStyle(fontSize: 14),
+                            ),
                           ),
                           Container(
-                            child: Text("the text of the description."),
-                          ),
+                            child: const Text(
+                              "aminemhani21@gmail.com",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 83, 82, 82),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                       const Divider(
                         color: Colors.black,
-                      )
+                      ),
+                      Padding(padding: EdgeInsets.all(haille * 0.01)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            child: const Text(
+                              "Phone number : ",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          Container(
+                            child: const Text(
+                              "+212 623-20239",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 83, 82, 82),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const Divider(
+                        color: Colors.black,
+                      ),
+                      Padding(padding: EdgeInsets.all(haille * 0.01)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            child: const Text(
+                              "Address : ",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          Container(
+                            child: const Text(
+                              "2116 Chandler Drive",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 83, 82, 82),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      const Divider(
+                        color: Colors.black,
+                      ),
+                      Padding(padding: EdgeInsets.all(haille * 0.01)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            child: const Text(
+                              "Blood Type : ",
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                          Container(
+                            child: const Text(
+                              "O+",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 83, 82, 82),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),
