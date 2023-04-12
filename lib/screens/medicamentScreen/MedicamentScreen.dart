@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'home_design_course.dart';
 
-class MedicamentScreen extends StatelessWidget {
+class MedicamentScreen extends StatefulWidget {
+  @override
+  State<MedicamentScreen> createState() => _MedicamentScreenState();
+}
+
+class _MedicamentScreenState extends State<MedicamentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(  
+      appBar: AppBar(
           title: TextButton(
                   style: ButtonStyle(
                      minimumSize : MaterialStateProperty.all(Size(0,0)),

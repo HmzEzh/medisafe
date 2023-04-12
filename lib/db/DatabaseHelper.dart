@@ -5,8 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import '../models/medcin.dart';
 
 class DatabaseHelper {
-  static const _databaseName = "pfa.db";
-  static const _databaseVersion = 1;
+  static const _databaseName = "medisafe";
+  static const _databaseVersion = 4;
 
   late Database _db;
   Database get db => _db;
@@ -17,7 +17,7 @@ class DatabaseHelper {
     final path = join(documentsDirectory.path, _databaseName);
     _db = await openDatabase(
       path,
-      version: _databaseVersion,
+      version: 1,
       onCreate: _onCreate,
     );
   }
@@ -35,6 +35,26 @@ class DatabaseHelper {
             bureau TEXT NOT NULL
           );
           ''');
+
+    await db.execute('''
+          CREATE TABLE medicament (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nom TEXT NOT NULL,
+            type TEXT NOT NULL,
+            category TEXT NOT NULL,
+            nbrDeJour TEXT NOT NULL
+          );
+          ''');
+    await db.execute('''
+          CREATE TABLE doze (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            idMedicament INTEGER NOT NULL,
+            heure TEXT NOT NULL,
+            FOREIGN KEY(idMedicament) REFERENCES medicament(id)
+          );
+          ''');
+
+    print("creating tables!!!!!!!!");
   }
   // medecin service !!
 
@@ -81,5 +101,19 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+
+
+  // -- medicament
+  Future<int> insertMedicament(String name, String type, String category, int nbrJour) async {
+    await init();
+    final data = {'nom':name, 'type':type, 'category':category,'nbrDeJour':nbrJour};
+    return await _db.insert("medicament", data);
+  }
+
+  Future<List<Map<String, dynamic>>> getMedicaments() async {
+    await init();
+    return _db.query('medicament',orderBy: "id");
   }
 }

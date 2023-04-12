@@ -3,7 +3,7 @@ import 'package:medisafe/screens/medicamentScreen/popular_course_list_view.dart'
 import 'package:medisafe/main.dart';
 import 'package:flutter/material.dart';
 import 'design_course_app_theme.dart';
-import '../introduction_animation/introduction_animation_screen.dart';
+import 'introduction_animation/introduction_animation_screen.dart';
 
 class DesignCourseHomeScreen extends StatefulWidget {
   @override
@@ -173,10 +173,14 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
                   ),
                   Container(
                    child:GestureDetector(
-                        onTap: () {
-                          // Perform action when link is clicked
-                          // For example, navigate to another screen or show a dialog
-                        },
+                     onTap: () {
+                       Navigator.push<dynamic>(
+                         context,
+                         MaterialPageRoute<dynamic>(
+                           builder: (BuildContext context) => IntroductionAnimationScreen(),
+                         ),
+                       );
+                     },
                         child: const Text(
                           'new \u2192',
                           textAlign: TextAlign.left,
@@ -210,12 +214,12 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
   }
 
   void moveTo() {
-    Navigator.push<dynamic>(
-      context,
-      MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => IntroductionAnimationScreen(),
-      ),
-    );
+    // Navigator.push<dynamic>(
+    //   context,
+    //   MaterialPageRoute<dynamic>(
+    //     builder: (BuildContext context) => IntroductionAnimationScreen(),
+    //   ),
+    // );
   }
 
   Widget getButtonUI(CategoryType categoryTypeData, bool isSelected) {

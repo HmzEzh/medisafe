@@ -1,3 +1,4 @@
+import 'package:medisafe/db/DatabaseHelper.dart';
 import 'package:medisafe/screens/medicamentScreen/design_course_app_theme.dart';
 import 'package:medisafe/screens/medicamentScreen/models/category.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,7 @@ class _CategoryListViewState extends State<CategoryListView>
   }
 }
 
-class CategoryView extends StatelessWidget {
+class CategoryView extends StatefulWidget {
   const CategoryView(
       {Key? key,
       this.category,
@@ -93,24 +94,53 @@ class CategoryView extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
+  @override
+  State<CategoryView> createState() => _CategoryViewState();
+}
 
+class _CategoryViewState extends State<CategoryView> {
+  DatabaseHelper medicamentService = new DatabaseHelper();
+
+  List<Map<String, dynamic>> _journals = [];
+
+  bool _isLoading = true;
+
+  void _refreshJournals() async{
+    final data = await medicamentService.getMedicaments();
+    for(int i=0;i<data.length;i++){
+      print("nombre dsata = ${data[i]}");
+    }
+
+    setState(() {
+      _journals = data;
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _refreshJournals();
+    print("nombre de medi = ${_journals.length}");
+  }
 
 
   @override
   Widget build(BuildContext context) {
 
-    bool ai = category!.etat ? true : false;  
+
     return AnimatedBuilder(
-      animation: animationController!,
+      animation: widget.animationController!,
       builder: (BuildContext context, Widget? child) {
         return FadeTransition(
-          opacity: animation!,
+          opacity: widget.animation!,
           child: Transform(
             transform: Matrix4.translationValues(
-                100 * (1.0 - animation!.value), 0.0, 0.0),
+                100 * (1.0 - widget.animation!.value), 0.0, 0.0),
             child: InkWell(
               splashColor: Colors.transparent,
-              onTap: callback,
+              onTap: widget.callback,
               child: SizedBox(
                 width: 280,
                 child: Stack(
@@ -141,7 +171,7 @@ class CategoryView extends StatelessWidget {
                                             padding:
                                                 const EdgeInsets.only(top: 16),
                                             child: Text(
-                                              category!.title,
+                                              widget.category!.title,
                                               textAlign: TextAlign.left,
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -166,7 +196,7 @@ class CategoryView extends StatelessWidget {
                                                   CrossAxisAlignment.center,
                                               children: <Widget>[
                                                   Text(
-                                                    '${category!.date} ',
+                                                    '${widget.category!.date} ',
                                                     textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.w200,
@@ -174,14 +204,14 @@ class CategoryView extends StatelessWidget {
                                                       letterSpacing: 0.27,
                                                       color: DesignCourseAppTheme
                                                           .grey,
-                                                      
+
                                                     ),
                                                   ),
                                                 Container(
                                                   child: Row(
                                                     children: <Widget>[
                                                       Text(
-                                                        '${category!.heure}',
+                                                        '${widget.category!.heure}',
                                                         textAlign:
                                                             TextAlign.left,
                                                         style: const TextStyle(
@@ -217,10 +247,10 @@ class CategoryView extends StatelessWidget {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: <Widget>[
-                                                category!.etat ?Container(
+                                                widget.category!.etat ?Container(
                                                   margin: EdgeInsets.only(top: 5),
                                                   child: Text(
-                                                    '${category!.etat ? "Active" : "Disabled"}',
+                                                    '${widget.category!.etat ? "Active" : "Disabled"}',
                                                     textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.w600,
@@ -232,7 +262,7 @@ class CategoryView extends StatelessWidget {
                                                 ):Container(
                                                   margin: EdgeInsets.only(top: 5),
                                                   child: Text(
-                                                    '${category!.etat ? "Active" : "Disabled"}',
+                                                    '${widget.category!.etat ? "Active" : "Disabled"}',
                                                     textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.w600,
@@ -242,7 +272,7 @@ class CategoryView extends StatelessWidget {
                                                     ),
                                                   ),
                                                 ),
-                                                
+
                                                 Container(
                                                   decoration: const BoxDecoration(
                                                     color: DesignCourseAppTheme
@@ -289,7 +319,7 @@ class CategoryView extends StatelessWidget {
                                   const BorderRadius.all(Radius.circular(16.0)),
                               child: AspectRatio(
                                   aspectRatio: 1.0,
-                                  child: Image.asset(category!.imagePath)),
+                                  child: Image.asset(widget.category!.imagePath)),
                             )
                           ],
                         ),
