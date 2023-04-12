@@ -5,8 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import '../models/medcin.dart';
 
 class DatabaseHelper {
-  static const _databaseName = "medisafe";
-  static const _databaseVersion = 4;
+  static const _databaseName = "pfa.db";
+  static const _databaseVersion = 2;
 
   late Database _db;
   Database get db => _db;
