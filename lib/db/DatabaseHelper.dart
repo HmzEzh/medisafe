@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import '../models/medcin.dart';
 
 class DatabaseHelper {
-  static const _databaseName = "pfa.db";
+  static const _databaseName = "medisafe";
   static const _databaseVersion = 2;
 
   late Database _db;
@@ -109,11 +109,50 @@ class DatabaseHelper {
   Future<int> insertMedicament(String name, String type, String category, int nbrJour) async {
     await init();
     final data = {'nom':name, 'type':type, 'category':category,'nbrDeJour':nbrJour};
-    return await _db.insert("medicament", data);
+    int id =await _db.insert("medicament", data);
+    return id;
   }
 
   Future<List<Map<String, dynamic>>> getMedicaments() async {
     await init();
     return _db.query('medicament',orderBy: "id");
   }
+
+  Future<List<Map<String, dynamic>>> getMedicamentById(int id) async {
+    await init();
+    return _db.query('medicament',orderBy: "id",where: 'id = ?',
+      whereArgs: [id]);
+  }
+
+  Future<int> deleteMedicament(int id) async {
+    await init();
+    deleteDozes(id);
+    return await _db.delete(
+      "medicament",
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> insertDoze(String heure,int id) async {
+    await init();
+    final data = {'idMedicament':id, 'heure':heure};
+    int id2 =await _db.insert("doze", data);
+    return id2;
+  }
+
+  Future<List<Map<String, dynamic>>> getDozes() async {
+    await init();
+    return _db.query('doze',orderBy: "id");
+  }
+
+  Future<int> deleteDozes(int id) async {
+    await init();
+    return await _db.delete(
+      "doze",
+      where: 'idMedicament = ?',
+      whereArgs: [id],
+    );
+  }
+
 }
