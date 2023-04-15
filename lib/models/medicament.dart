@@ -5,14 +5,16 @@ class Medicament {
     required this.id ,
     this.title = '',
     this.imagePath = '',
-    this.nbrJour ="",
+    this.dateDebut ="",
+    this.dateFin ="",
     this.type = "",
     this.category = 'assets/images/medicine.png',
   });
 
   int id;
   String title;
-  String nbrJour;
+  String dateDebut;
+  String dateFin;
   String type = "";
   String category="";
   String imagePath = 'assets/images/medicine.png';
@@ -22,7 +24,8 @@ class Medicament {
       id: 1,
       imagePath: 'assets/images/calendar.png',
       title: 'rendez-vous 1',
-      nbrJour: "24-04-2023",
+      dateDebut: "24-04-2023",
+      dateFin: "24-04-2023",
       type: "",
       category:"12:30",
     ),
@@ -30,7 +33,8 @@ class Medicament {
       id: 2,
       imagePath: 'assets/images/calendar.png',
       title: 'rendez-vous 2',
-      nbrJour: "24-04-2023",
+      dateDebut: "24-04-2023",
+      dateFin: "24-04-2023",
       type: "",
       category: "10:30",
     ),
@@ -38,7 +42,8 @@ class Medicament {
       id: 3,
       imagePath: 'assets/images/calendar.png',
       title: 'rendez-vous 3',
-      nbrJour: "24-04-2023",
+      dateDebut: "24-04-2023",
+      dateFin: "24-04-2023",
       type: "",
       category: "11:30",
     ),
@@ -51,7 +56,8 @@ class Medicament {
       title: map['nom'] as String,
       type: map['type'] as String,
       category: map['category'] as String,
-      nbrJour: map['nbrDeJour'] as String,
+      dateDebut: map['dateDebut'] as String,
+      dateFin: map['dateFin'] as String,
       imagePath: 'assets/images/medicine.png',
     );
   }
@@ -68,7 +74,8 @@ class Medicament {
         id: data[i]['id'],
         imagePath: 'assets/images/medicine.png',
         title: data[i]['nom'],
-        nbrJour: data[i]['nbrDeJour'],
+        dateDebut: data[i]['dateDebut'],
+        dateFin: data[i]['dateFin'],
         type: data[i]['type'],
         category: data[i]['category'],
       ));

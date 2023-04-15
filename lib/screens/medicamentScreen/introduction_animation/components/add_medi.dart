@@ -227,12 +227,10 @@ class contenu extends State<name> with TickerProviderStateMixin  {
                             ),
                           ],
                           onChanged: (value) {
-                            // update the selected value when the user selects an option
-                            setState(() {
-                              selectedValue = value;
-                            });
+
                             Rappel rap = Rappel();
                             setState(() {
+                              selectedValue = value;
                               rap.setType(value!);
                             });
                           },

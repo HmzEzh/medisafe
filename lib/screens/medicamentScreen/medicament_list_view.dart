@@ -142,7 +142,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: <Widget>[
                                                     const Text(
-                                                      'next :',
+                                                      'End :',
                                                       textAlign: TextAlign.right,
                                                       style: TextStyle(
                                                         fontWeight: FontWeight.w200,
@@ -155,7 +155,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                                                       child: Row(
                                                         children: <Widget>[
                                                           Text(
-                                                            '${snapshot.data![index].nbrJour}',
+                                                            '${snapshot.data![index].dateFin}',
                                                             textAlign: TextAlign.left,
                                                             style: TextStyle(
                                                               fontWeight: FontWeight.w200,
@@ -165,7 +165,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                                                             ),
                                                           ),
                                                           Icon(
-                                                            Icons.alarm,
+                                                            Icons.calendar_month,
                                                             color: DesignCourseAppTheme.nearlyBlue,
                                                             size: 18,
                                                           ),
@@ -401,7 +401,7 @@ class _CategoryViewState extends State<CategoryView> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   const Text(
-                                    'next :',
+                                    'end :',
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w200,
@@ -414,7 +414,7 @@ class _CategoryViewState extends State<CategoryView> {
                                     child: Row(
                                       children: <Widget>[
                                         Text(
-                                          '${widget.category!.nbrJour}',
+                                          '${widget.category!.dateDebut}',
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w200,
@@ -424,7 +424,7 @@ class _CategoryViewState extends State<CategoryView> {
                                           ),
                                         ),
                                         Icon(
-                                          Icons.alarm,
+                                          Icons.calendar_month,
                                           color: DesignCourseAppTheme.nearlyBlue,
                                           size: 18,
                                         ),

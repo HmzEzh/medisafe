@@ -13,6 +13,7 @@ class DatabaseHelper {
 
   late Database _db;
   Future<Database> get database async {
+
     if (_db != null) return _db;
     // lazily instantiate the db the first time it is accessed
     _db = await init();
@@ -25,8 +26,8 @@ class DatabaseHelper {
     final path = join(documentsDirectory.path, _databaseName);
     _db = await openDatabase(
       path,
-      version: 2,
-      onCreate: _onCreate,
+      version: _databaseVersion,
+      onCreate: _onCreate, // Call the onUpgrade method
     );
     return _db;
   }
@@ -64,7 +65,8 @@ class DatabaseHelper {
             nom TEXT NOT NULL,
             type TEXT NOT NULL,
             category TEXT NOT NULL,
-            nbrDeJour TEXT NOT NULL
+            dateDebut TEXT NOT NULL,
+            dateFin TEXT NOT NULL
           );
           ''');
     await db.execute('''
@@ -79,6 +81,9 @@ class DatabaseHelper {
 
     print("creating tables!!!!!!!!");
   }
+
+
+
   // medecin service !!
 
   Future<int> insertMedecin(Map<String, dynamic> row) async {
@@ -131,7 +136,16 @@ class DatabaseHelper {
   // -- medicament
   Future<int> insertMedicament(String name, String type, String category, int nbrJour) async {
     await init();
-    final data = {'nom':name, 'type':type, 'category':category,'nbrDeJour':nbrJour};
+    DateTime now = DateTime.now();
+    String dateDebut = "${now.day}-${now.month}-${now.year}";
+
+    DateTime dateAfternDays = now.add(Duration(days: nbrJour));
+
+    // Format the date as a string
+    String dateFin = "${dateAfternDays.day}-${dateAfternDays.month}-${dateAfternDays.year}";
+
+
+    final data = {'nom':name, 'type':type, 'category':category,'dateDebut':dateDebut,'dateFin':dateFin};
     int id =await _db.insert("medicament", data);
     return id;
   }
