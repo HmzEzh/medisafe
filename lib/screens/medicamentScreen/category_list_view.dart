@@ -1,4 +1,4 @@
-import 'package:medisafe/db/DatabaseHelper.dart';
+import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/screens/medicamentScreen/design_course_app_theme.dart';
 import 'package:medisafe/screens/medicamentScreen/models/category.dart';
 import 'package:flutter/material.dart';

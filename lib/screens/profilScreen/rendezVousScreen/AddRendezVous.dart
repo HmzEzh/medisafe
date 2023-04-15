@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:medisafe/db/RendezVousService.dart';
+import 'package:medisafe/service/RendezVousService.dart';
 import 'package:provider/provider.dart';
 
-import '../../../db/DatabaseHelper.dart';
+import '../../../helpers/DatabaseHelper.dart';
 import '../../../models/RendezVous.dart';
 import '../../../models/medcin.dart';
 import '../../../provider/HomeProvider.dart';

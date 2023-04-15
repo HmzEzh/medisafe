@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import '../models/RendezVous.dart';
 import '../models/medcin.dart';
-import 'DatabaseHelper.dart';
+import '../helpers/DatabaseHelper.dart';
 
 class RendezVousService {
   // medecin service !!

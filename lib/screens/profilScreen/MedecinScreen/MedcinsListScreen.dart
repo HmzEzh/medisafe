@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:medisafe/models/medcin.dart';
 import 'package:medisafe/screens/profilScreen/MedecinScreen/MedcinsInfosScreen.dart';
 import 'package:provider/provider.dart';
-import '../../../db/DatabaseHelper.dart';
+import '../../../helpers/DatabaseHelper.dart';
 import '../../../provider/HomeProvider.dart';
 import 'AddMedcinScreen.dart';
 

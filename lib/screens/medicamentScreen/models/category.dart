@@ -1,4 +1,4 @@
-import 'package:medisafe/db/DatabaseHelper.dart';
+import 'package:medisafe/helpers/DatabaseHelper.dart';
 
 class Category {
   Category({

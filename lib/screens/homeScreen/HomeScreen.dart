@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:provider/provider.dart';
 
+import '../../main.dart';
+import '../../service/notification_service.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     Key? key,
@@ -95,7 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.transparent,
               child: InkWell(
                   borderRadius: BorderRadius.circular(90),
-                  onTap: (() {}),
+                  onTap: (() {
+                    Noti.showBigTextNotification(id:10,title: "New message title", body: "Your long body", fln: flutterLocalNotificationsPlugin);
+                  }),
                   splashColor: Colors.white24,
                   child: const CircleAvatar(
                     backgroundColor: Color.fromARGB(255, 38, 58, 167),

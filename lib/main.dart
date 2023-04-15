@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/homeScreen/HomeScreen.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 import 'package:medisafe/screens/recomScreen/RecomScreen.dart';
+import 'package:medisafe/service/notification_service.dart';
 import 'package:provider/provider.dart';
-import 'db/DatabaseHelper.dart';
+import 'helpers/DatabaseHelper.dart';
 
 
 final dbHelper = DatabaseHelper.instance;
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
 Future<void> main() async {
 WidgetsFlutterBinding.ensureInitialized();
   // initialize the database
   await dbHelper.init();
+  await Noti.initialize(flutterLocalNotificationsPlugin);
   runApp(
      MultiProvider(
       providers: [
