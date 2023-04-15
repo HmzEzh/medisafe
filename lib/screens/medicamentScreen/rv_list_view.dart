@@ -2,7 +2,7 @@ import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/screens/medicamentScreen/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/main.dart';
-import 'package:medisafe/screens/medicamentScreen/models/medicament.dart';
+import 'package:medisafe/models/medicament.dart';
 
 class RendezVousListView extends StatefulWidget {
   const RendezVousListView({Key? key, this.callBack}) : super(key: key);

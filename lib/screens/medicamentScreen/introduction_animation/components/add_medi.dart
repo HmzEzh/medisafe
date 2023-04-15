@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/add_dozes.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/doze_view.dart';
-import 'package:medisafe/screens/medicamentScreen/models/Rappel.dart';
+import 'package:medisafe/models/Rappel.dart';
 
 class NameMedi extends StatefulWidget {
   final AnimationController animationController;

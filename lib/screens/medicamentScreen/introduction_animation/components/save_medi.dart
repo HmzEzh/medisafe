@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/main.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
-import 'package:medisafe/screens/medicamentScreen/models/Rappel.dart';
+import 'package:medisafe/models/Rappel.dart';
 
 class WelcomeView extends StatefulWidget {
   

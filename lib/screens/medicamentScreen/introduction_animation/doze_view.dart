@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medisafe/main.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/user_model.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/save_medi.dart';
-import 'package:medisafe/screens/medicamentScreen/models/Rappel.dart';
+import 'package:medisafe/models/Rappel.dart';
 
 // ignore: camel_case_types
 class Horaire extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:medisafe/screens/medicamentScreen/models/medicament.dart';
+import 'package:medisafe/models/medicament.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
