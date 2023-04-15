@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import '../models/medcin.dart';
 
 class DatabaseHelper {
-  static const _databaseName = "medisafe";
+  static const _databaseName = "pfa.db";
   static const _databaseVersion = 3;
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -72,6 +72,7 @@ class DatabaseHelper {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             idMedicament INTEGER NOT NULL,
             heure TEXT NOT NULL,
+            suspend INTEGER NOT NULL,
             FOREIGN KEY(idMedicament) REFERENCES medicament(id)
           );
           ''');
