@@ -2,8 +2,8 @@ import 'package:medisafe/screens/medicamentScreen/category_list_view.dart';
 import 'package:medisafe/screens/medicamentScreen/popular_course_list_view.dart';
 import 'package:medisafe/main.dart';
 import 'package:flutter/material.dart';
+import '../introduction_animation/introduction_animation_screen.dart';
 import 'design_course_app_theme.dart';
-import 'introduction_animation/introduction_animation_screen.dart';
 
 class DesignCourseHomeScreen extends StatefulWidget {
   @override

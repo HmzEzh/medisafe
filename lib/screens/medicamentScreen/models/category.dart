@@ -53,7 +53,7 @@ class Category {
   ];
 
   Future<void> addCat() async {
-    DatabaseHelper medicamentService = new DatabaseHelper();
+    DatabaseHelper medicamentService = DatabaseHelper.instance;
 
     final data = await medicamentService.getMedicaments();
     popularCourseList.clear();

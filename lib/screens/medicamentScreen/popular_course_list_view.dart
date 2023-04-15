@@ -119,7 +119,7 @@ class CategoryView extends StatefulWidget {
 class _CategoryViewState extends State<CategoryView> {
   @override
   Widget build(BuildContext context) {
-    DatabaseHelper medicamentService = new DatabaseHelper();
+    DatabaseHelper medicamentService = DatabaseHelper.instance;
 
     // void _delete(int id) async {
     //   await medicamentService.deleteMedicament(id);

@@ -99,7 +99,7 @@ class CategoryView extends StatefulWidget {
 }
 
 class _CategoryViewState extends State<CategoryView> {
-  DatabaseHelper medicamentService = new DatabaseHelper();
+  DatabaseHelper medicamentService = DatabaseHelper.instance;
 
   List<Map<String, dynamic>> _journals = [];
 
