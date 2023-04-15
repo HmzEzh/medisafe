@@ -1,16 +1,16 @@
-import 'package:medisafe/screens/medicamentScreen/category_list_view.dart';
-import 'package:medisafe/screens/medicamentScreen/popular_course_list_view.dart';
+import 'package:medisafe/screens/medicamentScreen/rv_list_view.dart';
+import 'package:medisafe/screens/medicamentScreen/medicament_list_view.dart';
 import 'package:medisafe/main.dart';
 import 'package:flutter/material.dart';
-import '../introduction_animation/introduction_animation_screen.dart';
-import 'design_course_app_theme.dart';
+import 'app_theme.dart';
+import 'introduction_animation/introduction_add_medi.dart';
 
-class DesignCourseHomeScreen extends StatefulWidget {
+class DesignHomeScreen extends StatefulWidget {
   @override
   _DesignCourseHomeScreenState createState() => _DesignCourseHomeScreenState();
 }
 
-class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
+class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
   CategoryType categoryType = CategoryType.ui;
 
   @override
@@ -138,7 +138,7 @@ class _DesignCourseHomeScreenState extends State<DesignCourseHomeScreen> {
         /*const SizedBox(
           height: 16,
         ),*/
-        CategoryListView(
+        RendezVousListView(
           callBack: () {
             moveTo();
           },

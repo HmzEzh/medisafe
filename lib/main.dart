@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/homeScreen/HomeScreen.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
+import 'package:medisafe/screens/medicamentScreen/models/medicament.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 import 'package:medisafe/screens/recomScreen/RecomScreen.dart';
 import 'package:medisafe/service/notification_service.dart';
@@ -15,6 +16,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
+
 WidgetsFlutterBinding.ensureInitialized();
   // initialize the database
   await dbHelper.init();
@@ -26,7 +28,13 @@ WidgetsFlutterBinding.ensureInitialized();
           create: (_) => HomeProvider()
         ),],
     child: const MyApp()));
-}
+
+    Medicament.addCat();
+
+
+ }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -66,6 +74,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return Scaffold(
         // appBar: AppBar(
         //   title: Text(appbar[_selectedIndex]),

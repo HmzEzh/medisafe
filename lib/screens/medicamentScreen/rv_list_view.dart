@@ -1,18 +1,18 @@
 import 'package:medisafe/helpers/DatabaseHelper.dart';
-import 'package:medisafe/screens/medicamentScreen/design_course_app_theme.dart';
-import 'package:medisafe/screens/medicamentScreen/models/category.dart';
+import 'package:medisafe/screens/medicamentScreen/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/main.dart';
+import 'package:medisafe/screens/medicamentScreen/models/medicament.dart';
 
-class CategoryListView extends StatefulWidget {
-  const CategoryListView({Key? key, this.callBack}) : super(key: key);
+class RendezVousListView extends StatefulWidget {
+  const RendezVousListView({Key? key, this.callBack}) : super(key: key);
 
   final Function()? callBack;
   @override
-  _CategoryListViewState createState() => _CategoryListViewState();
+  _RendezVousListViewState createState() => _RendezVousListViewState();
 }
 
-class _CategoryListViewState extends State<CategoryListView>
+class _RendezVousListViewState extends State<RendezVousListView>
     with TickerProviderStateMixin {
   AnimationController? animationController;
 
@@ -50,12 +50,12 @@ class _CategoryListViewState extends State<CategoryListView>
               return ListView.builder(
                 padding: const EdgeInsets.only(
                     top: 0, bottom: 0, right: 16, left: 16),
-                itemCount: Category.categoryList.length,
+                itemCount: Medicament.categoryList.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
-                  final int count = Category.categoryList.length > 10
+                  final int count = Medicament.categoryList.length > 10
                       ? 10
-                      : Category.categoryList.length;
+                      : Medicament.categoryList.length;
                   final Animation<double> animation =
                       Tween<double>(begin: 0.0, end: 1.0).animate(
                           CurvedAnimation(
@@ -65,7 +65,7 @@ class _CategoryListViewState extends State<CategoryListView>
                   animationController?.forward();
 
                   return CategoryView(
-                    category: Category.categoryList[index],
+                    category: Medicament.categoryList[index],
                     animation: animation,
                     animationController: animationController,
                     callback: widget.callBack,
@@ -90,7 +90,7 @@ class CategoryView extends StatefulWidget {
       : super(key: key);
 
   final VoidCallback? callback;
-  final Category? category;
+  final Medicament? category;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -125,7 +125,7 @@ class _CategoryViewState extends State<CategoryView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.category!.addCat();
+    Medicament.addCat();
     _refreshJournals();
 
   }
@@ -201,7 +201,7 @@ class _CategoryViewState extends State<CategoryView> {
                                                   CrossAxisAlignment.center,
                                               children: <Widget>[
                                                   Text(
-                                                    '${widget.category!.date} ',
+                                                    '${widget.category!.type} ',
                                                     textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.w200,
@@ -216,7 +216,7 @@ class _CategoryViewState extends State<CategoryView> {
                                                   child: Row(
                                                     children: <Widget>[
                                                       Text(
-                                                        '${widget.category!.heure}',
+                                                        '${widget.category!.type}',
                                                         textAlign:
                                                             TextAlign.left,
                                                         style: const TextStyle(
@@ -252,10 +252,10 @@ class _CategoryViewState extends State<CategoryView> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: <Widget>[
-                                                widget.category!.etat ?Container(
+                                                true ?Container(
                                                   margin: EdgeInsets.only(top: 5),
                                                   child: Text(
-                                                    '${widget.category!.etat ? "Active" : "Disabled"}',
+                                                    '${false ? "Active" : "Disabled"}',
                                                     textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.w600,
@@ -267,7 +267,7 @@ class _CategoryViewState extends State<CategoryView> {
                                                 ):Container(
                                                   margin: EdgeInsets.only(top: 5),
                                                   child: Text(
-                                                    '${widget.category!.etat ? "Active" : "Disabled"}',
+                                                    '${true ? "Active" : "Disabled"}',
                                                     textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                       fontWeight: FontWeight.w600,

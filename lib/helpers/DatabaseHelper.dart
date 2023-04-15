@@ -1,3 +1,4 @@
+import 'package:medisafe/screens/medicamentScreen/models/medicament.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -5,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import '../models/medcin.dart';
 
 class DatabaseHelper {
-  static const _databaseName = "pfa.db";
+  static const _databaseName = "medisafe";
   static const _databaseVersion = 3;
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -24,7 +25,7 @@ class DatabaseHelper {
     final path = join(documentsDirectory.path, _databaseName);
     _db = await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
     );
     return _db;
@@ -139,10 +140,19 @@ class DatabaseHelper {
     return _db.query('medicament',orderBy: "id");
   }
 
+  Future<List<Medicament>> getAllMedicaments() async {
+    await init();
+    List<Medicament> medicaments = [];
+    for (Map<String, dynamic> item in await _db.query("medicament")) {
+      medicaments.add(Medicament.fromMap(item));
+    }
+    return medicaments;
+  }
+
   Future<List<Map<String, dynamic>>> getMedicamentById(int id) async {
     await init();
     return _db.query('medicament',orderBy: "id",where: 'id = ?',
-      whereArgs: [id]);
+        whereArgs: [id]);
   }
 
   Future<int> deleteMedicament(int id) async {
@@ -153,6 +163,11 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<int> countMedicaments() async {
+    final results = await _db.rawQuery('SELECT COUNT(*) FROM medicament');
+    return Sqflite.firstIntValue(results) ?? 0;
   }
 
   Future<int> insertDoze(String heure,int id) async {

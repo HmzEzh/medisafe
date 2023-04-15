@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'home_design_course.dart';
+import 'home_design.dart';
 
 class MedicamentScreen extends StatefulWidget {
   @override
@@ -42,7 +42,7 @@ class _MedicamentScreenState extends State<MedicamentScreen> {
                   child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
             ]),
       backgroundColor: Colors.white,
-      body: DesignCourseHomeScreen(),
+      body: DesignHomeScreen(),
     );
   }
 }
