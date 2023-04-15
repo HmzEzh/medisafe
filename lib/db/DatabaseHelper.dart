@@ -24,7 +24,7 @@ class DatabaseHelper {
     final path = join(documentsDirectory.path, _databaseName);
     _db = await openDatabase(
       path,
-      version: _databaseVersion,
+      version: 1,
       onCreate: _onCreate,
     );
     return _db;
@@ -56,6 +56,26 @@ class DatabaseHelper {
            
           );
           ''');
+
+    await db.execute('''
+          CREATE TABLE medicament (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nom TEXT NOT NULL,
+            type TEXT NOT NULL,
+            category TEXT NOT NULL,
+            nbrDeJour TEXT NOT NULL
+          );
+          ''');
+    await db.execute('''
+          CREATE TABLE doze (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            idMedicament INTEGER NOT NULL,
+            heure TEXT NOT NULL,
+            FOREIGN KEY(idMedicament) REFERENCES medicament(id)
+          );
+          ''');
+
+    print("creating tables!!!!!!!!");
   }
   // medecin service !!
 
@@ -103,4 +123,57 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
+
+
+
+  // -- medicament
+  Future<int> insertMedicament(String name, String type, String category, int nbrJour) async {
+    await init();
+    final data = {'nom':name, 'type':type, 'category':category,'nbrDeJour':nbrJour};
+    int id =await _db.insert("medicament", data);
+    return id;
+  }
+
+  Future<List<Map<String, dynamic>>> getMedicaments() async {
+    await init();
+    return _db.query('medicament',orderBy: "id");
+  }
+
+  Future<List<Map<String, dynamic>>> getMedicamentById(int id) async {
+    await init();
+    return _db.query('medicament',orderBy: "id",where: 'id = ?',
+      whereArgs: [id]);
+  }
+
+  Future<int> deleteMedicament(int id) async {
+    await init();
+    deleteDozes(id);
+    return await _db.delete(
+      "medicament",
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> insertDoze(String heure,int id) async {
+    await init();
+    final data = {'idMedicament':id, 'heure':heure};
+    int id2 =await _db.insert("doze", data);
+    return id2;
+  }
+
+  Future<List<Map<String, dynamic>>> getDozes() async {
+    await init();
+    return _db.query('doze',orderBy: "id");
+  }
+
+  Future<int> deleteDozes(int id) async {
+    await init();
+    return await _db.delete(
+      "doze",
+      where: 'idMedicament = ?',
+      whereArgs: [id],
+    );
+  }
+
 }

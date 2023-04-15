@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
-class MedicamentScreen extends StatelessWidget {
+import 'home_design_course.dart';
+
+class MedicamentScreen extends StatefulWidget {
+  @override
+  State<MedicamentScreen> createState() => _MedicamentScreenState();
+}
+
+class _MedicamentScreenState extends State<MedicamentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(  
+      appBar: AppBar(
           title: TextButton(
                   style: ButtonStyle(
                      minimumSize : MaterialStateProperty.all(Size(0,0)),
@@ -35,8 +42,7 @@ class MedicamentScreen extends StatelessWidget {
                   child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
             ]),
       backgroundColor: Colors.white,
-      body: const Center(
-          child: Text("medicament")),
+      body: DesignCourseHomeScreen(),
     );
   }
 }
