@@ -1,25 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/models/medcin.dart';
+import 'package:medisafe/models/rendezVous.dart';
 import 'package:medisafe/screens/profilScreen/MedecinScreen/MedcinsInfosScreen.dart';
 import 'package:provider/provider.dart';
 import '../../../db/DatabaseHelper.dart';
+import '../../../db/RendezVousService.dart';
 import '../../../provider/HomeProvider.dart';
-import 'AddMedcinScreen.dart';
+import 'AddRendezVous.dart';
+import 'RendezVousInfoScreen.dart';
 
-class MedcinsListScreen extends StatefulWidget {
-  const MedcinsListScreen({
+class RendezVousListScreen extends StatefulWidget {
+  const RendezVousListScreen({
     Key? key,
   }) : super(key: key);
   @override
-  State<MedcinsListScreen> createState() => _MedcinsListScreenState();
+  State<RendezVousListScreen> createState() => _RendezVousListScreenState();
 }
 
-class _MedcinsListScreenState extends State<MedcinsListScreen>
+class _RendezVousListScreenState extends State<RendezVousListScreen>
     with TickerProviderStateMixin {
-  DatabaseHelper medcinService = DatabaseHelper.instance;
   AnimationController? animationController;
-
+  RendezVousService rendezVousService = new RendezVousService();
   void initState() {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
@@ -53,10 +55,11 @@ class _MedcinsListScreenState extends State<MedcinsListScreen>
                     splashFactory: NoSplash.splashFactory,
                   ),
                   onPressed: () {
+                    //TODO:
                     Navigator.push<dynamic>(
                       context,
                       MaterialPageRoute<dynamic>(
-                          builder: (BuildContext context) => AddMedcinScreen()),
+                          builder: (BuildContext context) => AddRendezVous()),
                     );
                   },
                   child: Icon(
@@ -67,8 +70,8 @@ class _MedcinsListScreenState extends State<MedcinsListScreen>
         backgroundColor: Colors.white,
         body: Container(
           //color:Color.fromARGB(255, 246, 246, 246),
-          child: FutureBuilder<List<Medcin>>(
-              future: medcinService.queryAllRowsMedecin(),
+          child: FutureBuilder<List>(
+              future: rendezVousService.allRendezVous(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -102,16 +105,16 @@ class _MedcinsListScreenState extends State<MedcinsListScreen>
                       scrollDirection: Axis.vertical,
                       itemCount: snapshot.data!.length,
                       itemBuilder: (ctx, index) {
-                        
+                        // Medcin med = await rendezVousService.findMedecin(snapshot.data![index].medecinId);
                         return InkWell(
                           onTap: () {
-                            print(snapshot.data![index].id);
+                            //TODO:
                             Navigator.push<dynamic>(
                               context,
                               MaterialPageRoute<dynamic>(
                                   builder: (BuildContext context) =>
-                                      MedcinsInfosScreen(
-                                        doctor: snapshot.data![index],
+                                      RendezVousInfoScreen(
+                                        rendezVous: snapshot.data![index],
                                       )),
                             );
                           },
@@ -119,58 +122,58 @@ class _MedcinsListScreenState extends State<MedcinsListScreen>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                decoration: BoxDecoration(
-                                  //color: Color.fromARGB(255, 246, 246, 246),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(4)),
-                                  // border: Border.all(
-                                  //     color: DesignCourseAppTheme.nearlyBlue)
-                                ),
-
-                                width: size.width,
-                                height: 50,
-                                //height: 200,
-                                margin: EdgeInsets.only(
-                                    top: 4, bottom: 0, left: 8, right: 8),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                margin: EdgeInsets.only(left: 0,right: 16,top: 6,bottom: 6),
+                                //height: 50,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 60,
+                                      child: Center(child: Image.asset("assets/images/calendarDone.png", scale: 3.5)),
+                                    ),
+                                    Container(
+                                      child:  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Spacer(
-                                        flex: 1,
-                                      ),
-                                      CircleAvatar(
-                                        radius: 20,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 38, 58, 167),
-                                        child: snapshot
-                                                    .data![index].nom.length >=
-                                                2
-                                            ? Text(snapshot.data![index].nom
-                                                .substring(0, 2))
-                                            : Text(snapshot.data![index].nom),
-                                      ),
-                                      Spacer(
-                                        flex: 1,
-                                      ),
-                                      Text(
-                                        snapshot.data![index].nom,
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      Spacer(
-                                        flex: 20,
-                                      )
-                                    ],
-                                  ),
+                                      Container(
+                                                margin: EdgeInsets.only(left: 0,bottom: 4),
+                                                 child: Text(
+                                                  snapshot.data![index].nom,
+                                                  style: TextStyle(fontSize: 16),
+                                                                                 ),
+                                               ),
+                                      Container(
+                                          margin: EdgeInsets.only(
+                                              top: 0, bottom: 0, left: 0),
+                                          child: Text(snapshot.data![index].heure,style: TextStyle(fontSize: 14,
+                                          color: Color.fromARGB(255, 124, 123, 123))),
+                                        ),
+                                        Container(
+                                          width: 3*size.width/4,
+                                          margin: EdgeInsets.only(
+                                              top: 0, bottom: 0, left: 0),
+                                          child: Text(snapshot.data![index].remarque,
+                                          style: TextStyle(fontSize: 14,
+                                          color: Color.fromARGB(255, 124, 123, 123)),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,),
+                                        ),
+                                      
+                                    ]),
+                                    )
+                              
+                                  ],
                                 ),
                               ),
                               Divider(
-                                height: 2,
-                                indent: 80,
-                                endIndent: 0,
-                              )
+                                        height: 2,
+                                        indent: 60,
+                                        endIndent: 0,
+                                       
+                                      )
                             ],
                           ),
                         );

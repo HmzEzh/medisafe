@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'db/DatabaseHelper.dart';
 
 
-final dbHelper = DatabaseHelper();
+final dbHelper = DatabaseHelper.instance;
 Future<void> main() async {
 WidgetsFlutterBinding.ensureInitialized();
   // initialize the database

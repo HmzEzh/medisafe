@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medisafe/screens/profilScreen/rendezVousScreen/RendezVousListScreen.dart';
 import 'MedecinScreen/MedcinsListScreen.dart';
 import 'AccountScreen/AccountScreen.dart';
 import '../introduction_animation/introduction_animation_screen.dart';
@@ -198,7 +199,16 @@ class ProfilScreen extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push<dynamic>(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                  builder: (BuildContext context) =>
+                                      RendezVousListScreen(
+                                      
+                                      )),
+                            );
+                    },
                     child: Container(
                       margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),
                       padding: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),

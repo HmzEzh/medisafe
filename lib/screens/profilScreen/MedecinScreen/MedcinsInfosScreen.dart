@@ -16,7 +16,7 @@ class MedcinsInfosScreen extends StatefulWidget {
 }
 
 class _MedcinsInfosScreenState extends State<MedcinsInfosScreen> {
-  DatabaseHelper medcinService = new DatabaseHelper();
+  DatabaseHelper medcinService = DatabaseHelper.instance;
 
   final TextEditingController nomController = TextEditingController();
   final TextEditingController specialiteController = TextEditingController();

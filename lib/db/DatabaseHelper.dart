@@ -6,13 +6,20 @@ import '../models/medcin.dart';
 
 class DatabaseHelper {
   static const _databaseName = "pfa.db";
-  static const _databaseVersion = 1;
+  static const _databaseVersion = 3;
+  DatabaseHelper._privateConstructor();
+  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   late Database _db;
+  Future<Database> get database async {
+    if (_db != null) return _db;
+    // lazily instantiate the db the first time it is accessed
+    _db = await init();
+    return _db;
+  }
   Database get db => _db;
-
   // this opens the database (and creates it if it doesn't exist)
-  Future<void> init() async {
+  Future<Database> init() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
     _db = await openDatabase(
@@ -20,6 +27,7 @@ class DatabaseHelper {
       version: _databaseVersion,
       onCreate: _onCreate,
     );
+    return _db;
   }
 
   // SQL code to create the database table
@@ -33,6 +41,19 @@ class DatabaseHelper {
             adress TEXT NOT NULL,
             tele TEXT NOT NULL,
             bureau TEXT NOT NULL
+          );
+          ''');
+    await db.execute('''
+          CREATE TABLE rendezVous (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            medecinId INTEGER,
+            nom TEXT NOT NULL,
+            lieu TEXT NOT NULL,
+            remarque TEXT NOT NULL,
+            heure TEXT NOT NULL,
+            FOREIGN KEY (medecinId) REFERENCES medcin (id)                  
+               ON DELETE NO ACTION ON UPDATE NO ACTION
+           
           );
           ''');
   }

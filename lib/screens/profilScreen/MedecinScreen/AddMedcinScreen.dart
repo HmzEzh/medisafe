@@ -21,7 +21,7 @@ class _AddMedcinScreenState extends State<AddMedcinScreen> {
   final TextEditingController bureauController = TextEditingController();
   final TextEditingController teleController = TextEditingController();
   final TextEditingController adresseController = TextEditingController();
-  DatabaseHelper medcinService = new DatabaseHelper();
+  DatabaseHelper medcinService = DatabaseHelper.instance;
   @override
   void initState() {
     // TODO: implement initState
@@ -273,8 +273,7 @@ class _AddMedcinScreenState extends State<AddMedcinScreen> {
                   splashFactory: NoSplash.splashFactory,
                 ),
                 onPressed: () async {
-                  Medcin medcin = new Medcin(
-                    id: 0,
+                  Medcin medcin = Medcin.az(
                     nom: nomController.text,
                     specialite: specialiteController.text,
                     email: emailController.text,
@@ -345,9 +344,8 @@ class _AddMedcinScreenState extends State<AddMedcinScreen> {
                               ));
                     } else {
                       await medcinService.insertMedecin(medcin.toMap());
-                      print(await medcinService.queryRowCount());
+                      //print(await medcinService.queryRowCount());
                       // ignore: use_build_context_synchronously
-                     
                       Navigator.pop(context);
                        changes.setChanges();
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -20,6 +20,15 @@ class Medcin {
       required this.tele,
       required this.bureau,
       });
+      Medcin.az(
+      {
+      required this.nom,
+      required this.specialite,
+      required this.email,
+      required this.adress,
+      required this.tele,
+      required this.bureau,
+      });
 
     Map<String, dynamic> toMap() {
     return {
@@ -31,7 +40,7 @@ class Medcin {
       'bureau': bureau,
     };
   }
-  factory Medcin.fromMap(Map<String, dynamic> map) {
+  factory Medcin.fromMap(Map map) {
     return Medcin(
       id: map['id'] as int,
       nom: map['nom'] as String,
