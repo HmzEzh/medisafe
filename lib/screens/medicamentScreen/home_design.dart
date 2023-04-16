@@ -2,6 +2,7 @@ import 'package:medisafe/screens/medicamentScreen/rv_list_view.dart';
 import 'package:medisafe/screens/medicamentScreen/medicament_list_view.dart';
 import 'package:medisafe/main.dart';
 import 'package:flutter/material.dart';
+import 'package:medisafe/screens/profilScreen/rendezVousScreen/AddRendezVous.dart';
 import 'app_theme.dart';
 import 'introduction_animation/introduction_add_medi.dart';
 
@@ -111,7 +112,7 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
                         Navigator.push<dynamic>(
                           context,
                           MaterialPageRoute<dynamic>(
-                            builder: (BuildContext context) => IntroductionAnimationScreen(),
+                            builder: (BuildContext context) => AddRendezVous(),
                           ),
                         );
                       },

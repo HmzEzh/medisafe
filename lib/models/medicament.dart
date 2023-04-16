@@ -29,24 +29,7 @@ class Medicament {
       type: "",
       category:"12:30",
     ),
-    Medicament(
-      id: 2,
-      imagePath: 'assets/images/calendar.png',
-      title: 'rendez-vous 2',
-      dateDebut: "24-04-2023",
-      dateFin: "24-04-2023",
-      type: "",
-      category: "10:30",
-    ),
-    Medicament(
-      id: 3,
-      imagePath: 'assets/images/calendar.png',
-      title: 'rendez-vous 3',
-      dateDebut: "24-04-2023",
-      dateFin: "24-04-2023",
-      type: "",
-      category: "11:30",
-    ),
+
   ];
 
 
