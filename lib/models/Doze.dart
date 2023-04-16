@@ -27,7 +27,7 @@ class Doze {
       id: map['id'] as int,
       idMedicament: map['idMedicament'] as int,
       heure: map['heure'] as String,
-      suspend: map['suspend'] as bool,
+      suspend: map['suspend']==0?false:true as bool,
     );
   }
 }

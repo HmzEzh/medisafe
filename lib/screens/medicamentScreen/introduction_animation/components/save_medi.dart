@@ -156,12 +156,15 @@ class _MyWidgetState extends State<WelcomeView> {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     _addMedi();
-                    Navigator.push<dynamic>(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => MyApp(),
-                      ),
-                    );
+                    // Navigator.push<dynamic>(
+                    //   context,
+                    //   MaterialPageRoute<dynamic>(
+                    //     builder: (BuildContext context) => MyApp(),
+                    //   ),
+                    // );
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   icon: Flexible(
                     flex: 1,

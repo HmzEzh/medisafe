@@ -72,10 +72,11 @@ class _IntroductionAnimationScreenState
   void _onBackClick() {
     if (_animationController!.value >= 0 &&
         _animationController!.value <= 0.2) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => MyApp()),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => MyApp()),
+          // );
+      Navigator.pop(context);
       _animationController?.animateTo(0.0);
     } else if (_animationController!.value > 0.2 &&
         _animationController!.value <= 0.4) {

@@ -1,9 +1,12 @@
+import 'package:intl/intl.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
+import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/medicamentScreen/app_theme.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/main.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/medicamentScreen/profile_settings.dart';
+import 'package:provider/provider.dart';
 
 class PopularCourseListView extends StatefulWidget {
   const PopularCourseListView({Key? key, this.callBack}) : super(key: key);
@@ -29,11 +32,28 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
     return true;
   }
 
+  void _delete(int id) async {
+    DatabaseHelper medicamentService = DatabaseHelper.instance;
+    await medicamentService.deleteMedicament(id);
+
+    setState(() {
+      Medicament.popularCourseList.removeWhere((category) => category.id == id);
+      print(Medicament.categoryList.toString());
+    });
+  }
+
+  String formatDate(String dateString) {
+    DateTime date = DateFormat('dd-M-yyyy').parse(dateString);
+    return DateFormat('dd-MM-yy').format(date);
+  }
 
 
   @override
   Widget build(BuildContext context) {
-    DatabaseHelper medicamentService = DatabaseHelper.instance;;
+    var changes = Provider.of<HomeProvider>(context, listen: true);
+    DatabaseHelper medicamentService = DatabaseHelper.instance;
+
+
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: Container(
@@ -104,7 +124,18 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
+                                  Navigator.push<dynamic>(
+                                    context,
+                                    MaterialPageRoute<dynamic>(
+                                      builder: (BuildContext context) => ProfileSettingScreen(
+                                        medicament: snapshot.data![index],
+                                      ),
+                                    ),
+                                  );
                                   //_showForm(widget.category!.id);
+                                  // _delete(snapshot.data![index].id);
+                                  //
+                                  // changes.setChanges();
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -155,7 +186,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                                                       child: Row(
                                                         children: <Widget>[
                                                           Text(
-                                                            '${snapshot.data![index].dateFin}',
+                                                            '${formatDate(snapshot.data![index].dateFin)}',
                                                             textAlign: TextAlign.left,
                                                             style: TextStyle(
                                                               fontWeight: FontWeight.w200,
@@ -260,7 +291,7 @@ class _CategoryViewState extends State<CategoryView> {
 
   @override
   Widget build(BuildContext context) {
-    DatabaseHelper medicamentService = DatabaseHelper.instance;;
+    DatabaseHelper medicamentService = DatabaseHelper.instance;
 
     // void _delete(int id) async {
     //   await medicamentService.deleteMedicament(id);
@@ -322,12 +353,15 @@ class _CategoryViewState extends State<CategoryView> {
                       padding:  EdgeInsets.only(right:MediaQuery.of(context).size.width * 0.05 ),
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push<dynamic>(
-                            context,
-                            MaterialPageRoute<dynamic>(
-                              builder: (BuildContext context) => ProfileSettingScreen(),
-                            ),
-                          );
+                          // Navigator.push<dynamic>(
+                          //   context,
+                          //   MaterialPageRoute<dynamic>(
+                          //     builder: (BuildContext context) => ProfileSettingScreen(
+                          //
+                          //
+                          //     ),
+                          //   ),
+                          // );
 
                           // Perform action when 'Yes' button is pressed
                           Navigator.pop(context);
