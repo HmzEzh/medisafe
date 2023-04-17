@@ -1,5 +1,9 @@
+import 'dart:isolate';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/date_symbol_data_file.dart';
+import 'package:medisafe/models/RendezVous.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/homeScreen/HomeScreen.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
@@ -7,34 +11,61 @@ import 'package:medisafe/screens/medicamentScreen/models/medicament.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 import 'package:medisafe/screens/recomScreen/RecomScreen.dart';
 import 'package:medisafe/service/notification_service.dart';
+import 'package:medisafe/service/rendezVousNotifService.dart';
 import 'package:provider/provider.dart';
 import 'helpers/DatabaseHelper.dart';
-
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 final dbHelper = DatabaseHelper.instance;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
+
+RendezVousNotifService rdvSrv = new RendezVousNotifService();
+
+@pragma('vm:entry-point')
+void rendezVousTask() async {
+  final DateTime now = DateTime.now();
+  final int isolateId = Isolate.current.hashCode;
+  try {
+    RendezVous? rv = await rdvSrv.sendNotif();
+    if (rv != null) {
+      print(rv.nom);
+      Noti.showBigTextNotification(
+          id: rv.nom,
+          title: "Rendez-vous",
+          body: rv.nom,
+          fln: flutterLocalNotificationsPlugin);
+    }
+  } catch (e) {
+    print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh $e');
+  }
+  print(
+      "[$now] Hello, world! isolate=${isolateId} function='$rendezVousTask' ##################################################################");
+}
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-WidgetsFlutterBinding.ensureInitialized();
+  // Workmanager().initialize(callbackDispatcher);
   // initialize the database
+  await AndroidAlarmManager.initialize();
+  final int helloAlarmID = 3;
+  await AndroidAlarmManager.periodic(
+      const Duration(minutes: 1), helloAlarmID, rendezVousTask);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   await dbHelper.init();
   await Noti.initialize(flutterLocalNotificationsPlugin);
-  runApp(
-     MultiProvider(
-      providers: [
-       ChangeNotifierProvider(
-          create: (_) => HomeProvider()
-        ),],
-    child: const MyApp()));
 
-    Medicament.addCat();
+  // Define the task constraints
 
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => HomeProvider()),
+  ], child: const MyApp()));
 
- }
-
-
+  Medicament.addCat();
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -49,7 +80,6 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
       debugShowCheckedModeBanner: false,
-     
     );
   }
 }
@@ -63,6 +93,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    // Workmanager().registerPeriodicTask(
+    //   'mTask',
+    //   'mTask',
+    //   frequency: Duration(minutes: 1),
+    // );
+    // TODO: implement initState
+    super.initState();
+  }
+
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
@@ -70,13 +111,15 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  final screens = [const HomeScreen(),RecomScreen(),MedicamentScreen(),ProfilScreen()];
+  final screens = [
+    const HomeScreen(),
+    RecomScreen(),
+    MedicamentScreen(),
+    ProfilScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
         // appBar: AppBar(
         //   title: Text(appbar[_selectedIndex]),

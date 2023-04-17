@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../models/RendezVous.dart';
 import '../models/medcin.dart';
 
 class DatabaseHelper {
@@ -77,6 +78,15 @@ class DatabaseHelper {
           ''');
 
     print("creating tables!!!!!!!!");
+  }
+
+  Future<List<RendezVous>> allRendezVous() async {
+    await init();
+    List<RendezVous> rendezVous = [];
+    for (Map<String, dynamic> item in await _db.query("rendezVous")) {
+      rendezVous.add(RendezVous.fromMap(item));
+    }
+    return rendezVous;
   }
   // medecin service !!
 

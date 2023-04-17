@@ -8,6 +8,7 @@ import '../../../helpers/DatabaseHelper.dart';
 import '../../../models/RendezVous.dart';
 import '../../../models/medcin.dart';
 import '../../../provider/HomeProvider.dart';
+import '../../../utils/utils.dart';
 
 class AddRendezVous extends StatefulWidget {
   const AddRendezVous({
@@ -24,6 +25,8 @@ class _AddRendezVousState extends State<AddRendezVous> {
   final TextEditingController remarqueController = TextEditingController();
   final TextEditingController heureController = TextEditingController();
   late Medcin medecin;
+  var a="";
+  var b="";
 
   DatabaseHelper medcinService = DatabaseHelper.instance;
   DatabaseHelper databaseHelper = DatabaseHelper.instance;
@@ -61,7 +64,7 @@ class _AddRendezVousState extends State<AddRendezVous> {
                   child: TextFormField(
                     controller: nomController,
                     decoration: InputDecoration(
-                      hintText: "Nom du médcin",
+                      hintText: "Saire un titre de rendez-vous",
                       isDense: true,
                       border: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -372,6 +375,8 @@ class _AddRendezVousState extends State<AddRendezVous> {
               print(date);
               setState(() {
                 heureController.text = '$date';
+                a = Utils.formatDate(date);
+                b = Utils.formatTime(date); 
               });
             }, currentTime: DateTime.now(), locale: LocaleType.fr);
           },
@@ -401,7 +406,7 @@ class _AddRendezVousState extends State<AddRendezVous> {
                           ),
                         ),
                         Container(
-                          child: Text(heureController.text),
+                          child: Text('$a à $b'),
                         )
                       ])),
             ],
@@ -479,18 +484,15 @@ class _AddRendezVousState extends State<AddRendezVous> {
                   splashFactory: NoSplash.splashFactory,
                 ),
                 onPressed: () async {
-                  if(medecinIdController.text == ""){
+                  if (medecinIdController.text == "") {
                     RendezVous rendezVous = RendezVous(
-                      id:null,
-                      medecinId: int.parse(medecinIdController.text),
-                      nom: nomController.text,
-                      lieu: lieuController.text,
-                      remarque: remarqueController.text,
-                      heure: heureController.text);
-                    
-                  }else{
-                    
-                  }
+                        id: null,
+                        medecinId: int.parse(medecinIdController.text),
+                        nom: nomController.text,
+                        lieu: lieuController.text,
+                        remarque: remarqueController.text,
+                        heure: heureController.text);
+                  } else {}
                   try {
                     if (nomController.text.length == 0) {
                       showDialog(
@@ -554,12 +556,13 @@ class _AddRendezVousState extends State<AddRendezVous> {
                               ));
                     } else {
                       RendezVous rendezVous = RendezVous.az(
-                      medecinId: int.parse(medecinIdController.text),
-                      nom: nomController.text,
-                      lieu: lieuController.text,
-                      remarque: remarqueController.text,
-                      heure: heureController.text);
-                      await rendezVousService.insertRendezVous(rendezVous.toMap());
+                          medecinId: int.parse(medecinIdController.text),
+                          nom: nomController.text,
+                          lieu: lieuController.text,
+                          remarque: remarqueController.text,
+                          heure: heureController.text);
+                      await rendezVousService
+                          .insertRendezVous(rendezVous.toMap());
                       //print(await medcinService.queryRowCount());
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);

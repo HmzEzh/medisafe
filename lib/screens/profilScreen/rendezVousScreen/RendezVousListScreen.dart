@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:medisafe/models/medcin.dart';
 import 'package:medisafe/models/rendezVous.dart';
 import 'package:medisafe/screens/profilScreen/MedecinScreen/MedcinsInfosScreen.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../helpers/DatabaseHelper.dart';
 import '../../../service/RendezVousService.dart';
 import '../../../provider/HomeProvider.dart';
+import '../../../utils/utils.dart';
 import 'AddRendezVous.dart';
 import 'RendezVousInfoScreen.dart';
 
@@ -35,14 +37,25 @@ class _RendezVousListScreenState extends State<RendezVousListScreen>
     var changes = Provider.of<HomeProvider>(context, listen: true);
     return Scaffold(
         appBar: AppBar(
-            title: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(
-                  IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                  color: Color.fromARGB(255, 38, 58, 167),
-                )),
+            title: Row(
+              children: [
+                InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      IconData(0xe16a, fontFamily: 'MaterialIcons'),
+                      color: Color.fromARGB(255, 38, 58, 167),
+                    )),
+                     Spacer(),
+            Text("Rendez-vous",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 38, 58, 167))),
+            Spacer(),
+              ],
+            ),
             shadowColor: Colors.transparent,
             backgroundColor: Color.fromARGB(255, 246, 246, 246),
             automaticallyImplyLeading: false,
@@ -106,6 +119,8 @@ class _RendezVousListScreenState extends State<RendezVousListScreen>
                       itemCount: snapshot.data!.length,
                       itemBuilder: (ctx, index) {
                         // Medcin med = await rendezVousService.findMedecin(snapshot.data![index].medecinId);
+                        var a = Utils.formatDate(DateTime.parse(snapshot.data![index].heure));
+                        var b = Utils.formatTime(DateTime.parse(snapshot.data![index].heure));
                         return InkWell(
                           onTap: () {
                             //TODO:
@@ -130,7 +145,16 @@ class _RendezVousListScreenState extends State<RendezVousListScreen>
                                   children: [
                                     Container(
                                       width: 60,
-                                      child: Center(child: Image.asset("assets/images/calendarDone.png", scale: 3.5)),
+                                      child: Center(child: 
+                                      Utils.formatDate(DateTime.parse(snapshot.data![index].heure)).compareTo(Utils.formatDate(DateTime.now())) > 0? 
+                                      Image.asset("assets/images/calendarNot.png", scale: 3.5):
+                                      Utils.formatDate(DateTime.parse(snapshot.data![index].heure)).compareTo(Utils.formatDate(DateTime.now())) == 0?
+                                      Utils.formatTime(DateTime.parse(snapshot.data![index].heure)).compareTo(Utils.formatTime(DateTime.now())) > 0?
+                                      Image.asset("assets/images/calendarNot.png", scale: 3.5):
+                                      Image.asset("assets/images/calendarDone.png", scale: 3.5):
+                                      Image.asset("assets/images/calendarDone.png", scale: 3.5)
+                                      
+                                      ),
                                     ),
                                     Container(
                                       child:  Column(
@@ -148,7 +172,7 @@ class _RendezVousListScreenState extends State<RendezVousListScreen>
                                       Container(
                                           margin: EdgeInsets.only(
                                               top: 0, bottom: 0, left: 0),
-                                          child: Text(snapshot.data![index].heure,style: TextStyle(fontSize: 14,
+                                          child: Text('$a à $b',style: TextStyle(fontSize: 14,
                                           color: Color.fromARGB(255, 124, 123, 123))),
                                         ),
                                         Container(

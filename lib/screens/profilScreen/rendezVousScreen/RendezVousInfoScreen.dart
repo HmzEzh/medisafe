@@ -7,6 +7,7 @@ import '../../../helpers/DatabaseHelper.dart';
 import '../../../models/RendezVous.dart';
 import '../../../models/medcin.dart';
 import '../../../provider/HomeProvider.dart';
+import '../../../utils/utils.dart';
 
 class RendezVousInfoScreen extends StatefulWidget {
   const RendezVousInfoScreen({
@@ -25,6 +26,8 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
   final TextEditingController remarqueController = TextEditingController();
   final TextEditingController heureController = TextEditingController();
   Medcin medecin = new Medcin(id: 0, nom: "nom", specialite: "specialite", email: "email", adress: "adress", tele: "tele", bureau: "bureau");
+  var a="";
+   var b=""; 
 
   DatabaseHelper medcinService = DatabaseHelper.instance;
   DatabaseHelper databaseHelper = DatabaseHelper.instance;
@@ -49,6 +52,7 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
   }
 
   Widget section1(BuildContext context) {
+   
     var size = MediaQuery.of(context).size;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -384,6 +388,8 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
               print(date);
               setState(() {
                 heureController.text = '$date';
+                a = Utils.formatDate(date);
+                b = Utils.formatTime(date); 
               });
             }, currentTime: DateTime.now(), locale: LocaleType.fr);
           },
@@ -413,7 +419,7 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
                           ),
                         ),
                         Container(
-                          child: Text(heureController.text),
+                          child: Text('$a à $b'),
                         )
                       ])),
             ],
@@ -460,6 +466,8 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
   @override
   Widget build(BuildContext context) {
     var changes = Provider.of<HomeProvider>(context, listen: true);
+    a = Utils.formatDate(DateTime.parse(widget.rendezVous.heure));
+    b = Utils.formatTime(DateTime.parse(widget.rendezVous.heure)); 
     return Scaffold(
       appBar: AppBar(
           title: Row(children: [
@@ -471,7 +479,15 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
                   IconData(0xe16a, fontFamily: 'MaterialIcons'),
                   color: Color.fromARGB(255, 38, 58, 167),
                 )),
+                 Spacer(),
+            Text("Modifier rendez-vous",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 38, 58, 167))),
+            Spacer(),
           ]),
+          
           centerTitle: true,
           shadowColor: Colors.transparent,
           backgroundColor: Color.fromARGB(255, 246, 246, 246),

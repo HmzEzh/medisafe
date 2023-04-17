@@ -33,14 +33,25 @@ class _MedcinsListScreenState extends State<MedcinsListScreen>
     var changes = Provider.of<HomeProvider>(context, listen: true);
     return Scaffold(
         appBar: AppBar(
-            title: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Icon(
-                  IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                  color: Color.fromARGB(255, 38, 58, 167),
-                )),
+            title: Row(
+              children: [
+                InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      IconData(0xe16a, fontFamily: 'MaterialIcons'),
+                      color: Color.fromARGB(255, 38, 58, 167),
+                    )),
+                     Spacer(),
+            Text("Medecins",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 38, 58, 167))),
+            Spacer(),
+              ],
+            ),
             shadowColor: Colors.transparent,
             backgroundColor: Color.fromARGB(255, 246, 246, 246),
             automaticallyImplyLeading: false,
