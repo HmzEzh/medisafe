@@ -10,25 +10,24 @@ class RendezVous {
   late String remarque;
   late String heure;
 
-  RendezVous(
-      {required this.id,
-      required this.medecinId,
-      required this.nom,
-      required this.lieu,
-      required this.remarque,
-      required this.heure,
-      });
+  RendezVous({
+    required this.id,
+    required this.medecinId,
+    required this.nom,
+    required this.lieu,
+    required this.remarque,
+    required this.heure,
+  });
 
-      RendezVous.az(
-      {
-      required this.medecinId,
-      required this.nom,
-      required this.lieu,
-      required this.remarque,
-      required this.heure,
-      });
+  RendezVous.az({
+    required this.medecinId,
+    required this.nom,
+    required this.lieu,
+    required this.remarque,
+    required this.heure,
+  });
 
-    Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'medecinId': medecinId,
@@ -38,6 +37,7 @@ class RendezVous {
       'heure': heure,
     };
   }
+
   factory RendezVous.fromMap(Map<String, dynamic> map) {
     return RendezVous(
       id: map['id'] as int,

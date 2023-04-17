@@ -45,7 +45,9 @@ class ProfilScreen extends StatelessWidget {
                 Navigator.push<dynamic>(
                   context,
                   MaterialPageRoute<dynamic>(
-                      builder: (BuildContext context) => AccountScreen()),
+                      builder: (BuildContext context) => AccountScreen(
+                            userId: 1,
+                          )),
                 );
               },
               child: Container(
@@ -201,13 +203,11 @@ class ProfilScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.push<dynamic>(
-                              context,
-                              MaterialPageRoute<dynamic>(
-                                  builder: (BuildContext context) =>
-                                      RendezVousListScreen(
-                                      
-                                      )),
-                            );
+                        context,
+                        MaterialPageRoute<dynamic>(
+                            builder: (BuildContext context) =>
+                                RendezVousListScreen()),
+                      );
                     },
                     child: Container(
                       margin: EdgeInsets.fromLTRB(0, 0, 0, haille * 0.015),

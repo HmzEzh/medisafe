@@ -1,5 +1,6 @@
 import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/medicament.dart';
+import 'package:medisafe/models/Users/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,12 +15,12 @@ class DatabaseHelper {
 
   late Database _db;
   Future<Database> get database async {
-
     if (_db != null) return _db;
     // lazily instantiate the db the first time it is accessed
     _db = await init();
     return _db;
   }
+
   Database get db => _db;
   // this opens the database (and creates it if it doesn't exist)
   Future<Database> init() async {
@@ -80,10 +81,47 @@ class DatabaseHelper {
           );
           ''');
 
+    await db.execute('''
+    CREATE TABLE user (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nom TEXT NOT NULL,
+      prenom TEXT NOT NULL,
+      date_naissance TEXT NOT NULL,
+      address TEXT NOT NULL,
+      age INTEGER NOT NULL,
+      taille INTEGER NOT NULL,
+      poids INTEGER NOT NULL,
+      email TEXT NOT NULL,
+      password TEXT NOT NULL,
+      tele TEXT NOT NULL,
+      blood TEXT NOT NULL      
+    );
+    ''');
+
     print("creating tables!!!!!!!!");
   }
 
+  // user service !!
 
+  Future<int> insertUser(Map<String, dynamic> row) async {
+    await init();
+    return await _db.insert("user", row);
+  }
+
+  Future<List<Map<String, dynamic>>> getUserById(int id) async {
+    await init();
+    return _db.query('user', orderBy: "id", where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<List<Map<String, dynamic>>> getUsers() async {
+    await init();
+    return _db.query('user', orderBy: "id");
+  }
+
+  Future<int> queryUsersCount() async {
+    final results = await _db.rawQuery('SELECT COUNT(*) FROM user');
+    return Sqflite.firstIntValue(results) ?? 0;
+  }
 
   // medecin service !!
 
@@ -132,10 +170,9 @@ class DatabaseHelper {
     );
   }
 
-
-
   // -- medicament
-  Future<int> insertMedicament(String name, String type, String category, int nbrJour) async {
+  Future<int> insertMedicament(
+      String name, String type, String category, int nbrJour) async {
     await init();
     DateTime now = DateTime.now();
     String dateDebut = "${now.day}-${now.month}-${now.year}";
@@ -143,17 +180,23 @@ class DatabaseHelper {
     DateTime dateAfternDays = now.add(Duration(days: nbrJour));
 
     // Format the date as a string
-    String dateFin = "${dateAfternDays.day}-${dateAfternDays.month}-${dateAfternDays.year}";
+    String dateFin =
+        "${dateAfternDays.day}-${dateAfternDays.month}-${dateAfternDays.year}";
 
-
-    final data = {'nom':name, 'type':type, 'category':category,'dateDebut':dateDebut,'dateFin':dateFin};
-    int id =await _db.insert("medicament", data);
+    final data = {
+      'nom': name,
+      'type': type,
+      'category': category,
+      'dateDebut': dateDebut,
+      'dateFin': dateFin
+    };
+    int id = await _db.insert("medicament", data);
     return id;
   }
 
   Future<List<Map<String, dynamic>>> getMedicaments() async {
     await init();
-    return _db.query('medicament',orderBy: "id");
+    return _db.query('medicament', orderBy: "id");
   }
 
   Future<List<Medicament>> getAllMedicaments() async {
@@ -167,8 +210,8 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getMedicamentById(int id) async {
     await init();
-    return _db.query('medicament',orderBy: "id",where: 'id = ?',
-        whereArgs: [id]);
+    return _db
+        .query('medicament', orderBy: "id", where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> deleteMedicament(int id) async {
@@ -196,16 +239,16 @@ class DatabaseHelper {
     return Sqflite.firstIntValue(results) ?? 0;
   }
 
-  Future<int> insertDoze(String heure,int id) async {
+  Future<int> insertDoze(String heure, int id) async {
     await init();
-    final data = {'idMedicament':id, 'heure':heure,'suspend':0};
-    int id2 =await _db.insert("doze", data);
+    final data = {'idMedicament': id, 'heure': heure, 'suspend': 0};
+    int id2 = await _db.insert("doze", data);
     return id2;
   }
 
   Future<List<Map<String, dynamic>>> getDozes() async {
     await init();
-    return _db.query('doze',orderBy: "id");
+    return _db.query('doze', orderBy: "id");
   }
 
   Future<int> deleteDozes(int id) async {
@@ -237,7 +280,6 @@ class DatabaseHelper {
     );
     print("dghdynj${a}");
     return a;
-
   }
 
   Future<int> deleteDoze(int id) async {
@@ -253,11 +295,17 @@ class DatabaseHelper {
     await init();
 
     List<Doze> dozes = [];
-    for (Map<String, dynamic> item in await _db.query("doze",orderBy: "id",where: 'idMedicament = ?',
-        whereArgs: [id])) {
+    for (Map<String, dynamic> item in await _db.query("doze",
+        orderBy: "id", where: 'idMedicament = ?', whereArgs: [id])) {
       dozes.add(Doze.fromMap(item));
     }
     return dozes;
   }
 
+  Future<List<String>> getTableNames() async {
+    final result =
+        await _db.rawQuery('SELECT name FROM sqlite_master WHERE type="table"');
+    final tableNames = result.map((row) => row['name'] as String).toList();
+    return tableNames;
+  }
 }
