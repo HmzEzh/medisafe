@@ -347,7 +347,7 @@ class _AddMedcinScreenState extends State<AddMedcinScreen> {
                       //print(await medcinService.queryRowCount());
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);
-                       changes.setChanges();
+                      changes.setChanges();
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Container(
                             padding: EdgeInsets.only(top: 0, bottom: 2),
@@ -369,7 +369,7 @@ class _AddMedcinScreenState extends State<AddMedcinScreen> {
                   }
                 },
                 child: Text(
-                  "sauver",
+                  "save",
                   style: TextStyle(color: Color.fromARGB(255, 38, 58, 167)),
                 ))
           ]),
