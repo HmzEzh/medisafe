@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/main.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
-import 'package:medisafe/screens/medicamentScreen/models/Rappel.dart';
+import 'package:medisafe/models/Rappel.dart';
 
 class WelcomeView extends StatefulWidget {
   
@@ -156,12 +156,15 @@ class _MyWidgetState extends State<WelcomeView> {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     _addMedi();
-                    Navigator.push<dynamic>(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => MyApp(),
-                      ),
-                    );
+                    // Navigator.push<dynamic>(
+                    //   context,
+                    //   MaterialPageRoute<dynamic>(
+                    //     builder: (BuildContext context) => MyApp(),
+                    //   ),
+                    // );
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   icon: Flexible(
                     flex: 1,

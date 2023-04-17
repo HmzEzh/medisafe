@@ -7,7 +7,7 @@ import 'package:medisafe/models/RendezVous.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/homeScreen/HomeScreen.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
-import 'package:medisafe/screens/medicamentScreen/models/medicament.dart';
+import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 import 'package:medisafe/screens/recomScreen/RecomScreen.dart';
 import 'package:medisafe/service/notification_service.dart';

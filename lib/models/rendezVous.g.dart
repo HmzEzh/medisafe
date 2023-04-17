@@ -6,9 +6,6 @@ part of 'package:medisafe/models/RendezVous.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-
-
-
 RendezVous _$RendezVousFromJson(Map<String, dynamic> json) => RendezVous(
       id: json['id'] as int,
       medecinId: json['medecinId'] as int,

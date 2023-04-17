@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/add_dozes.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/doze_view.dart';
-import 'package:medisafe/screens/medicamentScreen/models/Rappel.dart';
+import 'package:medisafe/models/Rappel.dart';
 
 class NameMedi extends StatefulWidget {
   final AnimationController animationController;
@@ -38,40 +38,7 @@ class _NameMediState extends State<NameMedi> {
         ),
       ),
     );
-    final _textAnimation =
-        Tween<Offset>(begin: Offset(0, 0), end: Offset(-2, 0)).animate(
-      CurvedAnimation(
-        parent: widget.animationController,
-        curve: const Interval(
-          0.2,
-          0.4,
-          curve: Curves.fastOutSlowIn,
-        ),
-      ),
-    );
-    final _imageAnimation =
-        Tween<Offset>(begin: Offset(0, 0), end: Offset(-4, 0)).animate(
-      CurvedAnimation(
-        parent: widget.animationController,
-        curve: const Interval(
-          0.2,
-          0.4,
-          curve: Curves.fastOutSlowIn,
-        ),
-      ),
-    );
 
-    final _relaxAnimation =
-        Tween<Offset>(begin: Offset(0, -2), end: Offset(0, 0)).animate(
-      CurvedAnimation(
-        parent: widget.animationController,
-        curve: Interval(
-          0.0,
-          0.2,
-          curve: Curves.fastOutSlowIn,
-        ),
-      ),
-    );
 
     return SlideTransition(
       position: _firstHalfAnimation,
@@ -227,12 +194,10 @@ class contenu extends State<name> with TickerProviderStateMixin  {
                             ),
                           ],
                           onChanged: (value) {
-                            // update the selected value when the user selects an option
-                            setState(() {
-                              selectedValue = value;
-                            });
+
                             Rappel rap = Rappel();
                             setState(() {
+                              selectedValue = value;
                               rap.setType(value!);
                             });
                           },
@@ -270,7 +235,7 @@ class contenu extends State<name> with TickerProviderStateMixin  {
                 Navigator.push<dynamic>(
                   context,
                   MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) => CareView(),
+                    builder: (BuildContext context) => CareView(animationController: _animationController!),
                   ),
                 );
               },

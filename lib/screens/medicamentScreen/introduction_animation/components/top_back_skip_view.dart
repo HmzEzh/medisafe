@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TopBackSkipView extends StatelessWidget {
+class TopBackSkipView extends StatefulWidget {
   final AnimationController animationController;
   final VoidCallback onBackClick;
   final VoidCallback onSkipClick;
@@ -13,11 +13,16 @@ class TopBackSkipView extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<TopBackSkipView> createState() => _TopBackSkipViewState();
+}
+
+class _TopBackSkipViewState extends State<TopBackSkipView> {
+  @override
   Widget build(BuildContext context) {
     final _animation =
         Tween<Offset>(begin: Offset(0, -1), end: Offset(0.0, 0.0))
             .animate(CurvedAnimation(
-      parent: animationController,
+      parent: widget.animationController,
       curve: Interval(
         0.0,
         0.2,
@@ -37,7 +42,7 @@ class TopBackSkipView extends StatelessWidget {
     // ));
     final _skipAnimation = Tween<Offset>(begin: Offset(0, 0), end: Offset(2, 0))
         .animate(CurvedAnimation(
-      parent: animationController,
+      parent: widget.animationController,
       curve: Interval(
         0.6,
         0.8,
@@ -60,17 +65,22 @@ class TopBackSkipView extends StatelessWidget {
                 //   position: _backAnimation,
                 //   child:
                 IconButton(
-                  onPressed: onBackClick,
+                  onPressed: widget.onBackClick,
                   icon: Icon(Icons.arrow_back_ios_new_rounded),
                   //   ),
                 ),
                 SlideTransition(
                   position: _skipAnimation,
                   child: IconButton(
-                    onPressed: onSkipClick,
-                    icon: Text('Skip'),
+                    onPressed: ()=>Navigator.pop(context),
+                    icon: Text(
+                      'Skip',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                   ),
-                ),
+                ),)
               ],
             ),
           ),

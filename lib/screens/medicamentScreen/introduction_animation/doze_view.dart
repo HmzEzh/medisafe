@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medisafe/main.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/user_model.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/save_medi.dart';
-import 'package:medisafe/screens/medicamentScreen/models/Rappel.dart';
+import 'package:medisafe/models/Rappel.dart';
 
 // ignore: camel_case_types
 class Horaire extends StatefulWidget {
@@ -50,7 +50,7 @@ class _HoraireState extends State<Horaire> {
             child: Form(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15, left: MediaQuery.of(context).size.width * 0.001),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.10, left: MediaQuery.of(context).size.width * 0.001),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
