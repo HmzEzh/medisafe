@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const HomeScreen(),
     RecomScreen(),
     MedicamentScreen(),
-    ProfilScreen()
+    ProfilScreen(userId: 1)
   ];
 
   @override
