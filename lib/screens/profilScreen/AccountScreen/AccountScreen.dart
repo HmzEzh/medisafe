@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
+import 'package:medisafe/main.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:medisafe/screens/profilScreen/AccountScreen/EditAccountScreen.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
@@ -42,8 +43,10 @@ class _AccountScreenState extends State<AccountScreen> {
             Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) =>
-                      ProfilScreen(userId: widget.userId)),
+                  builder: (BuildContext context) => MyHomePage(
+                        nbr: 3,
+                        title: 'back to profil',
+                      )),
             );
           },
         ),
