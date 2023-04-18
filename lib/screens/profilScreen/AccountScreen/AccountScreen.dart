@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:medisafe/screens/profilScreen/AccountScreen/EditAccountScreen.dart';
+import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 
 class AccountScreen extends StatefulWidget {
   final int userId;
@@ -38,7 +39,12 @@ class _AccountScreenState extends State<AccountScreen> {
             color: Color.fromARGB(255, 38, 58, 167),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) =>
+                      ProfilScreen(userId: widget.userId)),
+            );
           },
         ),
         title: const Text(
