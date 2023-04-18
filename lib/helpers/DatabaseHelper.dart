@@ -7,12 +7,25 @@ import 'package:medisafe/models/Users/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:medisafe/service/UserServices/UserService.dart';
 import '../models/RendezVous.dart';
 import '../models/medcin.dart';
 import '../screens/medicamentScreen/medicament_list_view.dart';
 
 class DatabaseHelper {
+  static UserService userService = UserService();
+  static User utili = User.init(
+      nom: "DOE",
+      prenom: "Jhon",
+      date_naissance: "1993-07-23",
+      address: "3474 Tail Ends Road",
+      age: 32,
+      taille: 183,
+      poids: 85,
+      email: "jhondoe@gmail.com",
+      password: "testjhon",
+      tele: "+212 615-91203",
+      blood: "A+");
   static const _databaseName = "medisafe";
   static const _databaseVersion = 2;
   DatabaseHelper._privateConstructor();
@@ -20,8 +33,6 @@ class DatabaseHelper {
 
   late Database _db;
   Future<Database> get database async {
-
-
     if (_db != null) return _db;
     // lazily instantiate the db the first time it is accessed
     _db = await init();
@@ -107,6 +118,23 @@ class DatabaseHelper {
     );
     ''');
 
+    await db.execute('''
+  INSERT INTO user (nom, prenom, date_naissance, address, age, taille, poids, email, password, tele, blood)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+''', [
+      utili.nom,
+      utili.prenom,
+      utili.date_naissance,
+      utili.address,
+      utili.age,
+      utili.taille,
+      utili.poids,
+      utili.email,
+      utili.password,
+      utili.tele,
+      utili.blood
+    ]);
+
     print("creating tables!!!!!!!!");
   }
 
@@ -131,7 +159,6 @@ class DatabaseHelper {
     final results = await _db.rawQuery('SELECT COUNT(*) FROM user');
     return Sqflite.firstIntValue(results) ?? 0;
   }
-
 
   Future<List<RendezVous>> allRendezVous() async {
     await init();
@@ -189,7 +216,8 @@ class DatabaseHelper {
   }
 
   // -- medicament
-  Future<int> insertMedicament(String name, String type, String category, int nbrJour, String forme) async {
+  Future<int> insertMedicament(String name, String type, String category,
+      int nbrJour, String forme) async {
     await init();
     DateTime now = DateTime.now();
     String dateDebut = "${now.day}-${now.month}-${now.year}";
@@ -200,9 +228,15 @@ class DatabaseHelper {
     String dateFin =
         "${dateAfternDays.day}-${dateAfternDays.month}-${dateAfternDays.year}";
 
-
-    final data = {'nom':name, 'type':type, 'category':category,'dateDebut':dateDebut,'dateFin':dateFin,'forme':forme};
-    int id =await _db.insert("medicament", data);
+    final data = {
+      'nom': name,
+      'type': type,
+      'category': category,
+      'dateDebut': dateDebut,
+      'dateFin': dateFin,
+      'forme': forme
+    };
+    int id = await _db.insert("medicament", data);
 
     return id;
   }

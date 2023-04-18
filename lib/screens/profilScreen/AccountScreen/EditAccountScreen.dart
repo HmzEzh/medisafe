@@ -23,6 +23,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   TextEditingController poidsController = TextEditingController();
   TextEditingController teleController = TextEditingController();
   TextEditingController bloodController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   UserService userService2 = UserService();
   DatabaseHelper userService = DatabaseHelper.instance;
@@ -395,11 +397,11 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     prenom: prenomController.text,
                     date_naissance: naissanceController.text,
                     address: addressController.text,
-                    age: 32,
+                    age: int.parse(ageController.text),
                     taille: int.parse(tailleController.text),
                     poids: int.parse(poidsController.text),
-                    email: 'jhondoe@gmail.com',
-                    password: 'testjhon',
+                    email: emailController.text,
+                    password: passwordController.text,
                     tele: teleController.text,
                     blood: bloodController.text);
 
@@ -446,6 +448,11 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     TextEditingController(text: user['poids'].toString());
                 teleController = TextEditingController(text: user['tele']);
                 bloodController = TextEditingController(text: user['blood']);
+                ageController =
+                    TextEditingController(text: user['age'].toString());
+                emailController = TextEditingController(text: user['email']);
+                passwordController =
+                    TextEditingController(text: user['password']);
                 return SingleChildScrollView(
                   child: Column(
                     children: [

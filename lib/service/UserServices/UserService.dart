@@ -5,9 +5,9 @@ import 'package:medisafe/models/Users/user.dart';
 class UserService {
   late DatabaseHelper instance = DatabaseHelper.instance;
 
-  Future<int> insertUser(User user) async {
+  void insertUser(User user) async {
     Database db = await instance.database;
-    return await db.insert("user", user.toMap());
+    db.insert("user", user.toMap());
   }
 
   Future<List<User>> getAllUsers() async {
@@ -40,5 +40,13 @@ class UserService {
     Database db = await instance.database;
     final results = await db.rawQuery('SELECT COUNT(*) FROM user');
     return Sqflite.firstIntValue(results) ?? 0;
+  }
+
+  Future<List<String>> getTableNames() async {
+    Database db = await instance.database;
+    final result =
+        await db.rawQuery('SELECT name FROM sqlite_master WHERE type="table"');
+    final tableNames = result.map((row) => row['name'] as String).toList();
+    return tableNames;
   }
 }
