@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
+import 'package:medisafe/main.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:medisafe/screens/profilScreen/AccountScreen/EditAccountScreen.dart';
+import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 
 class AccountScreen extends StatefulWidget {
   final int userId;
@@ -28,11 +30,27 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     final double waille = MediaQuery.of(context).size.width;
     final double haille = MediaQuery.of(context).size.height;
-    final user = userService.getUserById(1);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromARGB(255, 38, 58, 167),
+          ),
+          onPressed: () {
+            Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) => MyHomePage(
+                        nbr: 3,
+                        title: 'back to profil',
+                      )),
+            );
+          },
+        ),
+        title: const Text(
           "Account",
           style: TextStyle(
             fontSize: 23,
@@ -40,6 +58,7 @@ class _AccountScreenState extends State<AccountScreen> {
             color: Color.fromARGB(255, 38, 58, 167),
           ),
         ),
+        titleSpacing: 0.0,
         shadowColor: Colors.transparent,
         backgroundColor: Color.fromARGB(255, 246, 246, 246),
         automaticallyImplyLeading: false,

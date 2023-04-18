@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/models/Users/user.dart';
+import 'package:medisafe/screens/profilScreen/AccountScreen/AccountScreen.dart';
+import 'package:medisafe/service/UserServices/UserService.dart';
 
 class EditAccountScreen extends StatefulWidget {
   final int userId;
@@ -21,7 +23,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   TextEditingController poidsController = TextEditingController();
   TextEditingController teleController = TextEditingController();
   TextEditingController bloodController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
+  UserService userService2 = UserService();
   DatabaseHelper userService = DatabaseHelper.instance;
   late Future<List<Map<String, dynamic>>> _user;
 
@@ -349,7 +354,12 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           title: Row(children: [
             InkWell(
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) =>
+                            AccountScreen(userId: widget.userId)),
+                  );
                 },
                 child: const Icon(
                   IconData(0xe16a, fontFamily: 'MaterialIcons'),
@@ -380,6 +390,36 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 /*List<Map<String, dynamic>> user =
                     await userService.getUserById(1);
                 print(user[0]);*/
+                print(nomController.text);
+                User update = User(
+                    id: widget.userId,
+                    nom: nomController.text,
+                    prenom: prenomController.text,
+                    date_naissance: naissanceController.text,
+                    address: addressController.text,
+                    age: int.parse(ageController.text),
+                    taille: int.parse(tailleController.text),
+                    poids: int.parse(poidsController.text),
+                    email: emailController.text,
+                    password: passwordController.text,
+                    tele: teleController.text,
+                    blood: bloodController.text);
+
+                userService2.updateUser(update, widget.userId);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Container(
+                      padding: EdgeInsets.only(top: 0, bottom: 2),
+                      child: Text(
+                        "Enregistré",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white),
+                      )),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Color.fromARGB(255, 75, 138, 220),
+                  margin: EdgeInsets.only(bottom: 20, left: 25, right: 25),
+                ));
               },
               child: const Icon(
                 Icons.save,
@@ -408,6 +448,11 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     TextEditingController(text: user['poids'].toString());
                 teleController = TextEditingController(text: user['tele']);
                 bloodController = TextEditingController(text: user['blood']);
+                ageController =
+                    TextEditingController(text: user['age'].toString());
+                emailController = TextEditingController(text: user['email']);
+                passwordController =
+                    TextEditingController(text: user['password']);
                 return SingleChildScrollView(
                   child: Column(
                     children: [

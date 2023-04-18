@@ -1,14 +1,31 @@
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/medicament.dart';
+import 'package:medisafe/provider/HomeProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:medisafe/service/UserServices/UserService.dart';
 import '../models/RendezVous.dart';
 import '../models/medcin.dart';
+import '../screens/medicamentScreen/medicament_list_view.dart';
 
 class DatabaseHelper {
+  static UserService userService = UserService();
+  static User utili = User.init(
+      nom: "DOE",
+      prenom: "Jhon",
+      date_naissance: "1993-07-23",
+      address: "3474 Tail Ends Road",
+      age: 32,
+      taille: 183,
+      poids: 85,
+      email: "jhondoe@gmail.com",
+      password: "testjhon",
+      tele: "+212 615-91203",
+      blood: "A+");
   static const _databaseName = "medisafe";
   static const _databaseVersion = 2;
   DatabaseHelper._privateConstructor();
@@ -27,6 +44,7 @@ class DatabaseHelper {
   Future<Database> init() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
+
     _db = await openDatabase(
       path,
       version: _databaseVersion,
@@ -69,7 +87,8 @@ class DatabaseHelper {
             type TEXT NOT NULL,
             category TEXT NOT NULL,
             dateDebut TEXT NOT NULL,
-            dateFin TEXT NOT NULL
+            dateFin TEXT NOT NULL,
+            forme TEXT NOT NULL
           );
           ''');
     await db.execute('''
@@ -99,6 +118,23 @@ class DatabaseHelper {
     );
     ''');
 
+    await db.execute('''
+  INSERT INTO user (nom, prenom, date_naissance, address, age, taille, poids, email, password, tele, blood)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+''', [
+      utili.nom,
+      utili.prenom,
+      utili.date_naissance,
+      utili.address,
+      utili.age,
+      utili.taille,
+      utili.poids,
+      utili.email,
+      utili.password,
+      utili.tele,
+      utili.blood
+    ]);
+
     print("creating tables!!!!!!!!");
   }
 
@@ -124,9 +160,12 @@ class DatabaseHelper {
     return Sqflite.firstIntValue(results) ?? 0;
   }
 
+<<<<<<< HEAD
 
   
   // medecin service !!
+=======
+>>>>>>> 41eca9db2aae7be09e3914bea4b697dfb0cd9a5e
   Future<List<RendezVous>> allRendezVous() async {
     await init();
     List<RendezVous> rendezVous = [];
@@ -181,8 +220,8 @@ class DatabaseHelper {
   }
 
   // -- medicament
-  Future<int> insertMedicament(
-      String name, String type, String category, int nbrJour) async {
+  Future<int> insertMedicament(String name, String type, String category,
+      int nbrJour, String forme) async {
     await init();
     DateTime now = DateTime.now();
     String dateDebut = "${now.day}-${now.month}-${now.year}";
@@ -198,9 +237,11 @@ class DatabaseHelper {
       'type': type,
       'category': category,
       'dateDebut': dateDebut,
-      'dateFin': dateFin
+      'dateFin': dateFin,
+      'forme': forme
     };
     int id = await _db.insert("medicament", data);
+
     return id;
   }
 
@@ -281,14 +322,14 @@ class DatabaseHelper {
 
   Future<int> updateDoze(Map<String, dynamic> row, int id) async {
     await init();
-    print("hahoma ldakhel ${row} + id");
+
     int a = await _db.update(
       "doze",
       row,
       where: 'id = ?',
       whereArgs: [id],
     );
-    print("dghdynj${a}");
+
     return a;
   }
 

@@ -111,12 +111,7 @@ class _CategoryViewState extends State<CategoryView> {
   void _refreshJournals() async {
     final data = await medicamentService.getMedicaments();
     final dozes = await medicamentService.getDozes();
-    for (int i = 0; i < data.length; i++) {
-      print("nombre dsata = ${data[i]}");
-    }
-    for (int i = 0; i < dozes!.length; i++) {
-      print("dozes = ${dozes![i]}");
-    }
+
 
     setState(() {
       _journals = data;

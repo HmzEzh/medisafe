@@ -30,6 +30,19 @@ class User {
       required this.tele,
       required this.blood});
 
+  User.init(
+      {required this.nom,
+      required this.prenom,
+      required this.date_naissance,
+      required this.address,
+      required this.age,
+      required this.taille,
+      required this.poids,
+      required this.email,
+      required this.password,
+      required this.tele,
+      required this.blood});
+
   Map<String, dynamic> toMap() {
     return {
       'nom': nom,

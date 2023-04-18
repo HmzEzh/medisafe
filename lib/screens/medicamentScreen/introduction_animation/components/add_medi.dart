@@ -58,6 +58,7 @@ class name extends StatefulWidget {
 }
 
 class contenu extends State<name> with TickerProviderStateMixin  {
+  String? selectedValue1 = 'gouttes';
   String? selectedValue = 'everyday';
 
 
@@ -81,7 +82,7 @@ class contenu extends State<name> with TickerProviderStateMixin  {
     var row = Row(
       children: [
         Container(
-          margin: EdgeInsets.only(left: 25, top: 50, bottom: 10),
+          margin: EdgeInsets.only(left: 25, top: 30, bottom: 2),
           alignment: Alignment.topLeft,
           child: CustomText(
             text: 'nombre de jour:',
@@ -94,8 +95,8 @@ class contenu extends State<name> with TickerProviderStateMixin  {
         ),
         SizedBox(width: 20),
         Container(
-          margin: EdgeInsets.only(left: 25, top: 50, bottom: 10),
-          width: 100,
+          margin: EdgeInsets.only(left: 25, top: 30, bottom: 2),
+          width: 130,
           height: 30,
           child: TextField(
             keyboardType: TextInputType.number,
@@ -114,6 +115,42 @@ class contenu extends State<name> with TickerProviderStateMixin  {
         ),
       ],
     );
+    var row2 = Row(
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: 25, top: 40, bottom: 2),
+          alignment: Alignment.topLeft,
+          child: CustomText(
+            text: 'category:',
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        SizedBox(width: 65),
+        Container(
+          margin: EdgeInsets.only(left: 25, top: 40, bottom: 2),
+          width: 130,
+          height: 30,
+          child: TextField(
+            keyboardType: TextInputType.text,
+            // set the keyboard type to numeric
+            onChanged: (text) {
+              Rappel rap = Rappel();
+              rap.setCategory(text);
+            },
+            decoration: const InputDecoration(
+              labelText: 'Enter category', // set a label for the input box
+              border: OutlineInputBorder(),
+              contentPadding:
+              EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            ),
+          ),
+        ),
+      ],
+    );
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return  SingleChildScrollView(
@@ -121,11 +158,10 @@ class contenu extends State<name> with TickerProviderStateMixin  {
           children: [
             Container(
               margin: EdgeInsets.only(
-                  top: constraints.maxHeight * 0.2,
+                  top: constraints.maxHeight * 0.12,
                   left: 8,
-                  right: 8,
-                  bottom: MediaQuery.of(context).size.height * 0.15),
-              height: MediaQuery.of(context).size.height * 0.45,
+                  right: 8),
+              height: MediaQuery.of(context).size.height * 0.58,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8.0),
@@ -150,7 +186,7 @@ class contenu extends State<name> with TickerProviderStateMixin  {
                           onChanged: (text) {
                             Rappel rap = Rappel();
                             rap.setNom(text);
-                            print(rap.getNom());
+
                           },
                           decoration: const InputDecoration(
                             labelText: 'Enter medicament\'s name',
@@ -159,11 +195,66 @@ class contenu extends State<name> with TickerProviderStateMixin  {
                       ),
                     ),
                   ),
+                  row2,
+                  Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 25, top: 30, bottom: 2),
+                        alignment: Alignment.topLeft,
+                        child: CustomText(
+                          text: 'Forme:',
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 84),
+                      Container(
+                        width: 120,
+                        margin: EdgeInsets.only(left: 25, top: 30, bottom: 2),
+                        child: DropdownButton<String>(
+                          value: selectedValue1, // set the initial value
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'Sirops',
+                              child: Text('Sirops'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Pommade',
+                              child: Text('Pommade'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Comprimés',
+                              child: Text('Comprimés'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'gouttes',
+                              child: Text('Gouttes'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Capsule',
+                              child: Text('Capsule'),
+                            ),
+                          ],
+                          onChanged: (value) {
+
+                            Rappel rap = Rappel();
+                            setState(() {
+                              selectedValue1 = value;
+                              rap.setForme(value!);
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                   row,
                   Row(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(left: 25, top: 40, bottom: 10),
+                        margin: EdgeInsets.only(left: 25, top: 30, bottom: 2),
                         alignment: Alignment.topLeft,
                         child: CustomText(
                           text: 'type de rappel:',
@@ -174,9 +265,9 @@ class contenu extends State<name> with TickerProviderStateMixin  {
                           ),
                         ),
                       ),
-                      SizedBox(width: 20),
+                      SizedBox(width: 30),
                       Container(
-                        margin: EdgeInsets.only(left: 25, top: 40, bottom: 10),
+                        margin: EdgeInsets.only(left: 25, top: 30, bottom: 2),
                         child: DropdownButton<String>(
                           value: selectedValue, // set the initial value
                           items: const [
@@ -209,7 +300,7 @@ class contenu extends State<name> with TickerProviderStateMixin  {
               ), // your child widget here
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 5),
+              padding: EdgeInsets.only(bottom: 5, top:MediaQuery.of(context).size.height * 0.1 ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

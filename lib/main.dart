@@ -57,19 +57,31 @@ Future<void> main() async {
   ]);
   await dbHelper.init();
   await Noti.initialize(flutterLocalNotificationsPlugin);
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
+      ],
+      child: const MyApp(
+        nbr: 0,
+      )));
 
   // Define the task constraints
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => HomeProvider()),
-  ], child: const MyApp()));
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HomeProvider()),
+      ],
+      child: const MyApp(
+        nbr: 0,
+      )));
 
   Medicament.addCat();
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.nbr});
 
+  final int nbr;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -78,21 +90,28 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(
+        title: 'Flutter Demo Home Page',
+        nbr: nbr,
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.nbr});
   final String title;
+  final int nbr;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState(nbr);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late int nbr = 0;
+  _MyHomePageState(this.nbr);
+  late int _selectedIndex = nbr;
   @override
   void initState() {
     // Workmanager().registerPeriodicTask(
@@ -104,7 +123,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -115,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const HomeScreen(),
     RecomScreen(),
     MedicamentScreen(),
-    ProfilScreen()
+    ProfilScreen(userId: 1)
   ];
 
   @override
