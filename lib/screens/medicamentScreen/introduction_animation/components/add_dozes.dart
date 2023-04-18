@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:medisafe/screens/introduction_animation/components/care_view.dart';
+import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/save_medi.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/top_back_skip_view.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/doze_view.dart';
 
@@ -127,7 +128,46 @@ class _CareViewState extends State<CareView>with TickerProviderStateMixin {
                 ]),
               ],
             ),
-          ), Horaire()
+          ), Horaire(),
+          Padding(
+            padding:  EdgeInsets.only(top:MediaQuery.of(context).size.height *0.117,bottom: MediaQuery.of(context).size.height * 0.008),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var i = 0; i < 2; i++)
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 480),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32),
+                        color: 1 == i ? Color(0xff132137) : Color(0xffE3E4E4),
+                      ),
+                      width: 10,
+                      height: 10,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.08),
+            child: FloatingActionButton(
+              backgroundColor: Colors.deepPurple,
+              onPressed: () {
+                Navigator.push<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => WelcomeView(),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.navigate_next,
+                color: Colors.white,
+              ),
+            ),
+          )
         ],
       ),
     )));

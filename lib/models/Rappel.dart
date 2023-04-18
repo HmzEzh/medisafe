@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 
 class Rappel extends ChangeNotifier {
   String nom="";
+  String category="";
+  String forme="";
   int nombre=0;
   String type="";
   List horaires=[];
@@ -36,6 +38,14 @@ class Rappel extends ChangeNotifier {
     type = t;
     notifyListeners();
   }
+  void setForme(String t){
+    forme = t;
+    notifyListeners();
+  }
+  void setCategory(String t){
+    category = t;
+    notifyListeners();
+  }
   String getNom(){
     return nom;
   }
@@ -45,4 +55,11 @@ class Rappel extends ChangeNotifier {
   int getNombre(){
     return nombre;
   }
+  String getForme(){
+    return forme;
+  }
+  String getCategory(){
+    return category;
+  }
+
 }

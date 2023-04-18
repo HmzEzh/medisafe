@@ -17,13 +17,14 @@ class PopularCourseListView extends StatefulWidget {
 }
 
 class _PopularCourseListViewState extends State<PopularCourseListView>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, ChangeNotifier {
   AnimationController? animationController;
 
   @override
   void initState() {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 2000), vsync: this);
+    print("haha");
     super.initState();
   }
 
@@ -31,6 +32,9 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
     await Future<dynamic>.delayed(const Duration(milliseconds: 200));
     return true;
   }
+
+
+  notifyListeners();
 
   void _delete(int id) async {
     DatabaseHelper medicamentService = DatabaseHelper.instance;
@@ -45,6 +49,11 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
   String formatDate(String dateString) {
     DateTime date = DateFormat('dd-M-yyyy').parse(dateString);
     return DateFormat('dd-MM-yy').format(date);
+  }
+
+  void first(){
+    var changes = Provider.of<HomeProvider>(context, listen: true);
+    changes.setChanges();
   }
 
 
@@ -105,9 +114,9 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                     childAspectRatio: 0.8,
                   ),
                   children: List<Widget>.generate(
-                    Medicament.popularCourseList.length,
+                    snapshot.data!.length,
                     (int index) {
-                      final int count = Medicament.popularCourseList.length;
+                      final int count = snapshot.data!.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
