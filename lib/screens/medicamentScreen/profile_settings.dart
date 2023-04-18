@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
+import 'package:medisafe/main.dart';
 import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/Rappel.dart';
 import 'package:medisafe/models/medicament.dart';
@@ -372,7 +373,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                           setState(() {
                                             temp = snapshot.data![index].idMedicament;
                                             heure1 =snapshot.data![index].heure;
-                                            print(temp);
+
                                             dozeservice.deleteDoze( snapshot.data![index].id!);
                                             changes.notifyListeners();
                                             //snapshot.data!.removeAt(index);
@@ -388,7 +389,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                                   // Add the item back to the data source.
                                                   setState(() {
                                                     dozeservice.insertDoze(heure1, temp);
-                                                    print(temp);
+
 
                                                     changes.notifyListeners();
                                                   });
@@ -410,9 +411,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                               if (newTime != null) {
                                                 setState(() {
                                                   _time = newTime;
-                                                  print("idMedicament:${snapshot.data![index].idMedicament!}, heure: ${snapshot.data![index].heure!}");
                                                   final row = {'idMedicament':snapshot.data![index].idMedicament!, 'heure':_time.toString().substring(10, 15),'suspend':snapshot.data![index].suspend!?1:0};
-                                                  print("row:${row}");
                                                   dozeservice.updateDoze(row, snapshot.data![index].id!);
                                                   changes.notifyListeners();
                                                 });
@@ -580,7 +579,13 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                                               .updateMedicament(data, widget.medicament.id);
 
                                                           changes.setChanges();
-                                                          Navigator.pop(context);
+                                                          // Navigator.pop(context);
+                                                          Navigator.push<dynamic>(
+                                                            context,
+                                                            MaterialPageRoute<dynamic>(
+                                                              builder: (BuildContext context) => MyApp( nbr: 2,),
+                                                            ),
+                                                          );
                                                           ScaffoldMessenger.of(context)
                                                               .showSnackBar(SnackBar(
                                                             content: Container(
@@ -716,7 +721,13 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
 
                                                           });
                                                           changes.setChanges();
-                                                          Navigator.pop(context);
+                                                          //Navigator.pop(context);
+                                                          Navigator.push<dynamic>(
+                                                            context,
+                                                            MaterialPageRoute<dynamic>(
+                                                              builder: (BuildContext context) => MyApp( nbr: 2,),
+                                                            ),
+                                                          );
                                                           ScaffoldMessenger.of(context)
                                                               .showSnackBar(SnackBar(
                                                             content: Container(

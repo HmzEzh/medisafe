@@ -1,5 +1,8 @@
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/medicament.dart';
+import 'package:medisafe/provider/HomeProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -7,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../models/RendezVous.dart';
 import '../models/medcin.dart';
+import '../screens/medicamentScreen/medicament_list_view.dart';
 
 class DatabaseHelper {
   static const _databaseName = "medisafe";
@@ -16,6 +20,8 @@ class DatabaseHelper {
 
   late Database _db;
   Future<Database> get database async {
+
+
     if (_db != null) return _db;
     // lazily instantiate the db the first time it is accessed
     _db = await init();
@@ -27,6 +33,7 @@ class DatabaseHelper {
   Future<Database> init() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
+
     _db = await openDatabase(
       path,
       version: _databaseVersion,
@@ -69,7 +76,8 @@ class DatabaseHelper {
             type TEXT NOT NULL,
             category TEXT NOT NULL,
             dateDebut TEXT NOT NULL,
-            dateFin TEXT NOT NULL
+            dateFin TEXT NOT NULL,
+            forme TEXT NOT NULL
           );
           ''');
     await db.execute('''
@@ -181,8 +189,7 @@ class DatabaseHelper {
   }
 
   // -- medicament
-  Future<int> insertMedicament(
-      String name, String type, String category, int nbrJour) async {
+  Future<int> insertMedicament(String name, String type, String category, int nbrJour, String forme) async {
     await init();
     DateTime now = DateTime.now();
     String dateDebut = "${now.day}-${now.month}-${now.year}";
@@ -193,14 +200,10 @@ class DatabaseHelper {
     String dateFin =
         "${dateAfternDays.day}-${dateAfternDays.month}-${dateAfternDays.year}";
 
-    final data = {
-      'nom': name,
-      'type': type,
-      'category': category,
-      'dateDebut': dateDebut,
-      'dateFin': dateFin
-    };
-    int id = await _db.insert("medicament", data);
+
+    final data = {'nom':name, 'type':type, 'category':category,'dateDebut':dateDebut,'dateFin':dateFin,'forme':forme};
+    int id =await _db.insert("medicament", data);
+
     return id;
   }
 
@@ -281,14 +284,14 @@ class DatabaseHelper {
 
   Future<int> updateDoze(Map<String, dynamic> row, int id) async {
     await init();
-    print("hahoma ldakhel ${row} + id");
+
     int a = await _db.update(
       "doze",
       row,
       where: 'id = ?',
       whereArgs: [id],
     );
-    print("dghdynj${a}");
+
     return a;
   }
 

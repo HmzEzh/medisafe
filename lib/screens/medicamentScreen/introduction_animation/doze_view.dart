@@ -50,7 +50,7 @@ class _HoraireState extends State<Horaire> {
             child: Form(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.10, left: MediaQuery.of(context).size.width * 0.001),
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.10, left: MediaQuery.of(context).size.width * 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -61,14 +61,14 @@ class _HoraireState extends State<Horaire> {
                       padding: EdgeInsets.symmetric(
                           vertical: 16.0, horizontal: 24.0), // add some padding
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 191, 202, 211), // set background color
+                        color: Color.fromRGBO(255, 191, 202, 0.1), // set background color
                         borderRadius: BorderRadius.circular(8.0), // round the corners
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
+                            color: Colors.grey.withOpacity(0.3),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(0, 3), // add some drop shadow
+                            offset: Offset(0, 1), // add some drop shadow
                           ),
                         ],
                       ),
@@ -88,62 +88,24 @@ class _HoraireState extends State<Horaire> {
             ),
           ),
         )),
-        Padding(
-          padding:  EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              for (var i = 0; i < 2; i++)
-                Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 480),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(32),
-                      color: 1 == i ? Color(0xff132137) : Color(0xffE3E4E4),
-                    ),
-                    width: 10,
-                    height: 10,
-                  ),
-                ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.2),
-          child: FloatingActionButton(
-            backgroundColor: Colors.deepPurple,
-            onPressed: () {
-              Navigator.push<dynamic>(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => WelcomeView(),
-                ),
-              );
-            },
-            child: const Icon(
-              Icons.navigate_next,
-              color: Colors.white,
-            ),
-          ),
-        )
+
       ],
     ));
   }
 
   Widget _emailsContainer() {
     return Container(
-      padding: EdgeInsets.only(left: 18,top: 5,bottom: 5),
+      padding: EdgeInsets.only(left: 18,top: 1,bottom: 18),
       margin:EdgeInsets.all(16.0),
       decoration: BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(8.0),
     boxShadow: [
       BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
+        color: Colors.grey.withOpacity(0.3),
         spreadRadius: 2,
-        blurRadius: 5,
-        offset: Offset(0, 3),
+        blurRadius: 1,
+        offset: Offset(0, 1),
       ),
     ],
   ),

@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/main.dart';
+import 'package:medisafe/models/medicament.dart';
+import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
 import 'package:medisafe/models/Rappel.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeView extends StatefulWidget {
   
@@ -11,14 +16,16 @@ class WelcomeView extends StatefulWidget {
 }
 class _MyWidgetState extends State<WelcomeView> {
   Rappel rap = Rappel();
+
   DatabaseHelper medicamentService = DatabaseHelper.instance;
   Future<void> _addMedi() async{
     int id = await medicamentService.insertMedicament(
-        rap.nom.toString(),rap.type,"vitamins",rap.nombre
+        rap.nom.toString(),rap.type,rap.category,rap.nombre,rap.forme
     );
     for(int i=0;i<rap.horaires.length;i++){
       await medicamentService.insertDoze(rap.horaires[i], id);
     }
+
 
     rap.horaires.clear();
   }
@@ -32,7 +39,7 @@ class _MyWidgetState extends State<WelcomeView> {
   
   @override
   Widget build(BuildContext context) {
-
+    var changes = Provider.of<HomeProvider>(context, listen: true);
     Rappel rap = Rappel();
     List<Widget> textWidgets = [];
 
@@ -92,18 +99,51 @@ class _MyWidgetState extends State<WelcomeView> {
         Divider(color: Colors.black),
         SizedBox(height: 8),
         Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: Text("type de rappel  :",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
-                  ),
-                ),
-                SizedBox(width: 20),
-                Text(rap.type),
-              ],
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: Text("category  :",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+              ),
+            ),
+            SizedBox(width: 20),
+            Text(rap.category),
+          ],
+        ),
+
+        Divider(color: Colors.black),
+        SizedBox(height: 8),
+        Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: Text("forme de medicament :",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+              ),
+            ),
+            SizedBox(width: 20),
+            Text(rap.forme),
+          ],
+        ),
+        Divider(color: Colors.black),
+        SizedBox(height: 8),
+        Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.3,
+                child: Text("type de rappel  :",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+              ),
+            ),
+            SizedBox(width: 20),
+            Text(rap.type),
+          ],
         ),
         Divider(color: Colors.black),
         SizedBox(height: 8),
@@ -155,23 +195,30 @@ class _MyWidgetState extends State<WelcomeView> {
                     width: 150.0,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    _addMedi();
-                    // Navigator.push<dynamic>(
-                    //   context,
-                    //   MaterialPageRoute<dynamic>(
-                    //     builder: (BuildContext context) => MyApp(),
-                    //   ),
-                    // );
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                      _addMedi();
+                      //Medicament.addCat();
+
+
+                   changes.setChanges();
+
+                    Navigator.push<dynamic>(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) => MyApp( nbr: 2,),
+                      ),
+                    );
+
+                     // Navigator.pop(context);
+                     // Navigator.pop(context);
+                     // Navigator.pop(context);
+
                   },
                   icon: Flexible(
                     flex: 1,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('INSERT'),
+                        Flexible(child: Text('INSERT')),
                       ],
                     ),
                   ),
@@ -180,7 +227,7 @@ class _MyWidgetState extends State<WelcomeView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Icon(Icons.verified_user),
+                        Flexible(child: Icon(Icons.verified_user)),
 
                       ],
                     ),
