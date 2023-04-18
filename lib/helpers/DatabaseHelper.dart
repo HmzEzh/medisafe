@@ -125,6 +125,8 @@ class DatabaseHelper {
   }
 
 
+  
+  // medecin service !!
   Future<List<RendezVous>> allRendezVous() async {
     await init();
     List<RendezVous> rendezVous = [];
@@ -133,8 +135,6 @@ class DatabaseHelper {
     }
     return rendezVous;
   }
-  // medecin service !!
-
   Future<int> insertMedecin(Map<String, dynamic> row) async {
     await init();
     return await _db.insert("medcin", row);
