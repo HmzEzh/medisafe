@@ -1,16 +1,13 @@
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/medicament.dart';
-import 'package:medisafe/provider/HomeProvider.dart';
-import 'package:provider/provider.dart';
 import 'package:medisafe/models/Users/user.dart';
+import 'package:medisafe/models/medicamentDoze.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
 import '../models/RendezVous.dart';
 import '../models/medcin.dart';
-import '../screens/medicamentScreen/medicament_list_view.dart';
+import 'package:path/path.dart';
 
 class DatabaseHelper {
   static UserService userService = UserService();
@@ -160,12 +157,7 @@ class DatabaseHelper {
     return Sqflite.firstIntValue(results) ?? 0;
   }
 
-<<<<<<< HEAD
-
-  
-  // medecin service !!
-=======
->>>>>>> 41eca9db2aae7be09e3914bea4b697dfb0cd9a5e
+  // Rendez-Vous
   Future<List<RendezVous>> allRendezVous() async {
     await init();
     List<RendezVous> rendezVous = [];
@@ -174,6 +166,9 @@ class DatabaseHelper {
     }
     return rendezVous;
   }
+
+  // medecin service !!
+
   Future<int> insertMedecin(Map<String, dynamic> row) async {
     await init();
     return await _db.insert("medcin", row);
@@ -320,6 +315,31 @@ class DatabaseHelper {
     return dozes;
   }
 
+  Future<List<MedicamentDoze>> getAllDozesByHeure(String heure) async {
+    await init();
+    List<MedicamentDoze> dozes = [];
+    for (Map<String, dynamic> item
+        in await _db.rawQuery('SELECT * FROM doze WHERE heure LIKE "$heure"')) {
+      //dozes.add(Doze.fromMap(item));
+      dozes.add(await getMedicamentBydozeId(Doze.fromMap(item)));
+    }
+    return dozes;
+  }
+
+  Future<MedicamentDoze> getMedicamentBydozeId(Doze doze) async {
+    await init();
+    List<MedicamentDoze> result = [];
+    int? dozeId = doze.idMedicament;
+    for (Map<String, dynamic> item
+        in await _db.rawQuery('SELECT * FROM medicament WHERE id="$dozeId"')) {
+      MedicamentDoze medicamentDoze = MedicamentDoze.fromMap(item);
+      medicamentDoze.doze = doze;
+      result.add(medicamentDoze);
+    }
+
+    return result[0];
+  }
+
   Future<int> updateDoze(Map<String, dynamic> row, int id) async {
     await init();
 
@@ -358,5 +378,17 @@ class DatabaseHelper {
         await _db.rawQuery('SELECT name FROM sqlite_master WHERE type="table"');
     final tableNames = result.map((row) => row['name'] as String).toList();
     return tableNames;
+  }
+
+  // for Home page
+  Future<Map<String, List<MedicamentDoze>>> calenderApi() async {
+    Map<String, List<MedicamentDoze>> doseMap = {};
+    List<Map<String, dynamic>> results =
+        await db.query('doze', orderBy: 'heure');
+    for (Map<String, dynamic> result in results) {
+      Doze dose = Doze.fromMap(result);
+      doseMap[dose.heure] = await getAllDozesByHeure(dose.heure);
+    }
+    return doseMap;
   }
 }

@@ -1,10 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
+import '../../models/Doze.dart';
+import '../../models/medicamentDoze.dart';
 import '../../service/notification_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late int numberOfDaysInMonth;
+  DatabaseHelper databaseHelper = DatabaseHelper.instance;
 
   int getTheNumberOfDaysInMonth(int year, int month) {
     DateTime firstDayOfMonth = DateTime(year, month, 1);
@@ -99,7 +104,11 @@ class _HomeScreenState extends State<HomeScreen> {
               child: InkWell(
                   borderRadius: BorderRadius.circular(90),
                   onTap: (() {
-                    Noti.showBigTextNotification(id:10,title: "New message title", body: "Your long body", fln: flutterLocalNotificationsPlugin);
+                    Noti.showBigTextNotification(
+                        id: 10,
+                        title: "New message title",
+                        body: "Your long body",
+                        fln: flutterLocalNotificationsPlugin);
                   }),
                   splashColor: Colors.white24,
                   child: const CircleAvatar(
@@ -118,8 +127,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
                     splashFactory: NoSplash.splashFactory,
                   ),
-                  onPressed: () {
-                    print("test");
+                  onPressed: () async {
+                    Map<String, List<MedicamentDoze>> dozes =
+                        await databaseHelper.calenderApi();
+                    print(dozes);
                   },
                   child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
             ]),
@@ -197,7 +208,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 20,
                               width: size.width / 7.0,
                               child: Text(
-                                DateFormat('EEEE').format(new DateTime(selectedDay.getSelectedYear(),selectedDay.getSelectedMonth(),index+1)).substring(0,3),
+                                DateFormat('EEEE')
+                                    .format(new DateTime(
+                                        selectedDay.getSelectedYear(),
+                                        selectedDay.getSelectedMonth(),
+                                        index + 1))
+                                    .substring(0, 3),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -235,40 +251,6 @@ List<String> meds = [
   "assets/images/med5.png",
   "assets/images/med6.png"
 ];
-List<String> names = ["lun", "mar", "mer", "jeu", "ven", "sam", "dim"];
-
-List<int> days = [
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10,
-  11,
-  12,
-  13,
-  14,
-  15,
-  16,
-  17,
-  18,
-  19,
-  20,
-  21,
-  22,
-  23,
-  24,
-  25,
-  26,
-  27,
-  28,
-  29,
-  30
-];
 
 class HomeScreenContent extends StatefulWidget {
   const HomeScreenContent({
@@ -281,10 +263,72 @@ class HomeScreenContent extends StatefulWidget {
 class _HomeScreenContentState extends State<HomeScreenContent>
     with TickerProviderStateMixin {
   AnimationController? animationController;
+  DatabaseHelper databaseHelper = DatabaseHelper.instance;
+
   @override
   void initState() {
     super.initState();
   }
+
+  Widget body(BuildContext context, List<MedicamentDoze> dozes) {
+    return ListView.builder(
+      shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        itemCount: dozes.length,
+        itemBuilder: (ctx, index) {
+          return Column(
+            children: [
+              Container(
+                  margin: EdgeInsets.only(
+                      left: 16, right: 16, bottom: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        //color: Colors.black,
+                        margin: EdgeInsets.only(right: 16),
+                        child: Image.asset(meds[index], scale: 3),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                              //color: Colors.blue,
+                              margin: EdgeInsets.only(bottom: 4),
+                              child: Text(
+                                dozes[index].title,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500),
+                              )),
+                          Container(
+                              //color: Colors.red,
+                              child: Text("med discription")),
+                          // Container(
+                          //   color: Colors.green,
+                          //   child: Text("med etat"))
+                           
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Divider(
+                            indent: 64,
+                            thickness: 0.5,
+                            color: Colors.black,
+                            endIndent: 24,
+                          ),
+            ],
+          )
+            ;
+        });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -299,216 +343,118 @@ class _HomeScreenContentState extends State<HomeScreenContent>
           parent: animationController!, curve: Curves.fastOutSlowIn),
     );
     animationController?.forward();
-    return AnimatedBuilder(
-        animation: animationController!,
-        builder: (BuildContext context, Widget? child) {
-          return Transform(
-              transform:
-                  selectedDay.getOldSelectedDay() > selectedDay.getSelectedDay()
-                      ? Matrix4.translationValues(
-                          -size.width * (1.0 - animation.value), 0.0, 0.0)
-                      : Matrix4.translationValues(
-                          size.width * (1.0 - animation.value), 0.0, 0.0),
-              child: GestureDetector(
-                // onPanUpdate: (details) {
-                //   if (details.delta.dx > 0)
-                //     selectedDay.setSelectedDay(selectedDay.getSelectedDay() + 1);
-                //   else if (details.delta.dx < 0) {
-                //     selectedDay.setSelectedDay(selectedDay.getSelectedDay() - 1);
+    return FutureBuilder<Map<String, List<MedicamentDoze>>>(
+        future: databaseHelper.calenderApi(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Center(
+                  child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(90),
+                    color: Color.fromARGB(36, 81, 86, 90)),
+                child: Center(
+                    child: CupertinoActivityIndicator(
+                  radius: 20,
+                )),
+              )),
+            );
+          } else if (snapshot.hasError) {
+            final error = snapshot.error;
+            return Center(
+              child: Text(error.toString()),
+            );
+          } else if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return Center(
+                child: Text("isEmpty"),
+              );
+            }
+            return AnimatedBuilder(
+                animation: animationController!,
+                builder: (BuildContext context, Widget? child) {
+                  return Transform(
+                      transform: selectedDay.getOldSelectedDay() >
+                              selectedDay.getSelectedDay()
+                          ? Matrix4.translationValues(
+                              -size.width * (1.0 - animation.value), 0.0, 0.0)
+                          : Matrix4.translationValues(
+                              size.width * (1.0 - animation.value), 0.0, 0.0),
+                      child: GestureDetector(
+                        // onPanUpdate: (details) {
+                        //   if (details.delta.dx > 0)
+                        //     selectedDay.setSelectedDay(selectedDay.getSelectedDay() + 1);
+                        //   else if (details.delta.dx < 0) {
+                        //     selectedDay.setSelectedDay(selectedDay.getSelectedDay() - 1);
 
-                //   }
-                // },
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: meds.length,
-                  itemBuilder: (ctx, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 246, 246, 246),
-                          borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(8),
-                              topLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(8),
-                              bottomLeft: Radius.circular(8)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: Color.fromRGBO(58, 81, 96, 1)
-                                  .withOpacity(0.4),
-                              offset: Offset(-4, 5),
-                              blurRadius: 4.0,
-                            ),
-                            BoxShadow(
-                              color: Color.fromARGB(0, 255, 255, 255)
-                                  .withOpacity(0.4),
-                              offset: Offset(4, -5),
-                              blurRadius: 4.0,
-                            ),
-                          ]),
-                      margin: EdgeInsets.only(bottom: 20, left: 24, right: 24),
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 12),
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 0, 87, 209),
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(8),
-                                topLeft: Radius.circular(8),
+                        //   }
+                        // },
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (ctx, index) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 246, 246, 246),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      topLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8)),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                      color: Color.fromRGBO(58, 81, 96, 1)
+                                          .withOpacity(0.4),
+                                      offset: Offset(-4, 5),
+                                      blurRadius: 4.0,
+                                    ),
+                                    BoxShadow(
+                                      color: Color.fromARGB(0, 255, 255, 255)
+                                          .withOpacity(0.4),
+                                      offset: Offset(4, -5),
+                                      blurRadius: 4.0,
+                                    ),
+                                  ]),
+                              margin: EdgeInsets.only(
+                                  bottom: 20, left: 24, right: 24),
+                              padding: EdgeInsets.only(bottom: 8),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 12),
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 0, 87, 209),
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(8),
+                                        topLeft: Radius.circular(8),
+                                      ),
+                                    ),
+                                    height: 45,
+                                    child: Center(
+                                      child: Text(
+                                          snapshot.data!.keys.elementAt(index),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.w500)),
+                                    ),
+                                  ),
+                                  body(context,snapshot.data!.values.elementAt(index))
+                                ],
                               ),
-                            ),
-                            height: 45,
-                            child: Center(
-                              child: Text("8 PM",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 16, right: 16, bottom: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  //color: Colors.black,
-                                  margin: EdgeInsets.only(right: 16),
-                                  child: Image.asset(meds[index], scale: 3),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                        //color: Colors.blue,
-                                        margin: EdgeInsets.only(bottom: 4),
-                                        child: Text(
-                                          "med name",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
-                                        )),
-                                    Container(
-                                        //color: Colors.red,
-                                        child: Text("med discription")),
-                                    // Container(
-                                    //   color: Colors.green,
-                                    //   child: Text("med etat"))
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          Divider(
-                            indent: 64,
-                            thickness: 0.5,
-                            color: Colors.black,
-                            endIndent: 24,
-                          ),
-                          Container(
-                            margin:
-                                EdgeInsets.only(left: 16, right: 16, bottom: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  //color: Colors.black,
-                                  margin: EdgeInsets.only(right: 16),
-                                  child: Image.asset(meds[index], scale: 3),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                        //color: Colors.blue,
-                                        margin: EdgeInsets.only(bottom: 4),
-                                        child: Text(
-                                          "med name",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
-                                        )),
-                                    Container(
-                                        //color: Colors.red,
-                                        child: Text("med discription")),
-                                    // Container(
-                                    //   color: Colors.green,
-                                    //   child: Text("med etat"))
-                                  ],
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ));
+                            );
+                          },
+                        ),
+                      ));
+                });
+          }
+          return Container();
         });
   }
 }
-// Container(
-//                   decoration: BoxDecoration(
-//                    color: Color.fromARGB(255, 175, 139, 21),
-//                     borderRadius: BorderRadius.circular(8),
-//                   ),
-//                     width: size.width,
-//                     height: 100,
-//                     margin: EdgeInsets.only(left: 16,right: 16,bottom: 8),
-//                     child: Column(
-//                       mainAxisSize: MainAxisSize.min,
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       mainAxisAlignment: MainAxisAlignment.start,
-//                       children: [
-//                         Container(
-//                           decoration: BoxDecoration(
-//                           color: Color.fromARGB(255, 21, 49, 175),
-//                             borderRadius: BorderRadius.only(
-//                               topRight: Radius.circular(8),
-//                               topLeft: Radius.circular(8)
-//                             )
-//                           ),
-//                           height: 50,
-//                           child: Center(
-//                             child: Text("8 PM",
-//                              style: TextStyle(
-//                               color: Colors.white,
-//                               fontSize: 24,
-//                               fontWeight: FontWeight.w500)),
-//                           ),),
-//                           Container( 
-//                              margin: EdgeInsets.only(left: 16,right: 16,bottom: 8),
-//                              child: Row(
-//                              crossAxisAlignment: CrossAxisAlignment.center,
-//                               children: [
-//                                   Image.asset(
-//                                       'assets/images/med1.png',
-//                                       scale: 2.5
-                                    
-//                                   ),
-//                                   Column(
-//                                       mainAxisSize: MainAxisSize.min,
-//                                     children: [
-//                                       Text("med name"),
-//                                       Text("Lorem ipsum"),
-//                                       Text("Lorem ipsum")
-//                                     ],
-//                                   )
-                                
-//                               ],
-//                              ),
-//                           )
-//                       ],
-//                     ))

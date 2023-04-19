@@ -33,5 +33,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'email': instance.email,
       'password': instance.password,
       'tele': instance.tele,
-      'blood': instance.blood
+      'blood': instance.blood,
     };
