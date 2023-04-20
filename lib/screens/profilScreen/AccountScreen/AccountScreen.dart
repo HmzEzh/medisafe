@@ -43,7 +43,7 @@ class _AccountScreenState extends State<AccountScreen> {
             Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => MyHomePage(
+                  builder: (BuildContext context) => const MyHomePage(
                         nbr: 3,
                         title: 'back to profil',
                       )),
