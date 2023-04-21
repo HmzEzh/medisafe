@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medisafe/screens/profilScreen/TrackerScreen/TrackerScreen.dart';
 
 import 'home_design.dart';
 
@@ -37,7 +38,12 @@ class _MedicamentScreenState extends State<MedicamentScreen> {
                     splashFactory: NoSplash.splashFactory,
                   ),
                   onPressed: () {
-                    print("test");
+                    Navigator.push<dynamic>(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                          builder: (BuildContext context) =>
+                              TrackerScreen()),
+                    );
                   },
                   child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
             ]),

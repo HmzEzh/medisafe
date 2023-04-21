@@ -7,6 +7,8 @@ class Rappel extends ChangeNotifier {
   int nombre=0;
   String type="";
   List horaires=[];
+
+  static double youssef=0;
   
   static final Rappel _instance = Rappel._internal();
 

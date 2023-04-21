@@ -5,6 +5,7 @@ import 'AccountScreen/AccountScreen.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
 import 'package:medisafe/models/Users/user.dart';
 import '../introduction_animation/introduction_animation_screen.dart';
+import 'TrackerScreen/TrackerScreen.dart';
 
 class ProfilScreen extends StatefulWidget {
   final int userId;
@@ -173,7 +174,14 @@ class _ProfilScreen extends State<ProfilScreen> {
                         child: Column(
                           children: [
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push<dynamic>(
+                                  context,
+                                  MaterialPageRoute<dynamic>(
+                                      builder: (BuildContext context) =>
+                                          TrackerScreen()),
+                                );
+                              },
                               child: Container(
                                 margin: EdgeInsets.fromLTRB(
                                     0, 0, 0, haille * 0.015),

@@ -660,7 +660,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
 
   @override
   Widget build(BuildContext context) {
-    print("azaz");
+
     var selectedDay = Provider.of<HomeProvider>(context, listen: true);
     var size = MediaQuery.of(context).size;
     animationController = AnimationController(

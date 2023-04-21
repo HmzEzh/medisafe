@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/models/Users/user.dart';
+import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/profilScreen/AccountScreen/AccountScreen.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
+import 'package:provider/provider.dart';
 
 class EditAccountScreen extends StatefulWidget {
   final int userId;
@@ -26,6 +32,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  late int numberOfDaysInMonth;
+
+  //List<String> PickerData = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
   UserService userService2 = UserService();
   DatabaseHelper userService = DatabaseHelper.instance;
   late Future<List<Map<String, dynamic>>> _user;
@@ -35,7 +45,37 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     // TODO: implement initState
     userService.init();
     super.initState();
+    numberOfDaysInMonth =
+        getTheNumberOfDaysInMonth(DateTime.now().year, DateTime.now().month);
     _user = userService.getUserById(widget.userId);
+  }
+
+  int getTheNumberOfDaysInMonth(int year, int month) {
+    DateTime firstDayOfMonth = DateTime(year, month, 1);
+    // Add one month to get the first day of the next month
+    DateTime firstDayOfNextMonth = DateTime(year, month + 1, 1);
+    // Subtract one day from the first day of the next month to get the last day of the current month
+    DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+    // Get the day of the month for the last day of the current month
+    int numberOfDaysInMonth = lastDayOfMonth.day;
+    print(numberOfDaysInMonth); // Output: 31 (for March 2023)
+    return numberOfDaysInMonth;
+  }
+
+  int calculateAge(DateTime birthDate) {
+    DateTime currentDate = DateTime.now();
+    int age = (currentDate.difference(birthDate).inDays / 365).round();
+    return age;
+  }
+
+  final ScrollController _controller = ScrollController();
+  bool _init = true;
+  void _animateToIndex(int index, double _width) {
+    _controller.animateTo(
+      (index - 1) * _width,
+      duration: Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
   }
 
   Widget person(BuildContext context, Map<String, dynamic> user) {
@@ -53,72 +93,75 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
       //height: 200,
       margin: EdgeInsets.only(top: 0, bottom: 0, left: 8, right: 8),
       //color: Colors.red,
-      child: Column(children: [
-        Row(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(left: 16, right: 16),
-              width: 10,
-              child: Icon(
-                Icons.person,
-                color: Colors.blue,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(left: 16, right: 16),
+                width: 10,
+                child: Icon(
+                  Icons.person,
+                  color: Colors.blue,
+                ),
               ),
-            ),
-            Container(
-              width: size.width - 60,
-              child: TextFormField(
-                controller: nomController,
-                decoration: InputDecoration(
-                  hintText: 'First name',
-                  isDense: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(5),
+              Container(
+                width: size.width - 60,
+                child: TextFormField(
+                  controller: nomController,
+                  decoration: InputDecoration(
+                    hintText: 'First name',
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Divider(
-          color: Colors.grey,
-          height: 2,
-          indent: 52,
-          endIndent: 0,
-        ),
-        Row(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(left: 16, right: 16),
-              width: 10,
-              child: Icon(
-                Icons.person_outline,
-                color: Colors.blue,
+            ],
+          ),
+          Divider(
+            color: Colors.grey,
+            height: 2,
+            indent: 52,
+            endIndent: 0,
+          ),
+          Row(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(left: 16, right: 16),
+                width: 10,
+                child: Icon(
+                  Icons.person_outline,
+                  color: Colors.blue,
+                ),
               ),
-            ),
-            Container(
-              width: size.width - 60,
-              child: TextFormField(
-                controller: prenomController,
-                decoration: InputDecoration(
-                  hintText: 'Last name',
-                  isDense: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(5),
+              Container(
+                width: size.width - 60,
+                child: TextFormField(
+                  controller: prenomController,
+                  decoration: InputDecoration(
+                    hintText: 'Last name',
+                    isDense: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ]),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   Widget age(BuildContext context, Map<String, dynamic> user) {
+    var selectedDay = Provider.of<HomeProvider>(context, listen: true);
     var size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
@@ -171,7 +214,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           children: [
             Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.only(left: 16, right: 16),
+              margin: EdgeInsets.only(left: 16, right: 25),
               width: 10,
               child: Icon(
                 Icons.event,
@@ -179,27 +222,27 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
               ),
             ),
             Container(
-              width: size.width - 60,
-              child: TextFormField(
-                keyboardType: TextInputType.datetime,
-                controller: naissanceController,
-                decoration: InputDecoration(
-                  hintText: 'Birthdate',
-                  isDense: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-            ),
+                width: size.width - 67,
+                child: TextFormField(
+                  controller: naissanceController,
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.parse(naissanceController.text),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (pickedDate != null) {
+                      String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
+                      naissanceController.text = formattedDate;
+                      ageController.text =
+                          calculateAge(DateTime.parse(naissanceController.text))
+                              .toString();
+                    }
+                  },
+                )),
           ],
-        ),
-        Divider(
-          color: Colors.grey,
-          height: 2,
-          indent: 52,
-          endIndent: 0,
         ),
         Row(
           children: [
@@ -453,6 +496,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 emailController = TextEditingController(text: user['email']);
                 passwordController =
                     TextEditingController(text: user['password']);
+
                 return SingleChildScrollView(
                   child: Column(
                     children: [

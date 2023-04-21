@@ -579,13 +579,13 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                                               .updateMedicament(data, widget.medicament.id);
 
                                                           changes.setChanges();
-                                                          // Navigator.pop(context);
-                                                          Navigator.push<dynamic>(
-                                                            context,
-                                                            MaterialPageRoute<dynamic>(
-                                                              builder: (BuildContext context) => MyApp( nbr: 2,),
-                                                            ),
-                                                          );
+                                                           Navigator.pop(context);
+                                                          // Navigator.push<dynamic>(
+                                                          //   context,
+                                                          //   MaterialPageRoute<dynamic>(
+                                                          //     builder: (BuildContext context) => MyApp( nbr: 2,),
+                                                          //   ),
+                                                          // );
                                                           ScaffoldMessenger.of(context)
                                                               .showSnackBar(SnackBar(
                                                             content: Container(
@@ -721,13 +721,13 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
 
                                                           });
                                                           changes.setChanges();
-                                                          //Navigator.pop(context);
-                                                          Navigator.push<dynamic>(
-                                                            context,
-                                                            MaterialPageRoute<dynamic>(
-                                                              builder: (BuildContext context) => MyApp( nbr: 2,),
-                                                            ),
-                                                          );
+                                                          Navigator.pop(context);
+                                                          // Navigator.push<dynamic>(
+                                                          //   context,
+                                                          //   MaterialPageRoute<dynamic>(
+                                                          //     builder: (BuildContext context) => MyApp( nbr: 2,),
+                                                          //   ),
+                                                          // );
                                                           ScaffoldMessenger.of(context)
                                                               .showSnackBar(SnackBar(
                                                             content: Container(

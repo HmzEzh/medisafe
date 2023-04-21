@@ -6,17 +6,20 @@ import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/main.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/medicamentScreen/profile_settings.dart';
+import 'package:medisafe/screens/profilScreen/TrackerScreen/add_track.dart';
 import 'package:provider/provider.dart';
 
-class PopularCourseListView extends StatefulWidget {
-  const PopularCourseListView({Key? key, this.callBack}) : super(key: key);
+import '../../../../models/Tracker.dart';
+
+class TrackerListView extends StatefulWidget {
+  const TrackerListView({Key? key, this.callBack}) : super(key: key);
 
   final Function()? callBack;
   @override
-  _PopularCourseListViewState createState() => _PopularCourseListViewState();
+  _TrackerListViewState createState() => _TrackerListViewState();
 }
 
-class _PopularCourseListViewState extends State<PopularCourseListView>
+class _TrackerListViewState extends State<TrackerListView>
     with TickerProviderStateMixin, ChangeNotifier {
   AnimationController? animationController;
 
@@ -57,7 +60,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
   @override
   Widget build(BuildContext context) {
     var changes = Provider.of<HomeProvider>(context, listen: true);
-    DatabaseHelper medicamentService = DatabaseHelper.instance;
+    DatabaseHelper trackerService = DatabaseHelper.instance;
 
 
     return Padding(
@@ -82,191 +85,189 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
         ),
         child: Padding(
           padding: const EdgeInsets.only(top: 8),
-          child: FutureBuilder<List<Medicament>>(
-            future: medicamentService.getAllMedicaments(),
-            builder: (context,  snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: Text("wait"),
-                );
-              } else if (snapshot.hasError) {
-                final error = snapshot.error;
-                return Center(
-                  child: Text(error.toString()),
-                );
-              } else if (snapshot.hasData) {
-              if (snapshot.data!.isEmpty) {
-              return Center(
-              child: Text("Try to add new one"),
-              );
-              }else{
-                return GridView(
-                  padding: const EdgeInsets.all(8),
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 4.0,
-                    crossAxisSpacing: 32.0,
-                    childAspectRatio: 0.8,
-                  ),
-                  children: List<Widget>.generate(
-                    snapshot.data!.length,
-                    (int index) {
-                      final int count = snapshot.data!.length;
-                      final Animation<double> animation =
+          child: FutureBuilder<List<Tracker>>(
+              future: trackerService.allTrackers(),
+              builder: (context,  snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: Text("wait"),
+                  );
+                } else if (snapshot.hasError) {
+                  final error = snapshot.error;
+                  return Center(
+                    child: Text(error.toString()),
+                  );
+                } else if (snapshot.hasData) {
+                  if (snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Text("Try to add new one"),
+                    );
+                  }else{
+                    return GridView(
+                      padding: const EdgeInsets.all(8),
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
+                        mainAxisSpacing: 4.0,
+                        crossAxisSpacing: 32.0,
+                        childAspectRatio: 0.8,
+                      ),
+                      children: List<Widget>.generate(
+                        snapshot.data!.length,
+                            (int index) {
+                          final int count = snapshot.data!.length;
+                          final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
-                        CurvedAnimation(
-                          parent: animationController!,
-                          curve: Interval((1 / count) * index, 1.0,
-                              curve: Curves.fastOutSlowIn),
-                        ),
-                      );
-                      animationController?.forward();
-                      return Container(
-                        height: MediaQuery.of(context).size.height * 0.7,
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push<dynamic>(
-                                    context,
-                                    MaterialPageRoute<dynamic>(
-                                      builder: (BuildContext context) => ProfileSettingScreen(
-                                        medicament: snapshot.data![index],
-                                      ),
-                                    ),
-                                  );
-                                  //_showForm(widget.category!.id);
-                                  // _delete(snapshot.data![index].id);
-                                  //
-                                  // changes.setChanges();
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: HexColor('#F8FAFB'),
+                            CurvedAnimation(
+                              parent: animationController!,
+                              curve: Interval((1 / count) * index, 1.0,
+                                  curve: Curves.fastOutSlowIn),
+                            ),
+                          );
+                          animationController?.forward();
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.7,
+                            child: Column(
+                              children: <Widget>[
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push<dynamic>(
+                                        context,
+                                        MaterialPageRoute<dynamic>(
+                                          builder: (BuildContext context) => AddTrackerScreen(),
+                                        ),
+                                      );
+                                      //_showForm(widget.category!.id);
+                                      // _delete(snapshot.data![index].id);
+                                      //
+                                      // changes.setChanges();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: HexColor('#F8FAFB'),
 
-                                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                                    // border: new Border.all(
-                                    //     color: DesignCourseAppTheme.notWhite),
-                                  ),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Container(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 16, left: 16, right: 16),
-                                                child: Text(
-                                                  snapshot.data![index].title,
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 16,
-                                                    letterSpacing: 0.27,
-                                                    color: DesignCourseAppTheme.darkerText,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8, left: 16, right: 16, bottom: 8),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    const Text(
-                                                      'End :',
-                                                      textAlign: TextAlign.right,
+                                        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                        // border: new Border.all(
+                                        //     color: DesignCourseAppTheme.notWhite),
+                                      ),
+                                      child: Column(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Container(
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        top: 16, left: 16, right: 16),
+                                                    child: Text(
+                                                      snapshot.data![index].nom,
+                                                      textAlign: TextAlign.left,
                                                       style: TextStyle(
-                                                        fontWeight: FontWeight.w200,
-                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w600,
+                                                        fontSize: 16,
                                                         letterSpacing: 0.27,
-                                                        color: DesignCourseAppTheme.grey,
+                                                        color: DesignCourseAppTheme.darkerText,
                                                       ),
                                                     ),
-                                                    Container(
-                                                      child: Row(
-                                                        children: <Widget>[
-                                                          Text(
-                                                            '${formatDate(snapshot.data![index].dateFin)}',
-                                                            textAlign: TextAlign.left,
-                                                            style: TextStyle(
-                                                              fontWeight: FontWeight.w200,
-                                                              fontSize: 18,
-                                                              letterSpacing: 0.27,
-                                                              color: DesignCourseAppTheme.grey,
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        top: 8, left: 16, right: 16, bottom: 8),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      children: <Widget>[
+                                                        const Text(
+                                                          'End :',
+                                                          textAlign: TextAlign.right,
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w200,
+                                                            fontSize: 12,
+                                                            letterSpacing: 0.27,
+                                                            color: DesignCourseAppTheme.grey,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          child: Row(
+                                                            children: <Widget>[
+                                                              Text(
+                                                                '${formatDate(snapshot.data![index].dateFin)}',
+                                                                textAlign: TextAlign.left,
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.w200,
+                                                                  fontSize: 18,
+                                                                  letterSpacing: 0.27,
+                                                                  color: DesignCourseAppTheme.grey,
+                                                                ),
+                                                              ),
+                                                              Icon(
+                                                                Icons.calendar_month,
+                                                                color: DesignCourseAppTheme.nearlyBlue,
+                                                                size: 18,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Container(
+                                                      child: SizedBox(
+                                                        height: 75,
+                                                        width: 128,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(
+                                                              top: 0, right: 16, left: 16),
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                              borderRadius: const BorderRadius.all(
+                                                                  Radius.circular(16.0)),
+                                                              boxShadow: <BoxShadow>[
+                                                                BoxShadow(
+                                                                    color: DesignCourseAppTheme.grey
+                                                                        .withOpacity(0.2),
+                                                                    offset: const Offset(0.0, 0.0),
+                                                                    blurRadius: 6.0),
+                                                              ],
+                                                            ),
+                                                            child: ClipRRect(
+                                                              borderRadius: const BorderRadius.all(
+                                                                  Radius.circular(16.0)),
+                                                              child: AspectRatio(
+                                                                  aspectRatio: 1.28,
+                                                                  child:
+                                                                  Image.asset(snapshot.data![index].type=="glycémie"?'assets/images/glycemie.png':'assets/images/blood-pressure.png')),
                                                             ),
                                                           ),
-                                                          Icon(
-                                                            Icons.calendar_month,
-                                                            color: DesignCourseAppTheme.nearlyBlue,
-                                                            size: 18,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Container(
-                                                  child: SizedBox(
-                                                    height: 75,
-                                                    width: 128,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          top: 0, right: 16, left: 16),
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: const BorderRadius.all(
-                                                              Radius.circular(16.0)),
-                                                          boxShadow: <BoxShadow>[
-                                                            BoxShadow(
-                                                                color: DesignCourseAppTheme.grey
-                                                                    .withOpacity(0.2),
-                                                                offset: const Offset(0.0, 0.0),
-                                                                blurRadius: 6.0),
-                                                          ],
-                                                        ),
-                                                        child: ClipRRect(
-                                                          borderRadius: const BorderRadius.all(
-                                                              Radius.circular(16.0)),
-                                                          child: AspectRatio(
-                                                              aspectRatio: 1.28,
-                                                              child:
-                                                              Image.asset(snapshot.data![index].imagePath)),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                );}
+                          );
+                        },
+                      ),
+                    );}
+                }
+                return Container();
               }
-              return Container();
-            }
           ),
         ),
       ),
@@ -277,10 +278,10 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
 class CategoryView extends StatefulWidget {
   const CategoryView(
       {Key? key,
-      this.category,
-      this.animationController,
-      this.animation,
-      this.callback})
+        this.category,
+        this.animationController,
+        this.animation,
+        this.callback})
       : super(key: key);
 
   final VoidCallback? callback;
@@ -501,7 +502,7 @@ class _CategoryViewState extends State<CategoryView> {
                                         child: AspectRatio(
                                             aspectRatio: 1.28,
                                             child:
-                                                Image.asset(widget.category!.imagePath)),
+                                            Image.asset(widget.category!.imagePath)),
                                       ),
                                     ),
                                   ),

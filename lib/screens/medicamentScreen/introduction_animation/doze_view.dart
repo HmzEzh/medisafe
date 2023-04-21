@@ -6,7 +6,7 @@ import 'package:medisafe/models/Rappel.dart';
 
 // ignore: camel_case_types
 class Horaire extends StatefulWidget {
-  const Horaire({super.key});
+  const Horaire({Key? key});
 
   @override
   State<Horaire> createState() => _HoraireState();

@@ -326,7 +326,7 @@ class contenu extends State<name> with TickerProviderStateMixin  {
                 Navigator.push<dynamic>(
                   context,
                   MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) => CareView(animationController: _animationController!),
+                    builder: (BuildContext context) => CareView(),
                   ),
                 );
               },
