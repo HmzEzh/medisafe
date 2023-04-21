@@ -13,6 +13,16 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  DateTime getCurentdate() {
+    try{
+      return DateTime.parse('$selectedYear-0$selectedMonth-$selectedDay');
+    }catch(e){
+      return DateTime.parse('$selectedYear-$selectedMonth-$selectedDay');
+    }
+    
+    
+  }
+
   void setSelectedMonth(int x) {
     selectedMonth = x;
     notifyListeners();

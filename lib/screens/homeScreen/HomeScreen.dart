@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:provider/provider.dart';
-
 import '../../main.dart';
-import '../../models/Doze.dart';
+import '../../models/HistoriqueDoze.dart';
 import '../../models/medicamentDoze.dart';
 import '../../service/notification_service.dart';
+import '../../utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -128,9 +129,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     splashFactory: NoSplash.splashFactory,
                   ),
                   onPressed: () async {
-                    Map<String, List<MedicamentDoze>> dozes =
-                        await databaseHelper.calenderApi();
-                    print(dozes);
+                    List dozes =
+                        await databaseHelper.getMedicaments();
+                    for(var histo in dozes){
+                      print(histo["dateDebut"]);
+                    }
                   },
                   child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
             ]),
@@ -270,65 +273,390 @@ class _HomeScreenContentState extends State<HomeScreenContent>
     super.initState();
   }
 
-  Widget body(BuildContext context, List<MedicamentDoze> dozes) {
-    return ListView.builder(
-      shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        itemCount: dozes.length,
-        itemBuilder: (ctx, index) {
-          return Column(
-            children: [
-              Container(
-                  margin: EdgeInsets.only(
-                      left: 16, right: 16, bottom: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        //color: Colors.black,
-                        margin: EdgeInsets.only(right: 16),
-                        child: Image.asset(meds[index], scale: 3),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                              //color: Colors.blue,
-                              margin: EdgeInsets.only(bottom: 4),
-                              child: Text(
-                                dozes[index].title,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500),
-                              )),
-                          Container(
-                              //color: Colors.red,
-                              child: Text("med discription")),
-                          // Container(
-                          //   color: Colors.green,
-                          //   child: Text("med etat"))
-                           
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Divider(
-                            indent: 64,
-                            thickness: 0.5,
-                            color: Colors.black,
-                            endIndent: 24,
-                          ),
-            ],
-          )
-            ;
-        });
-  }
+  Widget body(BuildContext context, List<MedicamentDoze> medicamentDoze) {
+    return Container(
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          itemCount: medicamentDoze.length,
+          itemBuilder: (ctx, index) {
+            return InkWell(
+              onTap: () {
+                if (medicamentDoze[index].historique != null) {
+                  print(medicamentDoze[index].historique!.valeur);
+                } else {
+                  print("haaaaaaaaaaaaaaaaaaaaaaaaaa");
+                }
+                HistoriqueDoze historiqueDoze = HistoriqueDoze(
+                    id: 0,
+                    idDoze: medicamentDoze[index].doze!.id!,
+                    idMedicament: medicamentDoze[index].doze!.idMedicament,
+                    valeur: "",
+                    remarque: "",
+                    datePrevu: "");
 
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          insetPadding: EdgeInsets.symmetric(horizontal: 50),
+                          buttonPadding: EdgeInsets.zero,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0))),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
+                          // title: const Text(
+                          //   'La connexion a échoué',
+                          //   textAlign: TextAlign.center,
+                          //   style:
+                          //       TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                          // ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 150,
+                                margin: const EdgeInsets.only(
+                                    left: 8, right: 8, bottom: 24),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      medicamentDoze[index].title +
+                                          medicamentDoze[index].doze!.heure,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 8, right: 8, bottom: 24),
+                                      child: Text(
+                                        "Veuillez entrez le nom de votre médecin",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 246, 246, 246),
+                                  borderRadius: const BorderRadius.only(
+                                    bottomRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                  ),
+                                ),
+                                height: 80,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: InkWell(
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                      ),
+                                      onTap: () => Navigator.pop(context),
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.close,
+                                              color: Colors.blue,
+                                              size: 30,
+                                            ),
+                                            Text("Ignorer",
+                                                style: TextStyle(
+                                                    color: Colors.blue,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize: 18)),
+                                          ],
+                                        ),
+                                      ),
+                                    )),
+                                    Expanded(
+                                        child: InkWell(
+                                      borderRadius: const BorderRadius.only(
+                                        bottomRight: Radius.circular(10),
+                                      ),
+                                      onTap: () {
+                                        showModalBottomSheet<void>(
+                                            constraints: BoxConstraints(
+                                                minWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                maxHeight:
+                                                    MediaQuery.of(context)
+                                                            .size
+                                                            .height /
+                                                        3,
+                                                minHeight:
+                                                    MediaQuery.of(context)
+                                                            .size
+                                                            .height /
+                                                        3),
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(24.0),
+                                                    topRight:
+                                                        Radius.circular(24.0))),
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return StatefulBuilder(builder:
+                                                  (BuildContext context,
+                                                      StateSetter setState) {
+                                                return Container(
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height /
+                                                            16,
+                                                        child: Center(
+                                                            child: Text(
+                                                                'Quand avez-vous pris votre médicament?')),
+                                                      ),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                          child: Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height /
+                                                                  16,
+                                                              child: Center(
+                                                                  child: Text(
+                                                                      "Maintenant",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .blue,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ))))),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                          onTap: () async {
+                                                            historiqueDoze
+                                                                    .valeur =
+                                                                "Pris";
+                                                            historiqueDoze
+                                                                .datePrevu = Utils
+                                                                    .formatDate(
+                                                                        DateTime
+                                                                            .now()) +
+                                                                " " +
+                                                                medicamentDoze[
+                                                                        index]
+                                                                    .doze!
+                                                                    .heure;
+                                                            await databaseHelper
+                                                                .insertHisto(
+                                                                    historiqueDoze
+                                                                        .toMap());
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height /
+                                                                  16,
+                                                              child: Center(
+                                                                  child: Text(
+                                                                      "À temps",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .blue,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ))))),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                          onTap: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                            DatePicker.showDateTimePicker(
+                                                                context,
+                                                                showTitleActions:
+                                                                    true,
+                                                                minTime: DateTime(
+                                                                    2023, 1, 1),
+                                                                maxTime:
+                                                                    DateTime(
+                                                                        2024,
+                                                                        12,
+                                                                        1),
+                                                                onConfirm:
+                                                                    (date) {
+                                                              if (kDebugMode) {
+                                                                print(date);
+                                                              }
+                                                            },
+                                                                currentTime:
+                                                                    DateTime
+                                                                        .now(),
+                                                                locale:
+                                                                    LocaleType
+                                                                        .fr);
+                                                          },
+                                                          child: Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height /
+                                                                  16,
+                                                              child: Center(
+                                                                  child: Text(
+                                                                      "Définir l'heure",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .blue,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ))))),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        child: Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              16,
+                                                          child: Center(
+                                                              child: Text(
+                                                                  'Annuler',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ))),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              });
+                                            });
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.done,
+                                              color: Colors.blue,
+                                              size: 30,
+                                            ),
+                                            Text("Prendre",
+                                                style: TextStyle(
+                                                    color: Colors.blue,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize: 18)),
+                                          ],
+                                        ),
+                                      ),
+                                    ))
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ));
+              },
+              child: Container(
+                padding:
+                    EdgeInsets.only(top: 12, bottom: 12, left: 12, right: 12),
+                //margin: EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 246, 246, 246),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(8),
+                        topLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                        bottomLeft: Radius.circular(8))),
+                margin: EdgeInsets.only(left: 12, right: 12, bottom: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      //color: Colors.black,
+                      margin: EdgeInsets.only(right: 16),
+                      child: Image.asset(meds[index], scale: 3),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                            //color: Colors.blue,
+                            margin: EdgeInsets.only(bottom: 4),
+                            child: Text(
+                              medicamentDoze[index].title,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500),
+                            )),
+                        Container(
+                            //color: Colors.red,
+                            child: Text("med discription")),
+                        // Container(
+                        //   color: Colors.green,
+                        //   child: Text("med etat"))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          }),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -344,7 +672,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
     );
     animationController?.forward();
     return FutureBuilder<Map<String, List<MedicamentDoze>>>(
-        future: databaseHelper.calenderApi(),
+        future: databaseHelper.calenderApi(selectedDay.getCurentdate()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -398,7 +726,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                           itemBuilder: (ctx, index) {
                             return Container(
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 246, 246, 246),
+                                  color: Color.fromARGB(255, 255, 255, 255),
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(8),
                                       topLeft: Radius.circular(8),

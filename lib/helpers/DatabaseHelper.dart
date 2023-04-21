@@ -5,6 +5,7 @@ import 'package:medisafe/models/medicamentDoze.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
+import '../models/HistoriqueDoze.dart';
 import '../models/RendezVous.dart';
 import '../models/medcin.dart';
 import 'package:path/path.dart';
@@ -89,6 +90,18 @@ class DatabaseHelper {
           );
           ''');
     await db.execute('''
+          CREATE TABLE historiqueDoze (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            idDoze INTEGER NOT NULL,
+            idMedicament INTEGER NOT NULL,
+            valeur TEXT NOT NULL,
+            remarque TEXT NOT NULL,
+            datePrevu TEXT NOT NULL,
+            FOREIGN KEY(idDoze) REFERENCES doze(id),
+            FOREIGN KEY(idMedicament) REFERENCES medicament(id)
+          );
+          ''');
+    await db.execute('''
           CREATE TABLE doze (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             idMedicament INTEGER NOT NULL,
@@ -99,20 +112,20 @@ class DatabaseHelper {
           ''');
 
     await db.execute('''
-    CREATE TABLE user (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nom TEXT NOT NULL,
-      prenom TEXT NOT NULL,
-      date_naissance TEXT NOT NULL,
-      address TEXT NOT NULL,
-      age INTEGER NOT NULL,
-      taille INTEGER NOT NULL,
-      poids INTEGER NOT NULL,
-      email TEXT NOT NULL,
-      password TEXT NOT NULL,
-      tele TEXT NOT NULL,
-      blood TEXT NOT NULL      
-    );
+      CREATE TABLE user (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nom TEXT NOT NULL,
+        prenom TEXT NOT NULL,
+        date_naissance TEXT NOT NULL,
+        address TEXT NOT NULL,
+        age INTEGER NOT NULL,
+        taille INTEGER NOT NULL,
+        poids INTEGER NOT NULL,
+        email TEXT NOT NULL,
+        password TEXT NOT NULL,
+        tele TEXT NOT NULL,
+        blood TEXT NOT NULL      
+      );
     ''');
 
     await db.execute('''
@@ -184,15 +197,11 @@ class DatabaseHelper {
     return medcins;
   }
 
-  // All of the methods (insert, query, update, delete) can also be done using
-  // raw SQL commands. This method uses a raw query to give the row count.
   Future<int> queryRowCount() async {
     final results = await _db.rawQuery('SELECT COUNT(*) FROM medcin');
     return Sqflite.firstIntValue(results) ?? 0;
   }
 
-  // We are assuming here that the id column in the map is set. The other
-  // column values will be used to update the row.
   Future<int> updateMedecin(Map<String, dynamic> row, int id) async {
     await init();
     return await _db.update(
@@ -203,12 +212,60 @@ class DatabaseHelper {
     );
   }
 
-  // Deletes the row specified by the id. The number of affected rows is
-  // returned. This should be 1 as long as the row exists.
   Future<int> deleteMedecin(int id) async {
     await init();
     return await _db.delete(
       "medcin",
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // historiqueDoze
+  Future<int> insertHisto(Map<String, dynamic> row) async {
+    await init();
+    return await _db.insert("historiqueDoze", row);
+  }
+
+  Future<List<HistoriqueDoze>> historiqueDoze() async {
+    await init();
+    List<HistoriqueDoze> historique = [];
+    for (Map<String, dynamic> item in await _db.query("historiqueDoze")) {
+      historique.add(HistoriqueDoze.fromMap(item));
+    }
+    return historique;
+  }
+
+  Future<HistoriqueDoze?> findHistoBydozeAndDate(
+      String date, int idDoze) async {
+    await init();
+    List<HistoriqueDoze> result = [];
+    for (Map<String, dynamic> item in await _db.rawQuery(
+        'SELECT * FROM historiqueDoze WHERE datePrevu LIKE "$date" AND idDoze=$idDoze')) {
+      HistoriqueDoze histo = HistoriqueDoze.fromMap(item);
+      result.add(histo);
+    }
+    if (result.isEmpty) {
+      return null;
+    } else {
+      return result[0];
+    }
+  }
+
+  Future<int> updateHisto(Map<String, dynamic> row, int id) async {
+    await init();
+    return await _db.update(
+      "historiqueDoze",
+      row,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> deleteHisto(int id) async {
+    await init();
+    return await _db.delete(
+      "historiqueDoze",
       where: 'id = ?',
       whereArgs: [id],
     );
@@ -315,15 +372,65 @@ class DatabaseHelper {
     return dozes;
   }
 
-  Future<List<MedicamentDoze>> getAllDozesByHeure(String heure) async {
+  Future<List<MedicamentDoze>> getAllDozesByHeure(
+      DateTime date, String heure) async {
     await init();
     List<MedicamentDoze> dozes = [];
     for (Map<String, dynamic> item
         in await _db.rawQuery('SELECT * FROM doze WHERE heure LIKE "$heure"')) {
       //dozes.add(Doze.fromMap(item));
-      dozes.add(await getMedicamentBydozeId(Doze.fromMap(item)));
+      //TODO:
+
+      if (await includeDoze(date, Doze.fromMap(item).idMedicament)) {
+        dozes.add(await getMedicamentBydozeId(Doze.fromMap(item)));
+      }
     }
     return dozes;
+  }
+
+  Future<bool> includeDoze(DateTime date, int dozeId) async {
+    Medicament med = await getMedicamentBydoze(dozeId);
+    List<String> list = med.dateFin.split('-');
+    String day = list[0];
+    String month = list[1];
+    String year = list[2];
+    if (day.length == 1) {
+      day = "0$day";
+    }
+    if (month.length == 1) {
+      month = "0$month";
+    }
+    DateTime dateFinal = DateTime.parse("$year-$month-$day");
+
+    List<String> list2 = med.dateDebut.split('-');
+    String day2 = list2[0];
+    String month2 = list2[1];
+    String year2 = list2[2];
+    if (day2.length == 1) {
+      day2 = "0$day2";
+    }
+    if (month2.length == 1) {
+      month2 = "0$month2";
+    }
+    DateTime dateDebut = DateTime.parse("$year2-$month2-$day2");
+    //print(list[2] + "-" + list[0] + "-" + list[1]);
+
+    if (dateFinal.compareTo(date) >= 0 && dateDebut.compareTo(date) <= 0 ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<Medicament> getMedicamentBydoze(int dozeId) async {
+    await init();
+    List<Medicament> result = [];
+    for (Map<String, dynamic> item
+        in await _db.rawQuery('SELECT * FROM medicament WHERE id="$dozeId"')) {
+      Medicament medicament = Medicament.fromMap(item);
+      result.add(medicament);
+    }
+    return result[0];
   }
 
   Future<MedicamentDoze> getMedicamentBydozeId(Doze doze) async {
@@ -334,6 +441,8 @@ class DatabaseHelper {
         in await _db.rawQuery('SELECT * FROM medicament WHERE id="$dozeId"')) {
       MedicamentDoze medicamentDoze = MedicamentDoze.fromMap(item);
       medicamentDoze.doze = doze;
+      medicamentDoze.historique =
+          await findHistoBydozeAndDate("4/21/2023%", doze.id!);
       result.add(medicamentDoze);
     }
 
@@ -381,14 +490,15 @@ class DatabaseHelper {
   }
 
   // for Home page
-  Future<Map<String, List<MedicamentDoze>>> calenderApi() async {
+  Future<Map<String, List<MedicamentDoze>>> calenderApi(DateTime date) async {
     Map<String, List<MedicamentDoze>> doseMap = {};
     List<Map<String, dynamic>> results =
         await db.query('doze', orderBy: 'heure');
     for (Map<String, dynamic> result in results) {
       Doze dose = Doze.fromMap(result);
-      doseMap[dose.heure] = await getAllDozesByHeure(dose.heure);
+      doseMap[dose.heure] = await getAllDozesByHeure(date, dose.heure);
     }
+    doseMap.removeWhere((key, value) => value.isEmpty);
     return doseMap;
   }
 }

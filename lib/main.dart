@@ -37,11 +37,8 @@ void rendezVousTask() async {
           fln: flutterLocalNotificationsPlugin);
     }
   } catch (e) {
-    // print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh $e');
   }
-  // print(
-  //     "[$now] Hello, world! isolate=${isolateId} function='$rendezVousTask' ##################################################################");
-
+  
 }
 
 Future<void> main() async {
