@@ -7,10 +7,11 @@ import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
 import 'package:medisafe/models/Rappel.dart';
+import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/add_medi.dart';
 import 'package:provider/provider.dart';
 
 class WelcomeView extends StatefulWidget {
-  
+
   @override
   _MyWidgetState createState() => _MyWidgetState();
 }
@@ -30,22 +31,17 @@ class _MyWidgetState extends State<WelcomeView> {
     rap.horaires.clear();
   }
 
- @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-  }
   
   @override
   Widget build(BuildContext context) {
     var changes = Provider.of<HomeProvider>(context, listen: true);
     Rappel rap = Rappel();
     List<Widget> textWidgets = [];
-
-    for (int i = 0; i < rap.horaires.length; i++) {
-      textWidgets.add(Text(rap.horaires[i]!));
-    }
+if(rap.horaires != null) {
+  for (int i = 0; i < rap.horaires!.length; i++) {
+    textWidgets.add(Text(rap.horaires[i]!));
+  }
+}
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -199,18 +195,18 @@ class _MyWidgetState extends State<WelcomeView> {
                       //Medicament.addCat();
 
 
-                   changes.setChanges();
+                   //changes.setChanges();
 
-                    Navigator.push<dynamic>(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => MyApp( nbr: 2,),
-                      ),
-                    );
+                    // Navigator.push<dynamic>(
+                    //   context,
+                    //   MaterialPageRoute<dynamic>(
+                    //     builder: (BuildContext context) => MyApp( nbr: 2,),
+                    //   ),
+                    // );
 
-                     // Navigator.pop(context);
-                     // Navigator.pop(context);
-                     // Navigator.pop(context);
+                     Navigator.pop(context);
+                     Navigator.pop(context);
+                     Navigator.pop(context);
 
                   },
                   icon: Flexible(

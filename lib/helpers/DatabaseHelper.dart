@@ -1,4 +1,5 @@
 import 'package:medisafe/models/Doze.dart';
+import 'package:medisafe/models/Tracker.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:medisafe/models/medicamentDoze.dart';
@@ -24,7 +25,7 @@ class DatabaseHelper {
       tele: "+212 615-91203",
       blood: "A+");
   static const _databaseName = "medisafe";
-  static const _databaseVersion = 2;
+  static const _databaseVersion = 1;
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
@@ -97,7 +98,15 @@ class DatabaseHelper {
             FOREIGN KEY(idMedicament) REFERENCES medicament(id)
           );
           ''');
-
+    await db.execute('''
+          CREATE TABLE tracker (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nom TEXT NOT NULL,
+            type TEXT NOT NULL,
+            dateDebut TEXT NOT NULL,
+            dateFin TEXT NOT NULL
+          );
+          ''');
     await db.execute('''
     CREATE TABLE user (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -390,5 +399,40 @@ class DatabaseHelper {
       doseMap[dose.heure] = await getAllDozesByHeure(dose.heure);
     }
     return doseMap;
+  }
+
+
+  //Tracker
+
+  Future<int> insertTracker(String name, String type,int nbrweeks) async {
+    await init();
+    DateTime now = DateTime.now();
+    String dateDebut = "${now.day}-${now.month}-${now.year}";
+
+    DateTime dateAfternWeeks = now.add(Duration(days: nbrweeks * 7));
+
+    // Format the date as a string
+    String dateFin =
+        "${dateAfternWeeks.day}-${dateAfternWeeks.month}-${dateAfternWeeks.year}";
+
+    final data = {
+      'nom': name,
+      'type': type,
+      'dateDebut': dateDebut,
+      'dateFin': dateFin,
+    };
+    int id = await _db.insert("tracker", data);
+
+    return id;
+  }
+
+  Future<List<Tracker>> allTrackers() async {
+    await init();
+    List<Tracker> trackers = [];
+    for (Map<String, dynamic> item in await _db.query("tracker")) {
+      trackers.add(Tracker.fromMap(item));
+    }
+
+    return trackers;
   }
 }
