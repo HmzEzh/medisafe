@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:provider/provider.dart';
+import '../../app_skoleton/appSkoleton.dart';
 import '../../main.dart';
 import '../../models/HistoriqueDoze.dart';
 import '../../models/medicamentDoze.dart';
@@ -129,10 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     splashFactory: NoSplash.splashFactory,
                   ),
                   onPressed: () async {
-                    List dozes =
-                        await databaseHelper.getMedicaments();
-                    for(var histo in dozes){
-                      print(histo["dateDebut"]);
+                    List dozes = await databaseHelper.historiqueDoze();
+                    for (var histo in dozes) {
+                      print(histo.datePrevu);
                     }
                   },
                   child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
@@ -274,6 +275,9 @@ class _HomeScreenContentState extends State<HomeScreenContent>
   }
 
   Widget body(BuildContext context, List<MedicamentDoze> medicamentDoze) {
+    var selectedDay = Provider.of<HomeProvider>(context, listen: true);
+    var date;
+    var time;
     return Container(
       child: ListView.builder(
           shrinkWrap: true,
@@ -281,6 +285,10 @@ class _HomeScreenContentState extends State<HomeScreenContent>
           scrollDirection: Axis.vertical,
           itemCount: medicamentDoze.length,
           itemBuilder: (ctx, index) {
+            if (medicamentDoze[index].historique != null) {
+              date = medicamentDoze[index].historique!.datePrevu.split(" ")[0];
+              time = medicamentDoze[index].historique!.datePrevu.split(" ")[1];
+            }
             return InkWell(
               onTap: () {
                 if (medicamentDoze[index].historique != null) {
@@ -324,19 +332,77 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text(
-                                      medicamentDoze[index].title +
-                                          medicamentDoze[index].doze!.heure,
-                                      textAlign: TextAlign.center,
-                                    ),
+                                    Container(
+                                        child: Center(
+                                            child: Image.asset(
+                                                medicamentDoze[index].imagePath,
+                                                scale: 3))),
                                     Container(
                                       margin: const EdgeInsets.only(
-                                          left: 8, right: 8, bottom: 24),
+                                          left: 8, right: 8, top: 12),
                                       child: Text(
-                                        "Veuillez entrez le nom de votre médecin",
+                                        medicamentDoze[index].title,
                                         textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ),
+                                    Container(
+                                        margin: const EdgeInsets.only(
+                                            left: 8, right: 8, top: 18),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: Icon(
+                                                  IconData(0xf06ae,
+                                                      fontFamily:
+                                                          'MaterialIcons'),
+                                                  size: 20),
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 8, right: 8, top: 2),
+                                              child: Text(
+                                                  "Programmé pour " +
+                                                      medicamentDoze[index]
+                                                          .doze!
+                                                          .heure +
+                                                      "., " +
+                                                      Utils.formatDate(
+                                                          selectedDay
+                                                              .getCurentdate()),
+                                                  style:
+                                                      TextStyle(fontSize: 14)),
+                                            ),
+                                          ],
+                                        )),
+                                    Container(
+                                        margin: const EdgeInsets.only(
+                                            left: 8, right: 8, top: 8),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: Icon(Icons.announcement,
+                                                  size: 20),
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 8, right: 8, top: 2),
+                                              child: Text("Prendre 1 ",
+                                                  style:
+                                                      TextStyle(fontSize: 14)),
+                                            ),
+                                          ],
+                                        ))
                                   ],
                                 ),
                               ),
@@ -356,7 +422,377 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                                       borderRadius: const BorderRadius.only(
                                         bottomLeft: Radius.circular(10),
                                       ),
-                                      onTap: () => Navigator.pop(context),
+                                      onTap: () {
+                                        historiqueDoze.valeur = "Non pris";
+                                        historiqueDoze
+                                            .datePrevu = Utils.formatDate(
+                                                selectedDay.getCurentdate()) +
+                                            " " +
+                                            Utils.formatTime(DateTime.now());
+                                        showModalBottomSheet<void>(
+                                            constraints: BoxConstraints(
+                                                minWidth: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                maxHeight: 9.5 *
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    16,
+                                                minHeight:
+                                                    MediaQuery.of(context)
+                                                            .size
+                                                            .height /
+                                                        3),
+                                            isScrollControlled: true,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(24.0),
+                                                    topRight:
+                                                        Radius.circular(24.0))),
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return StatefulBuilder(builder:
+                                                  (BuildContext context,
+                                                      StateSetter setState) {
+                                                return Container(
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        margin: EdgeInsets.only(
+                                                            left: 8, right: 8),
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height /
+                                                            16,
+                                                        child: Center(
+                                                            child: Text(
+                                                          'Pouvez-vous indiquer pourquoi vous ne prenez pase cette dose ?',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        )),
+                                                      ),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                          onTap: () async {
+                                                            historiqueDoze
+                                                                    .remarque =
+                                                                "Oublié / occupé / endormi";
+                                                            await databaseHelper
+                                                                .insertHisto(
+                                                                    historiqueDoze
+                                                                        .toMap());
+                                                            selectedDay
+                                                                .setSelectedDay(
+                                                                    selectedDay
+                                                                        .getSelectedDay());
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height /
+                                                                  16,
+                                                              child: Center(
+                                                                  child: Text(
+                                                                      "Oublié / occupé / endormi",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .blue,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ))))),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                          onTap: () async {
+                                                            historiqueDoze
+                                                                    .remarque =
+                                                                "Je n'ai plus le médicament";
+                                                            await databaseHelper
+                                                                .insertHisto(
+                                                                    historiqueDoze
+                                                                        .toMap());
+                                                            selectedDay
+                                                                .setSelectedDay(
+                                                                    selectedDay
+                                                                        .getSelectedDay());
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height /
+                                                                  16,
+                                                              child: Center(
+                                                                  child: Text(
+                                                                      "Je n'ai plus le médicament",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .blue,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ))))),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                          onTap: () async {
+                                                            historiqueDoze
+                                                                    .remarque =
+                                                                "Je n'ai pas besoin de prendre cette dose";
+                                                            await databaseHelper
+                                                                .insertHisto(
+                                                                    historiqueDoze
+                                                                        .toMap());
+                                                            selectedDay
+                                                                .setSelectedDay(
+                                                                    selectedDay
+                                                                        .getSelectedDay());
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height /
+                                                                  16,
+                                                              child: Center(
+                                                                  child: Text(
+                                                                      "Je n'ai pas besoin de prendre cette dose",
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .blue,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                      ))))),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          historiqueDoze
+                                                                  .remarque =
+                                                              'Effets secondaire / autres problèmes de santé ';
+                                                          await databaseHelper
+                                                              .insertHisto(
+                                                                  historiqueDoze
+                                                                      .toMap());
+                                                          selectedDay
+                                                              .setSelectedDay(
+                                                                  selectedDay
+                                                                      .getSelectedDay());
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              16,
+                                                          child: Center(
+                                                              child: Text(
+                                                                  'Effets secondaire / autres problèmes de santé ',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .blue,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ))),
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          historiqueDoze
+                                                                  .remarque =
+                                                              'Trop couteux';
+                                                          await databaseHelper
+                                                              .insertHisto(
+                                                                  historiqueDoze
+                                                                      .toMap());
+                                                          selectedDay
+                                                              .setSelectedDay(
+                                                                  selectedDay
+                                                                      .getSelectedDay());
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              16,
+                                                          child: Center(
+                                                              child: Text(
+                                                                  'Trop couteux',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .blue,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ))),
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          historiqueDoze
+                                                                  .remarque =
+                                                              "Je n'ai pas le médicament à proximité";
+                                                          await databaseHelper
+                                                              .insertHisto(
+                                                                  historiqueDoze
+                                                                      .toMap());
+                                                          selectedDay
+                                                              .setSelectedDay(
+                                                                  selectedDay
+                                                                      .getSelectedDay());
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              16,
+                                                          child: Center(
+                                                              child: Text(
+                                                                  "Je n'ai pas le médicament à proximité",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .blue,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ))),
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          historiqueDoze
+                                                                  .remarque =
+                                                              'autre';
+                                                          await databaseHelper
+                                                              .insertHisto(
+                                                                  historiqueDoze
+                                                                      .toMap());
+                                                          selectedDay
+                                                              .setSelectedDay(
+                                                                  selectedDay
+                                                                      .getSelectedDay());
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              16,
+                                                          child: Center(
+                                                              child: Text(
+                                                                  'autre',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .blue,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ))),
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                        height: 2,
+                                                        indent: 0,
+                                                        endIndent: 0,
+                                                      ),
+                                                      InkWell(
+                                                        onTap: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        child: Container(
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              16,
+                                                          child: Center(
+                                                              child: Text(
+                                                                  'Annuler',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                  ))),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              });
+                                            });
+                                      },
                                       child: Container(
                                         child: Column(
                                           mainAxisAlignment:
@@ -432,6 +868,32 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                                                         endIndent: 0,
                                                       ),
                                                       InkWell(
+                                                          onTap: () async {
+                                                            historiqueDoze
+                                                                    .valeur =
+                                                                "Pris";
+                                                            historiqueDoze
+                                                                .datePrevu = Utils
+                                                                    .formatDate(
+                                                                        selectedDay
+                                                                            .getCurentdate()) +
+                                                                " " +
+                                                                Utils.formatTime(
+                                                                    DateTime
+                                                                        .now());
+                                                            await databaseHelper
+                                                                .insertHisto(
+                                                                    historiqueDoze
+                                                                        .toMap());
+                                                            selectedDay
+                                                                .setSelectedDay(
+                                                                    selectedDay
+                                                                        .getSelectedDay());
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
                                                           child: Container(
                                                               height: MediaQuery.of(
                                                                           context)
@@ -461,8 +923,8 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                                                             historiqueDoze
                                                                 .datePrevu = Utils
                                                                     .formatDate(
-                                                                        DateTime
-                                                                            .now()) +
+                                                                        selectedDay
+                                                                            .getCurentdate()) +
                                                                 " " +
                                                                 medicamentDoze[
                                                                         index]
@@ -472,6 +934,10 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                                                                 .insertHisto(
                                                                     historiqueDoze
                                                                         .toMap());
+                                                            selectedDay
+                                                                .setSelectedDay(
+                                                                    selectedDay
+                                                                        .getSelectedDay());
                                                             Navigator.pop(
                                                                 context);
                                                             Navigator.pop(
@@ -504,22 +970,32 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                                                                 context);
                                                             Navigator.pop(
                                                                 context);
-                                                            DatePicker.showDateTimePicker(
+                                                            DatePicker.showTimePicker(
                                                                 context,
                                                                 showTitleActions:
                                                                     true,
-                                                                minTime: DateTime(
-                                                                    2023, 1, 1),
-                                                                maxTime:
-                                                                    DateTime(
-                                                                        2024,
-                                                                        12,
-                                                                        1),
                                                                 onConfirm:
-                                                                    (date) {
-                                                              if (kDebugMode) {
-                                                                print(date);
-                                                              }
+                                                                    (date) async {
+                                                              historiqueDoze
+                                                                      .valeur =
+                                                                  "Pris";
+                                                              historiqueDoze
+                                                                  .datePrevu = Utils
+                                                                      .formatDate(
+                                                                          selectedDay
+                                                                              .getCurentdate()) +
+                                                                  " " +
+                                                                  Utils
+                                                                      .formatTime(
+                                                                          date);
+                                                              await databaseHelper
+                                                                  .insertHisto(
+                                                                      historiqueDoze
+                                                                          .toMap());
+                                                              selectedDay
+                                                                  .setSelectedDay(
+                                                                      selectedDay
+                                                                          .getSelectedDay());
                                                             },
                                                                 currentTime:
                                                                     DateTime
@@ -610,7 +1086,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
               },
               child: Container(
                 padding:
-                    EdgeInsets.only(top: 12, bottom: 12, left: 12, right: 12),
+                    EdgeInsets.only(top: 20, bottom: 12, left: 12, right: 12),
                 //margin: EdgeInsets.all(18),
                 decoration: BoxDecoration(
                     color: Color.fromARGB(255, 246, 246, 246),
@@ -625,10 +1101,44 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      //color: Colors.black,
-                      margin: EdgeInsets.only(right: 16),
-                      child: Image.asset(meds[index], scale: 3),
-                    ),
+                        //color: Colors.black,
+                        margin: EdgeInsets.only(right: 16),
+                        child: medicamentDoze[index].historique == null
+                            ? Image.asset(medicamentDoze[index].imagePath,
+                                scale: 3)
+                            : medicamentDoze[index].historique!.valeur == 'Pris'
+                                ? badges.Badge(
+                                    position: badges.BadgePosition.topEnd(
+                                        top: -10, end: -12),
+                                    showBadge: true,
+                                    ignorePointer: false,
+                                    badgeContent: Icon(Icons.check,
+                                        color: Colors.white, size: 10),
+                                    badgeStyle: badges.BadgeStyle(
+                                      shape: badges.BadgeShape.circle,
+                                      badgeColor: Colors.green,
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                    child: Image.asset(
+                                        medicamentDoze[index].imagePath,
+                                        scale: 3),
+                                  )
+                                : badges.Badge(
+                                    position: badges.BadgePosition.topEnd(
+                                        top: -10, end: -12),
+                                    showBadge: true,
+                                    ignorePointer: false,
+                                    badgeContent: Icon(Icons.close,
+                                        color: Colors.white, size: 10),
+                                    badgeStyle: badges.BadgeStyle(
+                                      shape: badges.BadgeShape.circle,
+                                      badgeColor: Colors.red,
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                    child: Image.asset(
+                                        medicamentDoze[index].imagePath,
+                                        scale: 3),
+                                  )),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -644,7 +1154,41 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                             )),
                         Container(
                             //color: Colors.red,
-                            child: Text("med discription")),
+                            child: Text("Prendre 1")),
+                        medicamentDoze[index].historique != null
+                            ? medicamentDoze[index].historique!.valeur == 'Pris'
+                                ? Container(
+                                    //color: Colors.red,
+                                    child: Text(
+                                    "Pris à $time, $date",
+                                    style: TextStyle(color: Colors.green),
+                                  ))
+                                : SizedBox.shrink()
+                            : SizedBox.shrink(),
+                        medicamentDoze[index].historique != null
+                            ? medicamentDoze[index].historique!.valeur ==
+                                    'Non pris'
+                                ? Container(
+                                    //color: Colors.red,
+                                    child: Text(
+                                    medicamentDoze[index].historique!.remarque,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ))
+                                : SizedBox.shrink()
+                            : SizedBox.shrink(),
+                        medicamentDoze[index].historique != null
+                            ? medicamentDoze[index].historique!.valeur ==
+                                    'Non pris'
+                                ? Container(
+                                    //color: Colors.red,
+                                    child: Text(
+                                    "Non pris à $time, $date",
+                                    style: TextStyle(color: Colors.red),
+                                  ))
+                                : SizedBox.shrink()
+                            : SizedBox.shrink(),
+
                         // Container(
                         //   color: Colors.green,
                         //   child: Text("med etat"))
@@ -660,7 +1204,6 @@ class _HomeScreenContentState extends State<HomeScreenContent>
 
   @override
   Widget build(BuildContext context) {
-
     var selectedDay = Provider.of<HomeProvider>(context, listen: true);
     var size = MediaQuery.of(context).size;
     animationController = AnimationController(
@@ -675,20 +1218,66 @@ class _HomeScreenContentState extends State<HomeScreenContent>
         future: databaseHelper.calenderApi(selectedDay.getCurentdate()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Center(
-                  child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(90),
-                    color: Color.fromARGB(36, 81, 86, 90)),
-                child: Center(
-                    child: CupertinoActivityIndicator(
-                  radius: 20,
-                )),
-              )),
-            );
+            return ListView.builder(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: 6,
+                itemBuilder: (ctx, index) {
+                  return Container(
+                              decoration: BoxDecoration(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      topLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8)),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                      color: Color.fromRGBO(58, 81, 96, 1)
+                                          .withOpacity(0.4),
+                                      offset: Offset(-4, 5),
+                                      blurRadius: 4.0,
+                                    ),
+                                    BoxShadow(
+                                      color: Color.fromARGB(0, 255, 255, 255)
+                                          .withOpacity(0.4),
+                                      offset: Offset(4, -5),
+                                      blurRadius: 4.0,
+                                    ),
+                                  ]),
+                              margin: EdgeInsets.only(
+                                  bottom: 20, left: 24, right: 24),
+                              //padding: EdgeInsets.only(bottom: 8),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    //margin: EdgeInsets.only(bottom: 12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[500],
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(8),
+                                        topLeft: Radius.circular(8),
+                                      ),
+                                    ),
+                                    height: 45,
+                                    
+                                  ),
+                                  AppSkoleton(
+                                    width: size.width ,
+                                    height: 100,
+                                    margin: EdgeInsets.zero,
+                                    radius: BorderRadius.only(
+                                     
+                                      bottomRight: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8)))
+                                ],
+                              ),
+                            );
+                });
           } else if (snapshot.hasError) {
             final error = snapshot.error;
             return Center(
@@ -773,7 +1362,8 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                                               fontWeight: FontWeight.w500)),
                                     ),
                                   ),
-                                  body(context,snapshot.data!.values.elementAt(index))
+                                  body(context,
+                                      snapshot.data!.values.elementAt(index))
                                 ],
                               ),
                             );

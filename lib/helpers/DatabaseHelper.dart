@@ -3,6 +3,7 @@ import 'package:medisafe/models/Tracker.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:medisafe/models/medicamentDoze.dart';
+import 'package:medisafe/utils/utils.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
@@ -250,8 +251,9 @@ class DatabaseHelper {
     await init();
     List<HistoriqueDoze> result = [];
     for (Map<String, dynamic> item in await _db.rawQuery(
-        'SELECT * FROM historiqueDoze WHERE datePrevu LIKE "$date" AND idDoze=$idDoze')) {
+        'SELECT * FROM historiqueDoze WHERE datePrevu LIKE "$date%" AND idDoze=$idDoze')) {
       HistoriqueDoze histo = HistoriqueDoze.fromMap(item);
+      print(date);
       result.add(histo);
     }
     if (result.isEmpty) {
@@ -391,7 +393,7 @@ class DatabaseHelper {
       //TODO:
 
       if (await includeDoze(date, Doze.fromMap(item).idMedicament)) {
-        dozes.add(await getMedicamentBydozeId(Doze.fromMap(item)));
+        dozes.add(await getMedicamentBydozeId(date, Doze.fromMap(item)));
       }
     }
     return dozes;
@@ -424,7 +426,7 @@ class DatabaseHelper {
     DateTime dateDebut = DateTime.parse("$year2-$month2-$day2");
     //print(list[2] + "-" + list[0] + "-" + list[1]);
 
-    if (dateFinal.compareTo(date) >= 0 && dateDebut.compareTo(date) <= 0 ) {
+    if (dateFinal.compareTo(date) >= 0 && dateDebut.compareTo(date) <= 0) {
       return true;
     } else {
       return false;
@@ -442,7 +444,7 @@ class DatabaseHelper {
     return result[0];
   }
 
-  Future<MedicamentDoze> getMedicamentBydozeId(Doze doze) async {
+  Future<MedicamentDoze> getMedicamentBydozeId(DateTime date, Doze doze) async {
     await init();
     List<MedicamentDoze> result = [];
     int? dozeId = doze.idMedicament;
@@ -451,7 +453,7 @@ class DatabaseHelper {
       MedicamentDoze medicamentDoze = MedicamentDoze.fromMap(item);
       medicamentDoze.doze = doze;
       medicamentDoze.historique =
-          await findHistoBydozeAndDate("4/21/2023%", doze.id!);
+          await findHistoBydozeAndDate(Utils.formatDate(date), doze.id!);
       result.add(medicamentDoze);
     }
 
@@ -511,10 +513,9 @@ class DatabaseHelper {
     return doseMap;
   }
 
-
   //Tracker
 
-  Future<int> insertTracker(String name, String type,int nbrweeks) async {
+  Future<int> insertTracker(String name, String type, int nbrweeks) async {
     await init();
     DateTime now = DateTime.now();
     String dateDebut = "${now.day}-${now.month}-${now.year}";
