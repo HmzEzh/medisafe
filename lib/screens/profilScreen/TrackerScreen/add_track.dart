@@ -290,7 +290,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                 onTap: () {
 
                                   dozeservice.insertTracker(nameController.text, typeController.text, _currentSliderValue.round() );
-
+                                  changes.notifyListeners();
                                   changes.setChanges();
                                   Navigator.pop(context);
                                   ScaffoldMessenger.of(context)
@@ -311,6 +311,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                     margin: EdgeInsets.only(
                                         bottom: 20, left: 25, right: 25),
                                   ));
+                                  changes.setChanges();
                                 },
                                 child: Container(
                                   height: 50,

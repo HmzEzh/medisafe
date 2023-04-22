@@ -6,6 +6,7 @@ import 'package:medisafe/models/medicamentDoze.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
+import '../models/Mesure.dart';
 import '../models/HistoriqueDoze.dart';
 import '../models/RendezVous.dart';
 import '../models/medcin.dart';
@@ -118,6 +119,16 @@ class DatabaseHelper {
             type TEXT NOT NULL,
             dateDebut TEXT NOT NULL,
             dateFin TEXT NOT NULL
+          );
+          ''');
+    await db.execute('''
+          CREATE TABLE mesure (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            idTracker INTEGER NOT NULL,
+            value TEXT NOT NULL,
+            date TEXT NOT NULL,
+            heure TEXT NOT NULL,
+            FOREIGN KEY(idTracker) REFERENCES tracker(id)
           );
           ''');
     await db.execute('''
@@ -545,4 +556,89 @@ class DatabaseHelper {
 
     return trackers;
   }
+
+  Future<Tracker> getTrackerById(int id) async {
+    await init();
+
+    List<Tracker> trackers = [];
+    for (Map<String, dynamic> item in await _db.query("tracker",
+        orderBy: "id", where: 'id = ?', whereArgs: [id])) {
+      trackers.add(Tracker.fromMap(item));
+    }
+    return trackers[0];
+  }
+
+
+  //mesures of Tracker
+
+  Future<int> insertMesure(int idTracker, double value) async {
+    await init();
+    DateTime now = DateTime.now();
+    String dateDebut = "${now.day}-${now.month}-${now.year}";
+
+    int hour = now.hour;
+    int minute = now.minute;
+    int second = now.second;
+
+    String time = "$hour:$minute:$second";
+
+    final data = {
+      'idTracker': idTracker,
+      'value': value,
+      'date': dateDebut,
+      'heure': time,
+    };
+    int id = await _db.insert("mesure", data);
+
+    return id;
+  }
+
+  Future<double> getHighest(int idTracker) async {
+    try {
+      final results = await _db.rawQuery(
+          'SELECT MAX(value) AS max_value FROM mesure WHERE idTracker = ?',
+          [idTracker]);
+      final maxValue = results.isNotEmpty ? (double.parse(
+          results.first['max_value'] as String))?.toDouble() ?? 0.0 : 0.0;
+      return maxValue;
+    } on FormatException catch (e) {
+      // Handle the type cast exception here
+      print('Caught a FormatException: $e');
+      return 0.0;
+    } catch (e) {
+      // Handle other exceptions here
+      print('Caught an exception: $e');
+      return 0.0;
+    }
+  }
+
+  Future<double> getLowest(int idTracker) async {
+    try{
+    final results = await _db.rawQuery('SELECT MIN(value) AS min_value FROM mesure WHERE idTracker = ?', [idTracker]);
+    final maxValue = results.isNotEmpty ? (double.parse(results.first['min_value'] as String))?.toDouble() ?? 0.0 : 0.0;
+    return maxValue;
+    } on FormatException catch (e) {
+      // Handle the type cast exception here
+      print('Caught a FormatException: $e');
+      return 0.0;
+    } catch (e) {
+      // Handle other exceptions here
+      print('Caught an exception: $e');
+      return 0.0;
+    }
+  }
+
+  Future<List<Mesure>> getMesuresByIdTracker(int id) async {
+    await init();
+
+    List<Mesure> mesures = [];
+    for (Map<String, dynamic> item in await _db.query("mesure",
+        orderBy: "id", where: 'idTracker = ?', whereArgs: [id])) {
+      mesures.add(Mesure.fromMap(item));
+    }
+    return mesures;
+  }
+
+
+
 }
