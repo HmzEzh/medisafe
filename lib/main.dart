@@ -11,7 +11,7 @@ import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 import 'package:medisafe/screens/recomScreen/RecomScreen.dart';
 import 'package:medisafe/service/notification_service.dart';
-import 'package:medisafe/service/rendezVousNotifService.dart';
+import 'package:medisafe/service/notifService.dart';
 import 'package:provider/provider.dart';
 import 'helpers/DatabaseHelper.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
@@ -20,14 +20,14 @@ final dbHelper = DatabaseHelper.instance;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-RendezVousNotifService rdvSrv = new RendezVousNotifService();
+NotifService notifService = new NotifService();
 
 @pragma('vm:entry-point')
 void rendezVousTask() async {
   final DateTime now = DateTime.now();
   final int isolateId = Isolate.current.hashCode;
   try {
-    RendezVous? rv = await rdvSrv.sendNotif();
+    RendezVous? rv = await notifService.sendRendezVousNotif();
     if (rv != null) {
       print(rv.nom);
       Noti.showBigTextNotification(
@@ -37,8 +37,21 @@ void rendezVousTask() async {
           fln: flutterLocalNotificationsPlugin);
     }
   } catch (e) {
+    print(e);
   }
-  
+  try {
+   String time = await notifService.sendmedicamentsNotif();
+    if (time != "") {
+      //print(time);
+      Noti.showBigTextNotification(
+          id: time,
+          title: "Salut, c'est l'heure de prendre vos médicaments.",
+          body: "Prenez le(s) médicament(s) que vous devez prendre à $time",
+          fln: flutterLocalNotificationsPlugin);
+    }
+  } catch (e) {
+    print(e);
+  }
 }
 
 Future<void> main() async {
