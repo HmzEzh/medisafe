@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
@@ -7,16 +5,10 @@ import 'package:medisafe/models/Tracker.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/screens/introduction_animation/introduction_animation_screen.dart';
 import 'package:medisafe/screens/medicamentScreen/app_theme.dart';
-import 'package:medisafe/screens/medicamentScreen/rv_list_view.dart';
-import 'package:medisafe/screens/medicamentScreen/medicament_list_view.dart';
-import 'package:medisafe/main.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/Tracker_list.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/add_track.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/use/list_track_shapes.dart';
-import 'package:medisafe/screens/profilScreen/rendezVousScreen/AddRendezVous.dart';
-import 'package:provider/provider.dart';
-
 import '../../../models/Mesure.dart';
 import '../../../provider/HomeProvider.dart';
 
@@ -72,7 +64,6 @@ class _DesignScreenState extends State<DesignScreen>with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    var changes = Provider.of<HomeProvider>(context, listen: true);
     DatabaseHelper trackerService = DatabaseHelper.instance;
     return Scaffold(
       appBar: AppBar(

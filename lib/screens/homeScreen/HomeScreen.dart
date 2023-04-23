@@ -246,16 +246,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ]));
   }
 }
-
-List<String> meds = [
-  "assets/images/med1.png",
-  "assets/images/med2.png",
-  "assets/images/med3.png",
-  "assets/images/med4.png",
-  "assets/images/med5.png",
-  "assets/images/med6.png"
-];
-
 class HomeScreenContent extends StatefulWidget {
   const HomeScreenContent({
     Key? key,
@@ -303,17 +293,16 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                     valeur: "",
                     remarque: "",
                     datePrevu: "");
-
+                    if(Utils.formatDate(selectedDay.getCurentdate()) == Utils.formatDate(DateTime.now())){
                 showDialog(
-                    context: context,
+                  context: context,
                     builder: (context) => AlertDialog(
                           insetPadding: EdgeInsets.symmetric(horizontal: 50),
                           buttonPadding: EdgeInsets.zero,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0))),
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
+                          contentPadding:const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
                           // title: const Text(
                           //   'La connexion a échoué',
                           //   textAlign: TextAlign.center,
@@ -334,9 +323,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                                   children: [
                                     Container(
                                         child: Center(
-                                            child: Image.asset(
-                                                medicamentDoze[index].imagePath,
-                                                scale: 3))),
+                                            child: Image.asset(medicamentDoze[index].imagePath,scale: 3))),
                                     Container(
                                       margin: const EdgeInsets.only(
                                           left: 8, right: 8, top: 12),
@@ -1083,6 +1070,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                             ],
                           ),
                         ));
+              }
               },
               child: Container(
                 padding:
@@ -1285,8 +1273,25 @@ class _HomeScreenContentState extends State<HomeScreenContent>
             );
           } else if (snapshot.hasData) {
             if (snapshot.data!.isEmpty) {
-              return Center(
-                child: Text("isEmpty"),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                 Container(
+                  child:  Image.asset("assets/images/emptyState.png",scale:1.2),
+                 ),
+                 Container(
+                  margin: EdgeInsets.only(top:16),
+                  child:Text("Pas de médicament pour ce jour-là",textAlign: TextAlign.center,
+                  style:TextStyle(fontSize: 22,fontWeight: FontWeight.w600))
+                 ),
+                 Container(
+                   margin: EdgeInsets.only(top:8,left: 32,right:32),
+                  child:Text("Ajouter vos médicaments pour recevoire un rappel et suivre votre santé",
+                  textAlign: TextAlign.center,
+                   style:TextStyle(fontSize: 17))
+                 )
+                ],
               );
             }
             return AnimatedBuilder(
