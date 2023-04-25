@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
       height: size,
       decoration: BoxDecoration(
         color: day == selectedDay.getSelectedDay()
-            ? Color.fromARGB(255, 0, 87, 209)
+            ? Color.fromARGB(255, 27, 62, 92)
             : Color.fromRGBO(255, 255, 255, 1),
         borderRadius: const BorderRadius.all(Radius.circular(24.0)),
         // border: Border.all(
@@ -115,12 +115,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   }),
                   splashColor: Colors.white24,
                   child: const CircleAvatar(
-                    backgroundColor: Color.fromARGB(255, 38, 58, 167),
+                    backgroundColor: Colors.white,
                     child: Text('HE'),
                   )),
             ),
             shadowColor: Colors.transparent,
-            backgroundColor: Color.fromARGB(255, 246, 246, 246),
+            backgroundColor: Color.fromARGB(255, 27, 62, 92),
             automaticallyImplyLeading: false,
             centerTitle: false,
             actions: [
@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       print(histo.datePrevu);
                     }
                   },
-                  child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
+                  child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons'),color:Colors.white))
             ]),
         backgroundColor: Colors.white,
         body: Column(children: [
@@ -1351,7 +1351,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                                   Container(
                                     margin: EdgeInsets.only(bottom: 12),
                                     decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 0, 87, 209),
+                                      color: Color.fromARGB(255, 27, 62, 92),
                                       borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(8),
                                         topLeft: Radius.circular(8),

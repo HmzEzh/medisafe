@@ -19,13 +19,13 @@ class PdfApi {
     await file.writeAsBytes(bytes);
     print(file.path);
     final Email email = Email(
-  body: 'Email body',
-  subject: 'Email subject',
-  recipients: ['example@example.com'],
-  cc: ['cc@example.com'],
-  bcc: ['bcc@example.com'],
-  attachmentPaths: [file.path],
-  isHTML: false,
+      body: 'Email body',
+      subject: 'Email subject',
+      recipients: ['example@example.com'],
+      cc: ['cc@example.com'],
+      bcc: ['bcc@example.com'],
+      attachmentPaths: [file.path],
+      isHTML: false,
 );
 
 await FlutterEmailSender.send(email);

@@ -9,12 +9,8 @@ class NotifService {
   Future<RendezVous?> sendRendezVousNotif() async {
     List<RendezVous> rendezVous = await db.allRendezVous();
     for (RendezVous rdv in rendezVous) {
-      int rs1 = Utils.formatDate(DateTime.parse(rdv.heure))
-          .compareTo(Utils.formatDate(DateTime.now()));
-      if (rs1 == 0) {
-        int rs2 = Utils.formatTime(DateTime.parse(rdv.heure))
-            .compareTo(Utils.formatTime(DateTime.now()));
-        if (rs2 == 0) {
+      if (Utils.formatDate(DateTime.parse(rdv.heure)) == Utils.formatDate(DateTime.now())) {
+        if (Utils.formatTime(DateTime.parse(rdv.heure)) == Utils.formatTime(DateTime.now())) {
           return rdv;
         }
       } else {

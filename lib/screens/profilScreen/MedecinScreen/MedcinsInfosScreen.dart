@@ -523,19 +523,19 @@ class _MedcinsInfosScreenState extends State<MedcinsInfosScreen> {
                   },
                   child: Icon(
                     IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                    color: Color.fromARGB(255, 38, 58, 167),
+                    color: Colors.white,
                   )),
                    Spacer(),
             Text("Modifier medecin",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 38, 58, 167))),
+                    color: Colors.white)),
             Spacer(),
             ],
           ),
           shadowColor: Colors.transparent,
-          backgroundColor: Color.fromARGB(255, 246, 246, 246),
+          backgroundColor: Color.fromARGB(255, 27, 62, 92),
           automaticallyImplyLeading: false,
           centerTitle: false,
           actions: [
@@ -642,7 +642,7 @@ class _MedcinsInfosScreenState extends State<MedcinsInfosScreen> {
                 },
                 child: Text(
                   "Mettre à jour",
-                  style: TextStyle(color: Color.fromARGB(255, 38, 58, 167)),
+                  style: TextStyle(color: Colors.white),
                 ))
           ]),
       backgroundColor: Colors.white,
@@ -781,6 +781,34 @@ class _MedcinsInfosScreenState extends State<MedcinsInfosScreen> {
                             ],
                           ),
                         ));
+              },
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 40,
+            padding: EdgeInsets.only(top: 8, bottom: 8),
+            margin: EdgeInsets.only(top: 16, bottom: 0, left: 8, right: 8),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 27, 62, 92),
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
+              // border: Border.all(
+              //     color: DesignCourseAppTheme.nearlyBlue)
+            ),
+            child: InkWell(
+              child: Container(
+                child: Center(
+                  child: Text("Envoyer un rapport du statu au médecin",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(4),
+              ),
+              onTap: () {
+                //TODO:
               },
             ),
           )
