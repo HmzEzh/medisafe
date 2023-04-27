@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -31,6 +32,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   TextEditingController bloodController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  late Uint8List image;
 
   late int numberOfDaysInMonth;
 
@@ -406,19 +408,19 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 },
                 child: const Icon(
                   IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                  color: Color.fromARGB(255, 38, 58, 167),
+                  color: Colors.white,
                 )),
             const Spacer(),
             const Text("Edit Profile",
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 38, 58, 167))),
+                    color: Colors.white)),
             const Spacer(),
           ]),
           centerTitle: true,
           shadowColor: Colors.transparent,
-          backgroundColor: const Color.fromARGB(255, 246, 246, 246),
+          backgroundColor: Color.fromARGB(255, 27, 62, 92),
           automaticallyImplyLeading: false,
           actions: [
             TextButton(
@@ -446,7 +448,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     email: emailController.text,
                     password: passwordController.text,
                     tele: teleController.text,
-                    blood: bloodController.text);
+                    blood: bloodController.text,
+                    image: image);
 
                 userService2.updateUser(update, widget.userId);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -467,7 +470,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
               child: const Icon(
                 Icons.save,
                 size: 20,
-                color: Color.fromARGB(255, 38, 58, 167),
+                color: Colors.white,
               ),
             )
           ]),
@@ -496,6 +499,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 emailController = TextEditingController(text: user['email']);
                 passwordController =
                     TextEditingController(text: user['password']);
+
+                image = user['image'];
 
                 return SingleChildScrollView(
                   child: Column(

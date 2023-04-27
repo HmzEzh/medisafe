@@ -7,19 +7,19 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-      id: json['id'] as int,
-      nom: json['nom'] as String,
-      prenom: json['prenom'] as String,
-      date_naissance: json['date_naissance'] as String,
-      address: json['address'] as String,
-      age: json['age'] as int,
-      taille: json['taille'] as int,
-      poids: json['poids'] as int,
-      email: json['email'] as String,
-      password: json['password'] as String,
-      tele: json['tele'] as String,
-      blood: json['blood'] as String,
-    );
+    id: json['id'] as int,
+    nom: json['nom'] as String,
+    prenom: json['prenom'] as String,
+    date_naissance: json['date_naissance'] as String,
+    address: json['address'] as String,
+    age: json['age'] as int,
+    taille: json['taille'] as int,
+    poids: json['poids'] as int,
+    email: json['email'] as String,
+    password: json['password'] as String,
+    tele: json['tele'] as String,
+    blood: json['blood'] as String,
+    image: json['image'] as Uint8List);
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
@@ -34,4 +34,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'password': instance.password,
       'tele': instance.tele,
       'blood': instance.blood,
+      'image': instance.image
     };

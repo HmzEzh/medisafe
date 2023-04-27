@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:json_annotation/json_annotation.dart';
 part 'user.g.dart';
 
@@ -15,8 +17,24 @@ class User {
   late String password;
   late String tele;
   late String blood;
+  late Uint8List image;
 
   User(
+      {required this.id,
+      required this.nom,
+      required this.prenom,
+      required this.date_naissance,
+      required this.address,
+      required this.age,
+      required this.taille,
+      required this.poids,
+      required this.email,
+      required this.password,
+      required this.tele,
+      required this.blood,
+      required this.image});
+
+  User.id(
       {required this.id,
       required this.nom,
       required this.prenom,
@@ -55,7 +73,8 @@ class User {
       'email': email,
       'password': password,
       'tele': tele,
-      'blood': blood
+      'blood': blood,
+      'image': image
     };
   }
 
@@ -72,7 +91,8 @@ class User {
         email: map['email'] as String,
         password: map['password'] as String,
         tele: map['tele'] as String,
-        blood: map['blood'] as String);
+        blood: map['blood'] as String,
+        image: map['image'] as Uint8List);
   }
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

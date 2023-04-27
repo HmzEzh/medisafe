@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/profilScreen/rendezVousScreen/RendezVousListScreen.dart';
 import 'MedecinScreen/MedcinsListScreen.dart';
@@ -42,11 +44,11 @@ class _ProfilScreen extends State<ProfilScreen> {
             style: TextStyle(
               fontSize: 23,
               fontWeight: FontWeight.w500,
-              color: Color.fromARGB(255, 38, 58, 167),
+              color: Colors.white,
             ),
           ),
           shadowColor: Colors.transparent,
-          backgroundColor: Color.fromARGB(255, 246, 246, 246),
+          backgroundColor: Color.fromARGB(255, 27, 62, 92),
           automaticallyImplyLeading: false,
           centerTitle: false,
           actions: []),
@@ -58,6 +60,7 @@ class _ProfilScreen extends State<ProfilScreen> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData && snapshot.data!.toMap().isNotEmpty) {
                 final user = snapshot.data!;
+                Uint8List imageBytes = user.image;
                 return Center(
                   child: ListView(
                     children: [
@@ -97,21 +100,11 @@ class _ProfilScreen extends State<ProfilScreen> {
                                   color: Colors.white,
                                   border: Border.all(color: Colors.white),
                                 ),
-                                child: InkWell(
-                                    borderRadius: BorderRadius.circular(90),
-                                    onTap: (() {
-                                      debugPrint('test');
-                                    }),
-                                    splashColor: Colors.white24,
-                                    child: CircleAvatar(
-                                      radius: 50,
-                                      backgroundColor:
-                                          Color.fromARGB(255, 38, 58, 167),
-                                      child: Text(
-                                        "${user.prenom[0]}${user.nom[0]}",
-                                        style: TextStyle(fontSize: 30),
-                                      ),
-                                    )),
+                                child: CircleAvatar(
+                                  radius:
+                                      50, // adjust the radius to fit your needs
+                                  backgroundImage: MemoryImage(imageBytes),
+                                ),
                               ),
                               Container(
                                 height: haille * 0.12,

@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:flutter/services.dart';
 import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/Tracker.dart';
 import 'package:medisafe/models/medicament.dart';
@@ -12,6 +15,7 @@ import '../models/HistoriqueDoze.dart';
 import '../models/RendezVous.dart';
 import '../models/medcin.dart';
 import 'package:path/path.dart';
+import 'dart:io';
 
 class DatabaseHelper {
   static UserService userService = UserService();
@@ -27,6 +31,7 @@ class DatabaseHelper {
       password: "testjhon",
       tele: "+212 615-91203",
       blood: "A+");
+
   static const _databaseName = "medisafe";
   static const _databaseVersion = 1;
   DatabaseHelper._privateConstructor();
@@ -56,6 +61,10 @@ class DatabaseHelper {
 
   // SQL code to create the database table
   Future _onCreate(Database db, int version) async {
+    final ByteData imageData =
+        await rootBundle.load('assets/images/default.png');
+    final Uint8List imageBytes = imageData.buffer.asUint8List();
+
     await db.execute('''
           CREATE TABLE medcin (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -145,13 +154,14 @@ class DatabaseHelper {
         email TEXT NOT NULL,
         password TEXT NOT NULL,
         tele TEXT NOT NULL,
-        blood TEXT NOT NULL      
+        blood TEXT NOT NULL,
+        image BLOB      
       );
     ''');
 
     await db.execute('''
-  INSERT INTO user (nom, prenom, date_naissance, address, age, taille, poids, email, password, tele, blood)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  INSERT INTO user (nom, prenom, date_naissance, address, age, taille, poids, email, password, tele, blood, image)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''', [
       utili.nom,
       utili.prenom,
@@ -163,7 +173,8 @@ class DatabaseHelper {
       utili.email,
       utili.password,
       utili.tele,
-      utili.blood
+      utili.blood,
+      imageBytes
     ]);
 
     print("creating tables!!!!!!!!");
@@ -179,6 +190,28 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getUserById(int id) async {
     await init();
     return _db.query('user', orderBy: "id", where: 'id = ?', whereArgs: [id]);
+  }
+
+  /*Future<List<Map<String, dynamic>>> getUserById(int id) async {
+    await init();
+    return _db.query('user', orderBy: "id", where: 'id = ?', whereArgs: [
+      id
+    ], columns: [
+      'id',
+      'nom',
+      'prenom',
+      'image'
+    ]); // Pass the columns you want to retrieve
+  }*/
+
+  Future<int> updateUserImage(int id, Uint8List imageBytes) async {
+    final db = await instance.database;
+    return await db.update(
+      'user',
+      {'image': imageBytes},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<List<Map<String, dynamic>>> getUsers() async {
@@ -562,13 +595,12 @@ class DatabaseHelper {
     await init();
 
     List<Tracker> trackers = [];
-    for (Map<String, dynamic> item in await _db.query("tracker",
-        orderBy: "id", where: 'id = ?', whereArgs: [id])) {
+    for (Map<String, dynamic> item in await _db
+        .query("tracker", orderBy: "id", where: 'id = ?', whereArgs: [id])) {
       trackers.add(Tracker.fromMap(item));
     }
     return trackers[0];
   }
-
 
   //mesures of Tracker
 
@@ -599,8 +631,10 @@ class DatabaseHelper {
       final results = await _db.rawQuery(
           'SELECT MAX(value) AS max_value FROM mesure WHERE idTracker = ?',
           [idTracker]);
-      final maxValue = results.isNotEmpty ? (double.parse(
-          results.first['max_value'] as String))?.toDouble() ?? 0.0 : 0.0;
+      final maxValue = results.isNotEmpty
+          ? (double.parse(results.first['max_value'] as String))?.toDouble() ??
+              0.0
+          : 0.0;
       return maxValue;
     } on FormatException catch (e) {
       // Handle the type cast exception here
@@ -614,10 +648,15 @@ class DatabaseHelper {
   }
 
   Future<double> getLowest(int idTracker) async {
-    try{
-    final results = await _db.rawQuery('SELECT MIN(value) AS min_value FROM mesure WHERE idTracker = ?', [idTracker]);
-    final maxValue = results.isNotEmpty ? (double.parse(results.first['min_value'] as String))?.toDouble() ?? 0.0 : 0.0;
-    return maxValue;
+    try {
+      final results = await _db.rawQuery(
+          'SELECT MIN(value) AS min_value FROM mesure WHERE idTracker = ?',
+          [idTracker]);
+      final maxValue = results.isNotEmpty
+          ? (double.parse(results.first['min_value'] as String))?.toDouble() ??
+              0.0
+          : 0.0;
+      return maxValue;
     } on FormatException catch (e) {
       // Handle the type cast exception here
       print('Caught a FormatException: $e');
@@ -639,7 +678,4 @@ class DatabaseHelper {
     }
     return mesures;
   }
-
-
-
 }

@@ -1,9 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/main.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:medisafe/screens/profilScreen/AccountScreen/EditAccountScreen.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:medisafe/service/UserServices/UserService.dart';
 
 class AccountScreen extends StatefulWidget {
   final int userId;
@@ -16,6 +23,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   DatabaseHelper userService = DatabaseHelper.instance;
+  //UserService userService = UserService();
   late Future<List<Map<String, dynamic>>> _user;
 
   @override
@@ -37,7 +45,7 @@ class _AccountScreenState extends State<AccountScreen> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios,
-            color: Color.fromARGB(255, 38, 58, 167),
+            color: Colors.white,
           ),
           onPressed: () {
             Navigator.push<dynamic>(
@@ -55,12 +63,12 @@ class _AccountScreenState extends State<AccountScreen> {
           style: TextStyle(
             fontSize: 23,
             fontWeight: FontWeight.w500,
-            color: Color.fromARGB(255, 38, 58, 167),
+            color: Colors.white,
           ),
         ),
         titleSpacing: 0.0,
         shadowColor: Colors.transparent,
-        backgroundColor: Color.fromARGB(255, 246, 246, 246),
+        backgroundColor: Color.fromARGB(255, 27, 62, 92),
         automaticallyImplyLeading: false,
         centerTitle: false,
         actions: [
@@ -81,7 +89,7 @@ class _AccountScreenState extends State<AccountScreen> {
             child: const Icon(
               Icons.edit_square,
               size: 20,
-              color: Color.fromARGB(255, 38, 58, 167),
+              color: Colors.white,
             ),
           ),
         ],
@@ -93,7 +101,8 @@ class _AccountScreenState extends State<AccountScreen> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                final user = snapshot.data!.first;
+                var user = snapshot.data!.first;
+                Uint8List imageBytes = user['image'];
                 return Container(
                   color: Colors.blue[100],
                   child: ListView(
@@ -120,24 +129,75 @@ class _AccountScreenState extends State<AccountScreen> {
                                   height: waille * 0.32,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
-                                    child:
-                                        Image.asset('assets/images/avatar.jpg'),
+                                    child: Image.memory(imageBytes),
                                   ),
                                 ),
                                 Positioned(
                                   bottom: 0,
                                   right: 0,
-                                  child: Container(
-                                    width: waille * 0.09,
-                                    height: waille * 0.09,
-                                    decoration: BoxDecoration(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      // This function will be executed when the container is tapped
+                                      //print(user['image']);
+
+                                      final result =
+                                          await FilePicker.platform.pickFiles(
+                                        type: FileType
+                                            .image, // Only show image files
+                                      );
+                                      if (result != null &&
+                                          result.files.isNotEmpty) {
+                                        // Handle the case where the user selected a file
+                                        /*print(
+                                            "the selected file is ${result.files.single.path}");*/
+                                        final originalBytes = await File(
+                                                result.files.single.path!)
+                                            .readAsBytes();
+                                        final fileBytes =
+                                            await FlutterImageCompress
+                                                .compressWithList(
+                                          originalBytes,
+                                          minHeight:
+                                              1080, // set the minimum height of the compressed image
+                                          minWidth:
+                                              1080, // set the minimum width of the compressed image
+                                          quality:
+                                              50, // set the quality of the compressed image (0-100)
+                                        );
+                                        //print(fileBytes);
+                                        Uint8List imageUint8List =
+                                            Uint8List.fromList(fileBytes);
+                                        userService.updateUserImage(
+                                            widget.userId, fileBytes);
+                                        //Uint8List bytes = await result.files[0].readAsBytes();
+                                      } else {
+                                        // Handle the case where the user cancelled the file selection operation
+                                        print(
+                                            "File selection cancelled by user");
+                                      }
+
+                                      /*final ByteData imageData =
+                                          await rootBundle
+                                              .load('assets/images/avatar.jpg');
+                                      final Uint8List imageBytes2 =
+                                          imageData.buffer.asUint8List();
+
+                                      userService.updateUserImage(
+                                          widget.userId, imageBytes2);*/
+                                    },
+                                    child: Container(
+                                      width: waille * 0.09,
+                                      height: waille * 0.09,
+                                      decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(100),
-                                        color: Colors.black),
-                                    child: Icon(
-                                      Icons.edit_outlined,
-                                      color: Colors.white,
-                                      size: waille * 0.06,
+                                        color: Colors.black,
+                                      ),
+                                      child: Icon(
+                                        Icons.edit_outlined,
+                                        color: Colors.white,
+                                        size: waille * 0.06,
+                                      ),
                                     ),
                                   ),
                                 ),
