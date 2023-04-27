@@ -260,7 +260,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                           border:
                                               Border.all(color: Colors.white)),
                                       child: const Icon(
-                                        Icons.search,
+                                        Icons.calendar_today,
                                         size: 20,
                                         color: Colors.blueGrey,
                                       ),
@@ -273,7 +273,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                           border:
                                               Border.all(color: Colors.white)),
                                       child: const Text(
-                                        "Search",
+                                        "Rendez-vous",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,

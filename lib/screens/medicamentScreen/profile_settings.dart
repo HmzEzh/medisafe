@@ -117,7 +117,6 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
     var temp;
     var heure1;
 
-    //Size size = MediaQuery.of(context).size;
     return Container(
       child: Scaffold(
         body: SingleChildScrollView(

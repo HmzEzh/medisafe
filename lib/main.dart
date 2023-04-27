@@ -172,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
               label: 'Recomendation',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.school),
+              icon: Icon(Icons.medication),
               label: 'Medicament',
             ),
             BottomNavigationBarItem(

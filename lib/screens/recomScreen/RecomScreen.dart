@@ -2,16 +2,10 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:medisafe/helpers/DatabaseHelper.dart';
+import 'package:medisafe/service/UserServices/UserService.dart';
 
 class RecomScreen extends StatelessWidget {
-  DatabaseHelper userService = DatabaseHelper.instance;
-  @override
-  void initState() {
-    // TODO: implement initState
-    userService.init();
-  }
-
+  UserService userService = UserService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,15 +17,15 @@ class RecomScreen extends StatelessWidget {
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 splashFactory: NoSplash.splashFactory,
               ),
-              onPressed: () async {
+              onPressed: () {
                 print("test");
               },
               child: CircleAvatar(
-                backgroundColor: Color.fromARGB(255, 38, 58, 167),
+                backgroundColor: Colors.white,
                 child: const Text('HE'),
               )),
           shadowColor: Colors.transparent,
-          backgroundColor: Color.fromARGB(255, 246, 246, 246),
+          backgroundColor: Color.fromARGB(255, 27, 62, 92),
           automaticallyImplyLeading: false,
           centerTitle: false,
           actions: [
@@ -49,7 +43,10 @@ class RecomScreen extends StatelessWidget {
 
                   userService.updateUserImage(1, imageBytes2);
                 },
-                child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
+                child: Icon(
+                  IconData(0xe047, fontFamily: 'MaterialIcons'),
+                  color: Colors.white,
+                ))
           ]),
       body: const Center(child: Text("recomendation")),
     );

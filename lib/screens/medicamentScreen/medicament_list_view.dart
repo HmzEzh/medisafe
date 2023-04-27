@@ -203,7 +203,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                                                           ),
                                                           Icon(
                                                             Icons.calendar_month,
-                                                            color: DesignCourseAppTheme.nearlyBlue,
+                                                            color: Color.fromARGB(255, 27, 62, 92),
                                                             size: 18,
                                                           ),
                                                         ],
@@ -465,7 +465,7 @@ class _CategoryViewState extends State<CategoryView> {
                                         ),
                                         Icon(
                                           Icons.calendar_month,
-                                          color: DesignCourseAppTheme.nearlyBlue,
+                                          color: Color.fromARGB(255, 27, 62, 92),
                                           size: 18,
                                         ),
                                       ],

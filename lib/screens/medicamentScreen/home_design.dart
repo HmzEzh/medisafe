@@ -1,8 +1,10 @@
+import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/medicamentScreen/rv_list_view.dart';
 import 'package:medisafe/screens/medicamentScreen/medicament_list_view.dart';
 import 'package:medisafe/main.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/profilScreen/rendezVousScreen/AddRendezVous.dart';
+import 'package:provider/provider.dart';
 import 'app_theme.dart';
 import 'introduction_animation/introduction_add_medi.dart';
 
@@ -16,6 +18,7 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var changes = Provider.of<HomeProvider>(context, listen: true);
     return Container(
       color: DesignCourseAppTheme.nearlyWhite,
       child: Scaffold(
@@ -124,7 +127,7 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                           letterSpacing: 0.27,
-                          color: DesignCourseAppTheme.nearlyBlue,
+                          color: Color.fromARGB(255, 27, 62, 92),
                           decoration: TextDecoration.none,
                         ),
                       ),
@@ -190,7 +193,7 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                             letterSpacing: 0.27,
-                            color: DesignCourseAppTheme.nearlyBlue,
+                            color: Color.fromARGB(255, 27, 62, 92),
                             decoration: TextDecoration.none,
                           ),
                         ),
@@ -236,10 +239,10 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
       child: Container(
         decoration: BoxDecoration(
             color: isSelected
-                ? DesignCourseAppTheme.nearlyBlue
+                ? Color.fromARGB(255, 27, 62, 92)
                 : DesignCourseAppTheme.nearlyWhite,
             borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            border: Border.all(color: DesignCourseAppTheme.nearlyBlue)),
+            border: Border.all(color: Color.fromARGB(255, 27, 62, 92),)),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -263,7 +266,7 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
                     letterSpacing: 0.27,
                     color: isSelected
                         ? DesignCourseAppTheme.nearlyWhite
-                        : DesignCourseAppTheme.nearlyBlue,
+                        :  Color.fromARGB(255, 27, 62, 92),
                   ),
                 ),
               ),
@@ -306,7 +309,7 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
                             fontFamily: 'WorkSans',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: DesignCourseAppTheme.nearlyBlue,
+                            color: Color.fromARGB(255, 27, 62, 92),
                           ),
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(

@@ -9,6 +9,7 @@ import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/Rappel.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
+import 'package:medisafe/screens/profilScreen/TrackerScreen/use/MyModel.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
 
@@ -44,7 +45,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
   @override
   Widget build(BuildContext context) {
     DatabaseHelper dozeservice = DatabaseHelper.instance;
-    var changes = Provider.of<HomeProvider>(context, listen: true);
+    var selectedDay = Provider.of<HomeProvider>(context, listen: true);
     var temp;
     var heure1;
 
@@ -81,7 +82,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                       onPressed: () { Navigator.pop(context);},
                                       icon: Icon(Icons.arrow_back_ios_new_rounded),
                                     ),
-                                    Text("Hi youssef !", style: TextStyle(fontSize: 35, color:Color(0xFF363f93)),),
+                                    Text("Hi youssef !", style: TextStyle(fontSize: 35, color:Color.fromARGB(255, 27, 62, 92)),),
                                   ],
                                 )),
                               ),
@@ -168,6 +169,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                   value: _currentSliderValue,
                                   min: 1,
                                   max: 12,
+                                  activeColor: Color.fromARGB(255, 27, 62, 92),
                                   divisions: 11,
                                   label: _currentSliderValue.round().toString() + ' weeks',
                                   onChanged: (double value) {
@@ -214,7 +216,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                 height: 120,
                                 decoration: BoxDecoration(
                                   color: _selectedContainerIndex == 0
-                                      ? Colors.blue
+                                      ? Color.fromARGB(255, 27, 62, 92)
                                       : Colors.grey[200],
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -251,7 +253,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                 height: 120,
                                 decoration: BoxDecoration(
                                   color: _selectedContainerIndex == 1
-                                      ? Colors.blue
+                                      ? Color.fromARGB(255, 27, 62, 92)
                                       : Colors.grey[200],
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -290,9 +292,8 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                 onTap: () {
 
                                   dozeservice.insertTracker(nameController.text, typeController.text, _currentSliderValue.round() );
-                                  changes.notifyListeners();
-                                  changes.setChanges();
                                   Navigator.pop(context);
+                                  selectedDay.setChanges();
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
                                     content: Container(
@@ -311,7 +312,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                     margin: EdgeInsets.only(
                                         bottom: 20, left: 25, right: 25),
                                   ));
-                                  changes.setChanges();
+                                  Provider.of<MyModel>(context, listen: false).increment();
                                 },
                                 child: Container(
                                   height: 50,
@@ -326,7 +327,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                     child: Text(
                                       'Create',
                                       style: TextStyle(
-                                        color: Colors.lightBlueAccent,
+                                        color: Color.fromARGB(255, 27, 62, 92),
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),

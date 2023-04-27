@@ -41,7 +41,7 @@ class UserService {
   Future<int> updateUserImage(int id, List<int> imageBytes) async {
     final db = await instance.database;
     return await db.update(
-      'users',
+      'user',
       {'image': Uint8List.fromList(imageBytes)},
       where: 'id = ?',
       whereArgs: [id],
