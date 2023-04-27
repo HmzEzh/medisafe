@@ -22,14 +22,15 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  DatabaseHelper userService = DatabaseHelper.instance;
+  //DatabaseHelper userService = DatabaseHelper.instance;
+  UserService userService = UserService();
   //UserService userService = UserService();
-  late Future<List<Map<String, dynamic>>> _user;
+  late Future<User> _user;
 
   @override
   void initState() {
     // TODO: implement initState
-    userService.init();
+    //userService.init();
     super.initState();
     _user = userService.getUserById(widget.userId);
   }
@@ -96,13 +97,13 @@ class _AccountScreenState extends State<AccountScreen> {
       ),
       body: Container(
         alignment: Alignment.center,
-        child: FutureBuilder<List<Map<String, dynamic>>>(
+        child: FutureBuilder<User>(
           future: _user,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                var user = snapshot.data!.first;
-                Uint8List imageBytes = user['image'];
+              if (snapshot.hasData && snapshot.data!.toMap().isNotEmpty) {
+                var user = snapshot.data!;
+                Uint8List imageBytes = user.image;
                 return Container(
                   color: Colors.blue[100],
                   child: ListView(
@@ -206,7 +207,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             Container(
                               margin: EdgeInsets.only(top: haille * 0.02),
                               child: Text(
-                                "${user['prenom']} ${user['nom']}",
+                                "${user.prenom} ${user.nom}",
                                 style: TextStyle(
                                   fontSize: 23,
                                   fontWeight: FontWeight.w400,
@@ -219,7 +220,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "${user['poids']} Kg",
+                                  "${user.poids} Kg",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
@@ -238,7 +239,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   width: 10,
                                 ),
                                 Text(
-                                  "${user['taille']} cm",
+                                  "${user.taille} cm",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400,
@@ -286,7 +287,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ),
                                     Container(
                                       child: Text(
-                                        "${user['email']}",
+                                        "${user.email}",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -313,7 +314,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ),
                                     Container(
                                       child: Text(
-                                        "${user['tele']}",
+                                        "${user.tele}",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -340,7 +341,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ),
                                     Container(
                                       child: Text(
-                                        "${user['address']}",
+                                        "${user.address}",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -367,7 +368,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ),
                                     Container(
                                       child: Text(
-                                        "${user['blood']}",
+                                        "${user.blood}",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,

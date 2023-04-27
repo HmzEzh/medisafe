@@ -38,14 +38,14 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
 
   //List<String> PickerData = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-  UserService userService2 = UserService();
-  DatabaseHelper userService = DatabaseHelper.instance;
-  late Future<List<Map<String, dynamic>>> _user;
+  //DatabaseHelper userService = DatabaseHelper.instance;
+  UserService userService = UserService();
+  late Future<User> _user;
 
   @override
   void initState() {
     // TODO: implement initState
-    userService.init();
+    //userService.init();
     super.initState();
     numberOfDaysInMonth =
         getTheNumberOfDaysInMonth(DateTime.now().year, DateTime.now().month);
@@ -80,7 +80,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     );
   }
 
-  Widget person(BuildContext context, Map<String, dynamic> user) {
+  Widget person(BuildContext context, User user) {
     var size = MediaQuery.of(context).size;
     return Container(
       decoration: const BoxDecoration(
@@ -162,7 +162,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     );
   }
 
-  Widget age(BuildContext context, Map<String, dynamic> user) {
+  Widget age(BuildContext context, User user) {
     var selectedDay = Provider.of<HomeProvider>(context, listen: true);
     var size = MediaQuery.of(context).size;
     return Container(
@@ -278,7 +278,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
     );
   }
 
-  Widget body(BuildContext context, Map<String, dynamic> user) {
+  Widget body(BuildContext context, User user) {
     var size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
@@ -451,7 +451,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     blood: bloodController.text,
                     image: image);
 
-                userService2.updateUser(update, widget.userId);
+                userService.updateUser(update, widget.userId);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Container(
                       padding: EdgeInsets.only(top: 0, bottom: 2),
@@ -480,27 +480,25 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           future: _user,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                final user = snapshot.data!.first;
-                nomController = TextEditingController(text: user['nom']);
-                prenomController = TextEditingController(text: user['prenom']);
+              if (snapshot.hasData && snapshot.data!.toMap().isNotEmpty) {
+                final user = snapshot.data!;
+                nomController = TextEditingController(text: user.nom);
+                prenomController = TextEditingController(text: user.prenom);
                 naissanceController =
-                    TextEditingController(text: user['date_naissance']);
-                addressController =
-                    TextEditingController(text: user['address']);
+                    TextEditingController(text: user.date_naissance);
+                addressController = TextEditingController(text: user.address);
                 tailleController =
-                    TextEditingController(text: user['taille'].toString());
+                    TextEditingController(text: user.taille.toString());
                 poidsController =
-                    TextEditingController(text: user['poids'].toString());
-                teleController = TextEditingController(text: user['tele']);
-                bloodController = TextEditingController(text: user['blood']);
+                    TextEditingController(text: user.poids.toString());
+                teleController = TextEditingController(text: user.tele);
+                bloodController = TextEditingController(text: user.blood);
                 ageController =
-                    TextEditingController(text: user['age'].toString());
-                emailController = TextEditingController(text: user['email']);
-                passwordController =
-                    TextEditingController(text: user['password']);
+                    TextEditingController(text: user.age.toString());
+                emailController = TextEditingController(text: user.email);
+                passwordController = TextEditingController(text: user.password);
 
-                image = user['image'];
+                image = user.image;
 
                 return SingleChildScrollView(
                   child: Column(

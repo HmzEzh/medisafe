@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/profilScreen/rendezVousScreen/RendezVousListScreen.dart';
+import 'package:share/share.dart';
 import 'MedecinScreen/MedcinsListScreen.dart';
 import 'AccountScreen/AccountScreen.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
@@ -262,7 +263,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                       child: const Icon(
                                         Icons.calendar_today,
                                         size: 20,
-                                        color: Colors.blueGrey,
+                                        color: Color.fromARGB(255, 81, 93, 99),
                                       ),
                                     ),
                                     Container(
@@ -497,12 +498,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.push<dynamic>(
-                                  context,
-                                  MaterialPageRoute<dynamic>(
-                                      builder: (BuildContext context) =>
-                                          IntroductionAnimationScreen()),
-                                );
+                                Share.share('Check out this cool app!');
                               },
                               child: Container(
                                 margin: EdgeInsets.fromLTRB(
