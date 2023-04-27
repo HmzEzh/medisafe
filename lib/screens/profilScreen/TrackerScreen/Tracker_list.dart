@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:medisafe/screens/profilScreen/MedecinScreen/MedcinsInfosScreen.dart';
+import 'package:medisafe/screens/profilScreen/TrackerScreen/Tracker_info.dart';
 import 'package:provider/provider.dart';
 import '../../../helpers/DatabaseHelper.dart';
 import '../../../models/Tracker.dart';
@@ -49,7 +49,7 @@ class _TrackerListScreenState extends State<TrackerListScreen>
                     },
                     child: Icon(
                       IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                      color: Color.fromARGB(255, 38, 58, 167),
+                      color: Colors.white,
                     )),
                 Spacer(),
                 Text("Trackers",
@@ -57,12 +57,12 @@ class _TrackerListScreenState extends State<TrackerListScreen>
                         fontSize: 17,
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 38, 58, 167))),
+                        color: Colors.white)),
                 Spacer(),
               ],
             ),
             shadowColor: Colors.transparent,
-            backgroundColor: Color.fromARGB(255, 246, 246, 246),
+            backgroundColor:Color.fromARGB(255, 27, 62, 92),
             automaticallyImplyLeading: false,
             centerTitle: false,
             actions: [
@@ -81,7 +81,7 @@ class _TrackerListScreenState extends State<TrackerListScreen>
                   },
                   child: Icon(
                     IconData(0xe047, fontFamily: 'MaterialIcons'),
-                    color: Color.fromARGB(255, 38, 58, 167),
+                    color: Colors.white,
                   ))
             ]),
         backgroundColor: Colors.white,
@@ -130,7 +130,7 @@ class _TrackerListScreenState extends State<TrackerListScreen>
                               context,
                               MaterialPageRoute<dynamic>(
                                   builder: (BuildContext context) =>
-                                      AddTrackerScreen()),
+                                      TrackerInfo(tracker: snapshot.data![index],)),
                             );
                           },
                           child: Column(

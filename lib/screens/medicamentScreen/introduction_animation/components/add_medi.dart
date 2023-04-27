@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/add_dozes.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/doze_view.dart';
 import 'package:medisafe/models/Rappel.dart';
+import 'package:provider/provider.dart';
 
 class NameMedi extends StatefulWidget {
   final AnimationController animationController;
@@ -16,6 +18,7 @@ class NameMedi extends StatefulWidget {
 class _NameMediState extends State<NameMedi> {
   @override
   Widget build(BuildContext context) {
+    var changes = Provider.of<HomeProvider>(context, listen: true);
     final _firstHalfAnimation =
         Tween<Offset>(begin: Offset(0, 1), end: Offset(0, 0)).animate(
       CurvedAnimation(

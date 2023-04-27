@@ -16,11 +16,11 @@ class RecomScreen extends StatelessWidget {
                     print("test");
                   },
                   child:CircleAvatar(
-                backgroundColor: Color.fromARGB(255, 38, 58, 167),
+                backgroundColor: Colors.white,
                 child: const Text('HE'),
               )),
             shadowColor: Colors.transparent,
-            backgroundColor: Color.fromARGB(255, 246, 246, 246),
+            backgroundColor: Color.fromARGB(255, 27, 62, 92),
             automaticallyImplyLeading: false,
             centerTitle: false,
             actions: [
@@ -33,7 +33,7 @@ class RecomScreen extends StatelessWidget {
                   onPressed: () {
                     print("test");
                   },
-                  child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons')))
+                  child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons'),color: Colors.white,))
             ]),
       body: const Center(
           child: Text("recomendation")),

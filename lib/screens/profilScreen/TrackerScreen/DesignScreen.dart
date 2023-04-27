@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/Tracker_list.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/add_track.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/use/list_track_shapes.dart';
+import 'package:provider/provider.dart';
 import '../../../models/Mesure.dart';
 import '../../../provider/HomeProvider.dart';
 
@@ -16,9 +17,11 @@ import '../../../provider/HomeProvider.dart';
 class DesignScreen extends StatefulWidget {
   @override
   _DesignScreenState createState() => _DesignScreenState();
+
+
 }
 
-class _DesignScreenState extends State<DesignScreen>with TickerProviderStateMixin, ChangeNotifier {
+class _DesignScreenState extends State<DesignScreen> with TickerProviderStateMixin, ChangeNotifier {
   AnimationController? animationController;
   CategoryType categoryType = CategoryType.ui;
   TextEditingController trackerController = TextEditingController();
@@ -28,11 +31,13 @@ class _DesignScreenState extends State<DesignScreen>with TickerProviderStateMixi
   TextEditingController dateFinController = TextEditingController();
   TextEditingController idController = TextEditingController();
 
+
   late String nom ="";
   late int idPrincipale = 1;
   late double vHigh = 0;
   late double vLow = 0;
   late double valueP = 0;
+  int autoIncrement = 0;
 
   List<Mesure> listMesures = [];
 
@@ -67,7 +72,7 @@ class _DesignScreenState extends State<DesignScreen>with TickerProviderStateMixi
     DatabaseHelper trackerService = DatabaseHelper.instance;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlueAccent, // Set background color of AppBar
+        backgroundColor: Color.fromARGB(255, 27, 62, 92), // Set background color of AppBar
         title: Text('My Health Tracker',style: TextStyle(
           fontStyle: FontStyle.italic,
         ),), // Set the title of the AppBar
@@ -270,11 +275,11 @@ class _DesignScreenState extends State<DesignScreen>with TickerProviderStateMixi
                                                                       ));
                                                                       Navigator.of(context).pop(inputText);
                                                                       listMesures = await trackerservice.getMesuresByIdTracker(idPrincipale);
-
+                                                                      autoIncrement = 0;
                                                                       setState(() {
                                                                         spotss = listMesures.map((mesure) {
                                                                           double mappedValue = ((double.parse(mesure.value) - 70) / (200 - 70)) * (6 - 1) + 1;
-                                                                          return FlSpot(double.parse(mesure.id.toString()) , mappedValue);
+                                                                          return FlSpot(double.parse((++autoIncrement).toString()) , mappedValue);
                                                                         }).toList();
                                                                       });
 
@@ -426,7 +431,7 @@ class _DesignScreenState extends State<DesignScreen>with TickerProviderStateMixi
                                 height: 16,
                               ),
                               FloatingActionButton(
-                                  backgroundColor:  Colors.lightBlueAccent,
+                                  backgroundColor:  Color.fromARGB(255, 27, 62, 92),
                                   onPressed: () {
                                     Navigator.push<dynamic>(
                                       context,
@@ -515,7 +520,7 @@ class _DesignScreenState extends State<DesignScreen>with TickerProviderStateMixi
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: FutureBuilder<List<Tracker>>(
-                      future: trackerservice.allTrackers(),
+                      future: trackerservice.getTrackersWithoutMesureToday(),
                       builder: (context,  snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(
@@ -529,7 +534,22 @@ class _DesignScreenState extends State<DesignScreen>with TickerProviderStateMixi
                         } else if (snapshot.hasData) {
                           if (snapshot.data!.isEmpty) {
                             return Center(
-                              child: Text("Try to add new one"),
+                              child: Text(
+                                'No Tracker in ToFill List',
+                                style: TextStyle(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 1.5,
+                                      color: Colors.black.withOpacity(0.5),
+                                      offset: Offset(2.0, 2.0),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             );
                           }else{
                             return GridView(
@@ -571,13 +591,13 @@ class _DesignScreenState extends State<DesignScreen>with TickerProviderStateMixi
                                               vHigh = await trackerservice.getHighest(idPrincipale);
                                               vLow = await trackerservice.getLowest(idPrincipale);
                                               listMesures = await trackerservice.getMesuresByIdTracker(idPrincipale);
-
+                                              autoIncrement = 0;
 
                                               setState(() {
                                                 _selectedContainerIndex = snapshot.data![index].id;
                                                 spotss = listMesures.map((mesure) {
                                                   double mappedValue = ((double.parse(mesure.value) - 70) / (200 - 70)) * (6 - 1) + 1;
-                                                  return FlSpot(double.parse(mesure.id.toString()) , mappedValue);
+                                                  return FlSpot(double.parse((++autoIncrement).toString()) , mappedValue);
                                                 }).toList();
                                                 print("${vLow} ++  ${vHigh}");
                                               });
@@ -822,7 +842,7 @@ class _CategoryViewState extends State<CategoryView> {
   @override
   Widget build(BuildContext context) {
     DatabaseHelper medicamentService = DatabaseHelper.instance;
-
+    var selectedDay = Provider.of<HomeProvider>(context, listen: true);
     // void _delete(int id) async {
     //   await medicamentService.deleteMedicament(id);
     //

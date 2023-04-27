@@ -569,6 +569,21 @@ class DatabaseHelper {
     return trackers[0];
   }
 
+  Future<List<Tracker>> getTrackersWithoutMesureToday() async {
+    await init();
+
+    DateTime now = DateTime.now();
+    String today = "${now.day}-${now.month}-${now.year}";
+    List<Tracker> trackers = [];
+
+    for (Map<String, dynamic> item in await _db.rawQuery(
+        "SELECT * FROM tracker WHERE id NOT IN (SELECT idTracker FROM mesure WHERE date = ?)",
+        [ today])) {
+      trackers.add(Tracker.fromMap(item));
+    }
+    return trackers;
+  }
+
 
   //mesures of Tracker
 
@@ -639,6 +654,16 @@ class DatabaseHelper {
     }
     return mesures;
   }
+
+  Future<int> deleteMesure(int id) async {
+    await init();
+    return await _db.delete(
+      "mesure",
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
 
 
 

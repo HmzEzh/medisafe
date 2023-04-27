@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/introduction_animation/components/care_view.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/save_medi.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/top_back_skip_view.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/doze_view.dart';
+import 'package:provider/provider.dart';
 
 class CareView extends StatefulWidget implements TickerProvider {
 
@@ -24,7 +26,7 @@ class _CareViewState extends State<CareView>with TickerProviderStateMixin {
      
   @override
   Widget build(BuildContext context) {
-
+    var changes = Provider.of<HomeProvider>(context, listen: true);
 
 
     return Scaffold(

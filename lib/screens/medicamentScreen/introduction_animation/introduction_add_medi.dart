@@ -1,9 +1,11 @@
+import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
 
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/add_medi.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/top_back_skip_view.dart';
 import 'package:medisafe/screens/medicamentScreen/introduction_animation/components/save_medi.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../main.dart';
 
@@ -35,6 +37,7 @@ class _IntroductionAnimationScreenState
 
   @override
   Widget build(BuildContext context) {
+    var changes = Provider.of<HomeProvider>(context, listen: true);
     print(_animationController?.value);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),

@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
+import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/medicamentScreen/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/main.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/screens/profilScreen/rendezVousScreen/RendezVousInfoScreen.dart';
 import 'package:medisafe/service/RendezVousService.dart';
+import 'package:provider/provider.dart';
 
 class RendezVousListView extends StatefulWidget {
   const RendezVousListView({Key? key, this.callBack}) : super(key: key);
@@ -39,6 +41,7 @@ class _RendezVousListViewState extends State<RendezVousListView>
 
   @override
   Widget build(BuildContext context) {
+    var changes = Provider.of<HomeProvider>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.only(top: 16, bottom: 16),
       child: Container(
@@ -299,7 +302,7 @@ class _CategoryViewState extends State<CategoryView> {
                                                                           const Icon(
                                                                             Icons.alarm,
                                                                             color:
-                                                                                DesignCourseAppTheme.nearlyBlue,
+                                                                            Color.fromARGB(255, 27, 62, 92),
                                                                             size:
                                                                                 20,
                                                                           ),
@@ -332,13 +335,17 @@ class _CategoryViewState extends State<CategoryView> {
                                                                                 EdgeInsets.only(top: 5),
                                                                             child:
                                                                                 Text(
-                                                                              '${false ? "Active" : "Disabled"}',
+                                                                              '${true ? "Active" : "Disabled"}',
                                                                               textAlign: TextAlign.left,
                                                                               style: const TextStyle(
                                                                                 fontWeight: FontWeight.w600,
                                                                                 fontSize: 15,
                                                                                 letterSpacing: 0.27,
-                                                                                color: Color.fromARGB(255, 0, 255, 0),
+                                                                                color: Color.fromARGB(
+                                                                                    255,
+                                                                                    18,
+                                                                                    98,
+                                                                                    18),
                                                                               ),
                                                                             ),
                                                                           )
@@ -353,15 +360,18 @@ class _CategoryViewState extends State<CategoryView> {
                                                                                 fontWeight: FontWeight.w600,
                                                                                 fontSize: 15,
                                                                                 letterSpacing: 0.27,
-                                                                                color: Color.fromARGB(255, 255, 0, 0),
+                                                                                color: Color.fromARGB(
+                                                                                    255,
+                                                                                    169,
+                                                                                    16,
+                                                                                    16),
                                                                               ),
                                                                             ),
                                                                           ),
                                                                     Container(
                                                                       decoration:
                                                                           const BoxDecoration(
-                                                                        color: DesignCourseAppTheme
-                                                                            .nearlyBlue,
+                                                                        color: Color.fromARGB(255, 27, 62, 92),
                                                                         borderRadius:
                                                                             BorderRadius.all(Radius.circular(8.0)),
                                                                       ),
