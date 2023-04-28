@@ -40,7 +40,7 @@ void rendezVousTask() async {
     print(e);
   }
   try {
-   String time = await notifService.sendmedicamentsNotif();
+    String time = await notifService.sendmedicamentsNotif();
     if (time != "") {
       //print(time);
       Noti.showBigTextNotification(
@@ -141,9 +141,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final screens = [
-    const HomeScreen(),
-    RecomScreen(),
-    MedicamentScreen(),
+    const HomeScreen(userId: 1),
+    RecomScreen(userId: 1),
+    MedicamentScreen(userId: 1),
     ProfilScreen(userId: 1)
   ];
 

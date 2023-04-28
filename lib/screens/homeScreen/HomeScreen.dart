@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
+import 'package:medisafe/models/Users/user.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
+import 'package:medisafe/service/UserServices/UserService.dart';
 import 'package:provider/provider.dart';
 import '../../app_skoleton/appSkoleton.dart';
 import '../../main.dart';
@@ -15,16 +17,18 @@ import '../../service/notification_service.dart';
 import '../../utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    Key? key,
-  }) : super(key: key);
+  final int userId;
+
+  const HomeScreen({Key? key, required this.userId}) : super(key: key);
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   late int numberOfDaysInMonth;
+  late Future<User> _user;
   DatabaseHelper databaseHelper = DatabaseHelper.instance;
+  UserService userService = UserService();
 
   int getTheNumberOfDaysInMonth(int year, int month) {
     DateTime firstDayOfMonth = DateTime(year, month, 1);
@@ -44,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     numberOfDaysInMonth =
         getTheNumberOfDaysInMonth(DateTime.now().year, DateTime.now().month);
     super.initState();
+    _user = userService.getUserById(widget.userId);
   }
 
   final ScrollController _controller = ScrollController();
@@ -101,44 +106,66 @@ class _HomeScreenState extends State<HomeScreen> {
     var selectedDay = Provider.of<HomeProvider>(context, listen: true);
 
     return Scaffold(
-        appBar: AppBar(
-            title: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                  borderRadius: BorderRadius.circular(90),
-                  onTap: (() {
-                    Noti.showBigTextNotification(
-                        id: 10,
-                        title: "New message title",
-                        body: "Your long body",
-                        fln: flutterLocalNotificationsPlugin);
-                  }),
-                  splashColor: Colors.white24,
-                  child: const CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Text('HE'),
-                  )),
-            ),
-            shadowColor: Colors.transparent,
-            backgroundColor: Color.fromARGB(255, 27, 62, 92),
-            automaticallyImplyLeading: false,
-            centerTitle: false,
-            actions: [
-              TextButton(
-                  style: ButtonStyle(
-                    // minimumSize : MaterialStateProperty.all(Size(0,0)),
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    splashFactory: NoSplash.splashFactory,
-                  ),
-                  onPressed: () async {
-                    List dozes = await databaseHelper.historiqueDoze();
-                    for (var histo in dozes) {
-                      print(histo.datePrevu);
-                    }
-                  },
-                  child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons'),
-                      color: Colors.white))
-            ]),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(55.0),
+          child: FutureBuilder<User>(
+            future: _user,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData && snapshot.data!.toMap().isNotEmpty) {
+                  final user = snapshot.data!;
+                  Uint8List imageBytes = user.image;
+                  return AppBar(
+                      title: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(90),
+                          onTap: (() {
+                            Noti.showBigTextNotification(
+                                id: 10,
+                                title: "New message title",
+                                body: "Your long body",
+                                fln: flutterLocalNotificationsPlugin);
+                          }),
+                          splashColor: Colors.white24,
+                          child: CircleAvatar(
+                            radius: 20, // adjust the radius to fit your needs
+                            backgroundImage: MemoryImage(imageBytes),
+                          ),
+                        ),
+                      ),
+                      shadowColor: Colors.transparent,
+                      backgroundColor: Color.fromARGB(255, 27, 62, 92),
+                      automaticallyImplyLeading: false,
+                      centerTitle: false,
+                      actions: [
+                        TextButton(
+                            style: ButtonStyle(
+                              // minimumSize : MaterialStateProperty.all(Size(0,0)),
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              splashFactory: NoSplash.splashFactory,
+                            ),
+                            onPressed: () async {
+                              List dozes =
+                                  await databaseHelper.historiqueDoze();
+                              for (var histo in dozes) {
+                                print(histo.datePrevu);
+                              }
+                            },
+                            child: Icon(
+                                IconData(0xe047, fontFamily: 'MaterialIcons'),
+                                color: Colors.white))
+                      ]);
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              } else {
+                return const CircularProgressIndicator();
+              }
+            },
+          ),
+        ),
         backgroundColor: Colors.white,
         body: Column(children: [
           SizedBox(
