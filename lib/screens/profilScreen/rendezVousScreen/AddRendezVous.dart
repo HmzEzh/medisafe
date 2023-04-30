@@ -183,20 +183,9 @@ class _AddRendezVousState extends State<AddRendezVous> {
                                                         backgroundColor:
                                                             Color.fromARGB(255,
                                                                 38, 58, 167),
-                                                        child: snapshot
-                                                                    .data![
-                                                                        index]
-                                                                    .nom
-                                                                    .length >=
-                                                                2
-                                                            ? Text(snapshot
-                                                                .data![index]
-                                                                .nom
-                                                                .substring(
-                                                                    0, 2))
-                                                            : Text(snapshot
-                                                                .data![index]
-                                                                .nom),
+                                                        child: snapshot.data![index].nom.length >=2
+                                                            ? Text(snapshot.data![index].nom.substring(0, 2))
+                                                            : Text(snapshot.data![index].nom),
                                                       ),
                                                       Spacer(
                                                         flex: 1,
