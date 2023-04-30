@@ -5,6 +5,7 @@ class Rappel extends ChangeNotifier {
   String category="";
   String forme="";
   int nombre=0;
+  int idTracker = 0;
   String type="";
   List horaires=[];
 

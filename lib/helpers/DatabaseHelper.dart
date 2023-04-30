@@ -16,6 +16,8 @@ import '../models/RendezVous.dart';
 import '../models/medcin.dart';
 import 'package:path/path.dart';
 import 'dart:io';
+import 'dart:math';
+
 
 class DatabaseHelper {
   static UserService userService = UserService();
@@ -617,6 +619,7 @@ class DatabaseHelper {
     return trackers;
   }
 
+
   //mesures of Tracker
 
   Future<int> insertMesure(int idTracker, double value) async {
@@ -641,15 +644,30 @@ class DatabaseHelper {
     return id;
   }
 
+  // Future<double> getHighest(int idTracker) async {
+  //   try {
+  //     final results = await _db.rawQuery(
+  //         'SELECT MAX(CAST(value AS INTEGER)) AS max_value FROM mesure WHERE idTracker = ?',
+  //         [idTracker]);
+  //     final maxValue = results.isNotEmpty ? (double.parse(
+  //         results.first['max_value'] as String))?.toDouble() ?? 0.0 : 0.0;
+  //     return maxValue;
+  //   } on FormatException catch (e) {
+  //     // Handle the type cast exception here
+  //     print('Caught a FormatException: $e');
+  //     return 0.0;
+  //   } catch (e) {
+  //     // Handle other exceptions here
+  //     print('Caught an exception: $e');
+  //     return 0.0;
+  //   }
+  // }
   Future<double> getHighest(int idTracker) async {
     try {
-      final results = await _db.rawQuery(
-          'SELECT MAX(value) AS max_value FROM mesure WHERE idTracker = ?',
-          [idTracker]);
-      final maxValue = results.isNotEmpty
-          ? (double.parse(results.first['max_value'] as String))?.toDouble() ??
-              0.0
-          : 0.0;
+      final results = await _db.query("mesure",
+          where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
+      final maxValue = values.isNotEmpty ? values.reduce(max) : 0.0;
       return maxValue;
     } on FormatException catch (e) {
       // Handle the type cast exception here
@@ -662,16 +680,14 @@ class DatabaseHelper {
     }
   }
 
+
   Future<double> getLowest(int idTracker) async {
     try {
-      final results = await _db.rawQuery(
-          'SELECT MIN(value) AS min_value FROM mesure WHERE idTracker = ?',
-          [idTracker]);
-      final maxValue = results.isNotEmpty
-          ? (double.parse(results.first['min_value'] as String))?.toDouble() ??
-              0.0
-          : 0.0;
-      return maxValue;
+      final results = await _db.query("mesure",
+          where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
+      final minValue = values.isNotEmpty ? values.reduce(min) : 0.0;
+      return minValue;
     } on FormatException catch (e) {
       // Handle the type cast exception here
       print('Caught a FormatException: $e');
@@ -682,6 +698,7 @@ class DatabaseHelper {
       return 0.0;
     }
   }
+
 
   Future<List<Mesure>> getMesuresByIdTracker(int id) async {
     await init();
@@ -693,4 +710,17 @@ class DatabaseHelper {
     }
     return mesures;
   }
+
+  Future<int> deleteMesure(int id) async {
+    await init();
+    return await _db.delete(
+      "mesure",
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+
+
+
 }

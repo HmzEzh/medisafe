@@ -1,6 +1,10 @@
 
+import 'dart:io';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:intl/intl.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/models/Tracker.dart';
@@ -10,9 +14,16 @@ import 'package:medisafe/screens/medicamentScreen/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/Tracker_list.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/use/list_track_shapes.dart';
+import 'package:medisafe/screens/profilScreen/TrackerScreen/use/pdf_page.dart';
+
+import 'package:medisafe/screens/profilScreen/TrackerScreen/use/util.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/Mesure.dart';
+import '../../../models/Rappel.dart';
+import '../../../models/medcin.dart';
 import '../../../provider/HomeProvider.dart';
 
 
@@ -43,6 +54,8 @@ class _TrackerInfoState extends State<TrackerInfo>with TickerProviderStateMixin 
   List<FlSpot> spotss = [];
 
   int _selectedContainerIndex = 1;
+
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -83,6 +96,7 @@ class _TrackerInfoState extends State<TrackerInfo>with TickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     var changes = Provider.of<HomeProvider>(context, listen: true);
     DatabaseHelper trackerService = DatabaseHelper.instance;
     return Scaffold(
@@ -248,62 +262,18 @@ class _TrackerInfoState extends State<TrackerInfo>with TickerProviderStateMixin 
                                                       height: 20,
                                                     ),
                                                     GestureDetector(
-                                                      onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext context) {
-                                                            // initialize the input text variable
-                                                            String inputText = "";
-                                                            return AlertDialog(
-                                                              title: Text('${widget.tracker.type}\'s values'),
-                                                              content: TextField(
-                                                                onChanged: (value) {
-                                                                  valueP = double.parse(value); // update the input text variable when the user types
-                                                                },
-                                                                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                                                decoration: InputDecoration(
-                                                                  hintText: 'Enter value',
-                                                                ),
-                                                              ),
-                                                              actions: [
-                                                                TextButton(
-                                                                  child: Text('Save'),
-                                                                  onPressed: () async {
-                                                                    trackerservice.insertMesure(idPrincipale,valueP );
-                                                                    ScaffoldMessenger.of(context)
-                                                                        .showSnackBar(SnackBar(
-                                                                      content: Container(
-                                                                          padding: EdgeInsets.only(
-                                                                              top: 0, bottom: 2),
-                                                                          child: Text(
-                                                                            "Mesure inserted successfully",
-                                                                            style: TextStyle(
-                                                                                fontSize: 16,
-                                                                                fontWeight: FontWeight.w500,
-                                                                                color: Colors.white),
-                                                                          )),
-                                                                      behavior: SnackBarBehavior.floating,
-                                                                      backgroundColor:
-                                                                      Color.fromARGB(255, 75, 138, 220),
-                                                                      margin: EdgeInsets.only(
-                                                                          bottom: 20, left: 25, right: 25),
-                                                                    ));
-                                                                    Navigator.of(context).pop(inputText);
-                                                                    listMesures = await trackerservice.getMesuresByIdTracker(idPrincipale);
-                                                                    autoIncrement = 0;
-                                                                    setState(() {
-                                                                      spotss = listMesures.map((mesure) {
-                                                                        double mappedValue = ((double.parse(mesure.value) - 70) / (200 - 70)) * (6 - 1) + 1;
-                                                                        return FlSpot(double.parse((++autoIncrement).toString()) , mappedValue);
-                                                                      }).toList();
-                                                                    });
+                                                      onTap: () async {
 
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            );
-                                                          },
+                                                        Rappel rap = Rappel();
+                                                        rap.idTracker = widget.tracker.id;
+                                                        rap.type = widget.tracker.type;
+                                                        Navigator.push<dynamic>(
+                                                          context,
+                                                          MaterialPageRoute<dynamic>(
+                                                            builder: (BuildContext context) =>PdfPage1(),
+                                                          ),
                                                         );
+
 
                                                       },
                                                       child: Padding(
@@ -325,7 +295,154 @@ class _TrackerInfoState extends State<TrackerInfo>with TickerProviderStateMixin 
                                                   children: [
                                                     Padding(
                                                       padding:  EdgeInsets.only(left:100,top: 6),
-                                                      child: Icon(Icons.navigate_next),
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) => AlertDialog(
+                                                                insetPadding: EdgeInsets.symmetric(horizontal: 50),
+                                                                buttonPadding: EdgeInsets.zero,
+                                                                shape: const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                    BorderRadius.all(Radius.circular(10.0))),
+                                                                contentPadding:
+                                                                const EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 0.0),
+                                                                content: Container(
+                                                                  //margin: EdgeInsets.only(top: 0, bottom: 0, left: 24, right: 24),
+                                                                  height: size.height / 3,
+                                                                  width: size.width,
+                                                                  //color:Color.fromARGB(255, 246, 246, 246),
+                                                                  child: FutureBuilder<List<Medcin>>(
+                                                                      future: trackerService.queryAllRowsMedecin(),
+                                                                      builder: (context, snapshot) {
+                                                                        if (snapshot.connectionState ==
+                                                                            ConnectionState.waiting) {
+                                                                          return Center(
+                                                                            child: Center(
+                                                                                child: Container(
+                                                                                  width: 100,
+                                                                                  height: 100,
+                                                                                  decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.circular(90),
+                                                                                      color: Color.fromARGB(36, 81, 86, 90)),
+                                                                                  child: Center(
+                                                                                      child: CupertinoActivityIndicator(
+                                                                                        radius: 20,
+                                                                                      )),
+                                                                                )),
+                                                                          );
+                                                                        } else if (snapshot.hasError) {
+                                                                          final error = snapshot.error;
+                                                                          return Center(
+                                                                            child: Text(error.toString()),
+                                                                          );
+                                                                        } else if (snapshot.hasData) {
+                                                                          if (snapshot.data!.isEmpty) {
+                                                                            return Center(
+                                                                              child: Text("No contact"),
+                                                                            );
+                                                                          }
+
+                                                                          return Container(
+                                                                            child: ListView.builder(
+                                                                                physics: const BouncingScrollPhysics(),
+                                                                                scrollDirection: Axis.vertical,
+                                                                                itemCount: snapshot.data!.length,
+                                                                                itemBuilder: (ctx, index) {
+                                                                                  return InkWell(
+                                                                                    onTap: () {
+                                                                                      String emailMed = snapshot.data![index].email;
+                                                                                      final format = PdfPageFormat.a4;
+                                                                                      sendToDoctor(format,emailMed,widget.tracker.id,widget.tracker.type);
+                                                                                      //medecin = snapshot.data![index];
+
+                                                                                      //TODO:
+                                                                                     // medecinIdController.text = '$id';
+                                                                                      setState(() {
+                                                                                        Navigator.pop(context);
+                                                                                      });
+                                                                                    },
+                                                                                    child: Column(
+                                                                                      mainAxisSize: MainAxisSize.min,
+                                                                                      children: [
+                                                                                        Container(
+                                                                                          decoration: BoxDecoration(
+                                                                                            //color: Color.fromARGB(255, 246, 246, 246),
+                                                                                            borderRadius:
+                                                                                            const BorderRadius.all(
+                                                                                                Radius.circular(4)),
+                                                                                            // border: Border.all(
+                                                                                            //     color: DesignCourseAppTheme.nearlyBlue)
+                                                                                          ),
+
+                                                                                          width: size.width,
+                                                                                          height: 50,
+                                                                                          //height: 200,
+                                                                                          margin: EdgeInsets.only(
+                                                                                              top: 4,
+                                                                                              bottom: 0,
+                                                                                              left: 8,
+                                                                                              right: 8),
+                                                                                          child: Center(
+                                                                                            child: Row(
+                                                                                              mainAxisAlignment:
+                                                                                              MainAxisAlignment
+                                                                                                  .center,
+                                                                                              crossAxisAlignment:
+                                                                                              CrossAxisAlignment
+                                                                                                  .center,
+                                                                                              children: [
+                                                                                                Spacer(
+                                                                                                  flex: 1,
+                                                                                                ),
+                                                                                                CircleAvatar(
+                                                                                                  radius: 20,
+                                                                                                  backgroundColor:
+                                                                                                  Color.fromARGB(255, 27, 62, 92),
+                                                                                                  child: Icon(Icons.medical_services_outlined),
+                                                                                                  // snapshot.data![index].nom.length >=2
+                                                                                                  //     ? Text(snapshot.data![index].nom.substring(0, 2))
+                                                                                                  //     : Text(snapshot.data![index].nom),
+                                                                                                ),
+                                                                                                Spacer(
+                                                                                                  flex: 2,
+                                                                                                ),
+                                                                                                Text(
+                                                                                                  snapshot
+                                                                                                      .data![index].nom,
+                                                                                                  style: TextStyle(
+                                                                                                      fontSize: 16),
+                                                                                                ),
+                                                                                                Spacer(
+                                                                                                  flex: 18,
+                                                                                                ),
+                                                                                                Icon(Icons.screen_share_outlined,color:Color.fromARGB(255, 27, 62, 92)),
+
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        Divider(
+                                                                                          height: 2,
+                                                                                          indent: 0,
+                                                                                          endIndent: 0,
+                                                                                        )
+                                                                                      ],
+                                                                                    ),
+                                                                                  );
+                                                                                }),
+                                                                          );
+                                                                        }
+                                                                        return Container();
+                                                                      }),
+                                                                ),
+                                                              ));
+                                                        },
+                                                        child: Icon(
+                                                          Icons.attach_email_outlined,
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
                                                     ),
                                                     SizedBox(height: 10),
                                                     Container(
