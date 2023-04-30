@@ -251,19 +251,19 @@ class _AddMedcinScreenState extends State<AddMedcinScreen> {
                 },
                 child: Icon(
                   IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                  color: Color.fromARGB(255, 38, 58, 167),
+                  color: Colors.white,
                 )),
             Spacer(),
             Text("Ajouter un médcin",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 38, 58, 167))),
+                    color: Colors.white)),
             Spacer(),
           ]),
           centerTitle: true,
           shadowColor: Colors.transparent,
-          backgroundColor: Color.fromARGB(255, 246, 246, 246),
+          backgroundColor: Color.fromARGB(255, 27, 62, 92),
           automaticallyImplyLeading: false,
           actions: [
             TextButton(
@@ -370,7 +370,7 @@ class _AddMedcinScreenState extends State<AddMedcinScreen> {
                 },
                 child: Text(
                   "save",
-                  style: TextStyle(color: Color.fromARGB(255, 38, 58, 167)),
+                  style: TextStyle(color: Colors.white),
                 ))
           ]),
       backgroundColor: Colors.white,

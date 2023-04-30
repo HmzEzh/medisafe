@@ -45,19 +45,19 @@ class _RendezVousListScreenState extends State<RendezVousListScreen>
                     },
                     child: Icon(
                       IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                      color: Color.fromARGB(255, 38, 58, 167),
+                      color: Colors.white,
                     )),
-                     Spacer(),
-            Text("Rendez-vous",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 38, 58, 167))),
-            Spacer(),
+                Spacer(),
+                Text("Rendez-vous",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                Spacer(),
               ],
             ),
             shadowColor: Colors.transparent,
-            backgroundColor: Color.fromARGB(255, 246, 246, 246),
+            backgroundColor: Color.fromARGB(255, 27, 62, 92),
             automaticallyImplyLeading: false,
             centerTitle: false,
             actions: [
@@ -77,7 +77,7 @@ class _RendezVousListScreenState extends State<RendezVousListScreen>
                   },
                   child: Icon(
                     IconData(0xe047, fontFamily: 'MaterialIcons'),
-                    color: Color.fromARGB(255, 38, 58, 167),
+                    color: Colors.white,
                   ))
             ]),
         backgroundColor: Colors.white,
@@ -119,8 +119,10 @@ class _RendezVousListScreenState extends State<RendezVousListScreen>
                       itemCount: snapshot.data!.length,
                       itemBuilder: (ctx, index) {
                         // Medcin med = await rendezVousService.findMedecin(snapshot.data![index].medecinId);
-                        var a = Utils.formatDate(DateTime.parse(snapshot.data![index].heure));
-                        var b = Utils.formatTime(DateTime.parse(snapshot.data![index].heure));
+                        var a = Utils.formatDate(
+                            DateTime.parse(snapshot.data![index].heure));
+                        var b = Utils.formatTime(
+                            DateTime.parse(snapshot.data![index].heure));
                         return InkWell(
                           onTap: () {
                             //TODO:
@@ -137,7 +139,8 @@ class _RendezVousListScreenState extends State<RendezVousListScreen>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                margin: EdgeInsets.only(left: 0,right: 16,top: 6,bottom: 6),
+                                margin: EdgeInsets.only(
+                                    left: 0, right: 16, top: 6, bottom: 6),
                                 //height: 50,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -145,59 +148,78 @@ class _RendezVousListScreenState extends State<RendezVousListScreen>
                                   children: [
                                     Container(
                                       width: 60,
-                                      child: Center(child: 
-                                      Utils.formatDate(DateTime.parse(snapshot.data![index].heure)).compareTo(Utils.formatDate(DateTime.now())) > 0? 
-                                      Image.asset("assets/images/calendarNot.png", scale: 3.5):
-                                      Utils.formatDate(DateTime.parse(snapshot.data![index].heure)).compareTo(Utils.formatDate(DateTime.now())) == 0?
-                                      Utils.formatTime(DateTime.parse(snapshot.data![index].heure)).compareTo(Utils.formatTime(DateTime.now())) > 0?
-                                      Image.asset("assets/images/calendarNot.png", scale: 3.5):
-                                      Image.asset("assets/images/calendarDone.png", scale: 3.5):
-                                      Image.asset("assets/images/calendarDone.png", scale: 3.5)
-                                      
-                                      ),
+                                      child: Center(
+                                          child: Utils.formatDate(DateTime.parse(snapshot.data![index].heure))
+                                                      .compareTo(
+                                                          Utils.formatDate(
+                                                              DateTime.now())) >
+                                                  0
+                                              ? Image.asset(
+                                                  "assets/images/calendarNot.png",
+                                                  scale: 3.5)
+                                              : Utils.formatDate(DateTime.parse(snapshot.data![index].heure)).compareTo(Utils.formatDate(DateTime.now())) ==
+                                                      0
+                                                  ? Utils.formatTime(DateTime.parse(snapshot.data![index].heure)).compareTo(Utils.formatTime(DateTime.now())) >
+                                                          0
+                                                      ? Image.asset(
+                                                          "assets/images/calendarNot.png",
+                                                          scale: 3.5)
+                                                      : Image.asset(
+                                                          "assets/images/calendarDone.png",
+                                                          scale: 3.5)
+                                                  : Image.asset(
+                                                      "assets/images/calendarDone.png",
+                                                      scale: 3.5)),
                                     ),
                                     Container(
-                                      child:  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                                margin: EdgeInsets.only(left: 0,bottom: 4),
-                                                 child: Text(
-                                                  snapshot.data![index].nom,
-                                                  style: TextStyle(fontSize: 16),
-                                                                                 ),
-                                               ),
-                                      Container(
-                                          margin: EdgeInsets.only(
-                                              top: 0, bottom: 0, left: 0),
-                                          child: Text('$a à $b',style: TextStyle(fontSize: 14,
-                                          color: Color.fromARGB(255, 124, 123, 123))),
-                                        ),
-                                        Container(
-                                          width: 3*size.width/4,
-                                          margin: EdgeInsets.only(
-                                              top: 0, bottom: 0, left: 0),
-                                          child: Text(snapshot.data![index].remarque,
-                                          style: TextStyle(fontSize: 14,
-                                          color: Color.fromARGB(255, 124, 123, 123)),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,),
-                                        ),
-                                      
-                                    ]),
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  left: 0, bottom: 4),
+                                              child: Text(
+                                                snapshot.data![index].nom,
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                  top: 0, bottom: 0, left: 0),
+                                              child: Text('$a à $b',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Color.fromARGB(
+                                                          255, 124, 123, 123))),
+                                            ),
+                                            Container(
+                                              width: 3 * size.width / 4,
+                                              margin: EdgeInsets.only(
+                                                  top: 0, bottom: 0, left: 0),
+                                              child: Text(
+                                                snapshot.data![index].remarque,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Color.fromARGB(
+                                                        255, 124, 123, 123)),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ]),
                                     )
-                              
                                   ],
                                 ),
                               ),
                               Divider(
-                                        height: 2,
-                                        indent: 60,
-                                        endIndent: 0,
-                                       
-                                      )
+                                height: 2,
+                                indent: 60,
+                                endIndent: 0,
+                              )
                             ],
                           ),
                         );
