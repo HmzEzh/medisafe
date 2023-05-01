@@ -14,20 +14,36 @@ class HomeProvider with ChangeNotifier {
   }
 
   DateTime getCurentdate() {
-   
-    try {
-      return DateTime.parse('$selectedYear-0$selectedMonth-0$selectedDay');
-    } catch (e) {
+    if (selectedDay > 9 && selectedMonth > 9) {
       return DateTime.parse('$selectedYear-$selectedMonth-$selectedDay');
     }
+    if (selectedDay < 9 && selectedMonth < 9) {
+      return DateTime.parse('$selectedYear-0$selectedMonth-0$selectedDay');
+    }
+    if (selectedDay < 9 && selectedMonth > 9) {
+      return DateTime.parse('$selectedYear-$selectedMonth-0$selectedDay');
+    }
+    if (selectedDay > 9 && selectedMonth < 9) {
+      return DateTime.parse('$selectedYear-0$selectedMonth-$selectedDay');
+    }
+    return DateTime.now();
   }
 
   DateTime getCurentdateB(String time) {
-    try {
-      return DateTime.parse('$selectedYear-0$selectedMonth-0$selectedDay $time');
-    } catch (e) {
+    if (selectedDay > 9 && selectedMonth > 9) {
       return DateTime.parse('$selectedYear-$selectedMonth-$selectedDay $time');
     }
+    if (selectedDay < 9 && selectedMonth < 9) {
+      return DateTime.parse('$selectedYear-0$selectedMonth-0$selectedDay $time');
+    }
+    if (selectedDay < 9 && selectedMonth > 9) {
+      return DateTime.parse('$selectedYear-$selectedMonth-0$selectedDay $time');
+    }
+    if (selectedDay > 9 && selectedMonth < 9) {
+      return DateTime.parse('$selectedYear-0$selectedMonth-$selectedDay $time');
+    }
+    return DateTime.now();
+    
   }
 
   void setSelectedMonth(int x) {
