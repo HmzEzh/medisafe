@@ -97,7 +97,23 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
               } else if (snapshot.hasData) {
               if (snapshot.data!.isEmpty) {
               return Center(
-              child: Text("Try to add new one"),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child:
+                      Image.asset("assets/images/emptyState.png", scale: 1.2),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(top: 16),
+                        child: Text("Add new medicament",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.w600))),
+
+                  ],
+                ),
               );
               }else{
                 return GridView(

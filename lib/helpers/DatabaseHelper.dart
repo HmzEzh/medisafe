@@ -691,6 +691,27 @@ class DatabaseHelper {
     return id;
   }
 
+  Future<int> insertMesureForGraph(int idTracker, double value, String date) async {
+    await init();
+    DateTime now = DateTime.now();
+    String dateDebut = "${now.day}-${now.month}-${now.year}";
+
+    int hour = now.hour;
+    int minute = now.minute;
+    int second = now.second;
+
+    String time = "$hour:$minute:$second";
+
+    final data = {
+      'idTracker': idTracker,
+      'value': value,
+      'date': date,
+      'heure': time,
+    };
+    int id = await _db.insert("mesure", data);
+    return id;
+  }
+
   // Future<double> getHighest(int idTracker) async {
   //   try {
   //     final results = await _db.rawQuery(

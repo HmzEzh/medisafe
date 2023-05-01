@@ -113,7 +113,35 @@ class _TrackerListScreenState extends State<TrackerListScreen>
                 } else if (snapshot.hasData) {
                   if (snapshot.data!.isEmpty) {
                     return Center(
-                      child: Text("isEmpty"),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child:
+                            Image.asset("assets/images/sync.png", scale: 5),
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(top: 16),
+                              child: Text(
+                                'Add new Tracker',
+                                style: TextStyle(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 1.5,
+                                      color: Colors.black.withOpacity(0.5),
+                                      offset: Offset(2.0, 2.0),
+                                    ),
+                                  ],
+                                ),
+                              ),),
+
+                        ],
+                      ),
                     );
                   }
 
