@@ -62,6 +62,8 @@ dependencies:
   mailer: ^5.1.1
   dio: ^5.1.1
   get_it: ^7.3.0
+  cryptography: ^2.5.0
+  cryptography_flutter: ^2.3.0
 
 
 
