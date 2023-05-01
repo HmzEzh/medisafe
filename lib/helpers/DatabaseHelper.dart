@@ -18,8 +18,11 @@ import 'package:path/path.dart';
 import 'dart:io';
 import 'dart:math';
 
+<<<<<<< HEAD
 import '../models/raport.dart';
 
+=======
+>>>>>>> 829bd698ca0f942a37b2d0d36dcbcebd41b677bc
 class DatabaseHelper {
   static UserService userService = UserService();
   static User utili = User.init(
@@ -33,7 +36,8 @@ class DatabaseHelper {
       email: "jhondoe@gmail.com",
       password: "testjhon",
       tele: "+212 615-91203",
-      blood: "A+");
+      blood: "A+",
+      gender: 'Male');
 
   static const _databaseName = "medisafe";
   static const _databaseVersion = 1;
@@ -158,13 +162,14 @@ class DatabaseHelper {
         password TEXT NOT NULL,
         tele TEXT NOT NULL,
         blood TEXT NOT NULL,
+        gender TEXT NOT NULL,
         image BLOB
       );
     ''');
 
     await db.execute('''
-  INSERT INTO user (nom, prenom, date_naissance, address, age, taille, poids, email, password, tele, blood, image)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  INSERT INTO user (nom, prenom, date_naissance, address, age, taille, poids, email, password, tele, blood, gender, image)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''', [
       utili.nom,
       utili.prenom,
@@ -177,6 +182,7 @@ class DatabaseHelper {
       utili.password,
       utili.tele,
       utili.blood,
+      utili.gender,
       imageBytes
     ]);
 
@@ -564,6 +570,7 @@ class DatabaseHelper {
   }
 
   //for report page
+<<<<<<< HEAD
   Future<Map<String, Map<String, List<Raport>>>> raportApi(DateTime datedebut, DateTime datefin, Medicament? med) async {
     String debut = Utils.formatDate(datedebut);
     String fin = Utils.formatDate(datefin);
@@ -572,14 +579,34 @@ class DatabaseHelper {
         "SELECT DISTINCT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu");
     for (var i = datedebut;i.compareTo(datefin) <= 0;i = i.add(const Duration(days: 1))) {
       res[Utils.formatDate2(i)] = await HistpPrisNonPrisPerdate(Utils.formatDate(i), med);
+=======
+  Future<Map<String, Map<String, List<HistoriqueDoze>>>> reportApi(
+      DateTime datedebut, DateTime datefin, Medicament? med) async {
+    String debut = Utils.formatDate(datedebut);
+    String fin = Utils.formatDate(datefin);
+    Map<String, Map<String, List<HistoriqueDoze>>> res = {};
+    List<Map<String, dynamic>> results1 = await db.rawQuery(
+        "SELECT DISTINCT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu");
+    for (var i = datedebut;
+        i.compareTo(datefin) <= 0;
+        i = i.add(const Duration(days: 1))) {
+      res[Utils.formatDate2(i)] =
+          await HistpPrisNonPrisPerdate(Utils.formatDate(i), med);
+>>>>>>> 829bd698ca0f942a37b2d0d36dcbcebd41b677bc
     }
 
     return res;
   }
 
+<<<<<<< HEAD
   Future<Map<String, List<Raport>>> HistpPrisNonPrisPerdate(
       String datePrevu, Medicament? med) async {
     Map<String, List<Raport>> res = {};
+=======
+  Future<Map<String, List<HistoriqueDoze>>> HistpPrisNonPrisPerdate(
+      String datePrevu, Medicament? med) async {
+    Map<String, List<HistoriqueDoze>> res = {};
+>>>>>>> 829bd698ca0f942a37b2d0d36dcbcebd41b677bc
     res["pris"] = [];
     res["non pris"] = [];
     late List<Map<String, Object?>> loop1;

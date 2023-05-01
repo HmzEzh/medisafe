@@ -25,9 +25,16 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
   final TextEditingController lieuController = TextEditingController();
   final TextEditingController remarqueController = TextEditingController();
   final TextEditingController heureController = TextEditingController();
-  Medcin medecin = new Medcin(id: 0, nom: "nom", specialite: "specialite", email: "email", adress: "adress", tele: "tele", bureau: "bureau");
-  var a="";
-   var b=""; 
+  Medcin medecin = new Medcin(
+      id: 0,
+      nom: "nom",
+      specialite: "specialite",
+      email: "email",
+      adress: "adress",
+      tele: "tele",
+      bureau: "bureau");
+  var a = "";
+  var b = "";
 
   DatabaseHelper medcinService = DatabaseHelper.instance;
   DatabaseHelper databaseHelper = DatabaseHelper.instance;
@@ -52,7 +59,6 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
   }
 
   Widget section1(BuildContext context) {
-   
     var size = MediaQuery.of(context).size;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -389,7 +395,7 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
               setState(() {
                 heureController.text = '$date';
                 a = Utils.formatDate(date);
-                b = Utils.formatTime(date); 
+                b = Utils.formatTime(date);
               });
             }, currentTime: DateTime.now(), locale: LocaleType.fr);
           },
@@ -467,7 +473,7 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
   Widget build(BuildContext context) {
     var changes = Provider.of<HomeProvider>(context, listen: true);
     a = Utils.formatDate(DateTime.parse(widget.rendezVous.heure));
-    b = Utils.formatTime(DateTime.parse(widget.rendezVous.heure)); 
+    b = Utils.formatTime(DateTime.parse(widget.rendezVous.heure));
     return Scaffold(
       appBar: AppBar(
           title: Row(children: [
@@ -477,20 +483,19 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
                 },
                 child: Icon(
                   IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                  color: Color.fromARGB(255, 38, 58, 167),
+                  color: Colors.white,
                 )),
-                 Spacer(),
+            Spacer(),
             Text("Modifier rendez-vous",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 38, 58, 167))),
+                    color: Colors.white)),
             Spacer(),
           ]),
-          
           centerTitle: true,
           shadowColor: Colors.transparent,
-          backgroundColor: Color.fromARGB(255, 246, 246, 246),
+          backgroundColor: Color.fromARGB(255, 27, 62, 92),
           automaticallyImplyLeading: false,
           actions: [
             TextButton(
@@ -573,7 +578,7 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
                       print(heureController.text);
                       await rendezVousService.updateRendezVous(
                           rendezVous.toMap(), widget.rendezVous.id!);
-                           changes.setChanges();
+                      changes.setChanges();
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Container(
@@ -597,7 +602,7 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
                 },
                 child: Text(
                   "Mettre à jour",
-                  style: TextStyle(color: Color.fromARGB(255, 38, 58, 167)),
+                  style: TextStyle(color: Colors.white),
                 ))
           ]),
       backgroundColor: Colors.white,

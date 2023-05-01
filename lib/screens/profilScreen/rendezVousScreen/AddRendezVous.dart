@@ -25,8 +25,8 @@ class _AddRendezVousState extends State<AddRendezVous> {
   final TextEditingController remarqueController = TextEditingController();
   final TextEditingController heureController = TextEditingController();
   late Medcin medecin;
-  var a="";
-  var b="";
+  var a = "";
+  var b = "";
 
   DatabaseHelper medcinService = DatabaseHelper.instance;
   DatabaseHelper databaseHelper = DatabaseHelper.instance;
@@ -365,7 +365,7 @@ class _AddRendezVousState extends State<AddRendezVous> {
               setState(() {
                 heureController.text = '$date';
                 a = Utils.formatDate(date);
-                b = Utils.formatTime(date); 
+                b = Utils.formatTime(date);
               });
             }, currentTime: DateTime.now(), locale: LocaleType.fr);
           },
@@ -451,19 +451,19 @@ class _AddRendezVousState extends State<AddRendezVous> {
                 },
                 child: Icon(
                   IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                  color: Color.fromARGB(255, 38, 58, 167),
+                  color: Colors.white,
                 )),
             Spacer(),
             Text("Ajouter un rendez-vous",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 38, 58, 167))),
+                    color: Colors.white)),
             Spacer(),
           ]),
           centerTitle: true,
           shadowColor: Colors.transparent,
-          backgroundColor: Color.fromARGB(255, 246, 246, 246),
+          backgroundColor: Color.fromARGB(255, 27, 62, 92),
           automaticallyImplyLeading: false,
           actions: [
             TextButton(
@@ -577,8 +577,8 @@ class _AddRendezVousState extends State<AddRendezVous> {
                   }
                 },
                 child: Text(
-                  "sauver",
-                  style: TextStyle(color: Color.fromARGB(255, 38, 58, 167)),
+                  "save",
+                  style: TextStyle(color: Colors.white),
                 ))
           ]),
       backgroundColor: Colors.white,

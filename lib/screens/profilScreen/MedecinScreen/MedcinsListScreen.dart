@@ -41,19 +41,19 @@ class _MedcinsListScreenState extends State<MedcinsListScreen>
                     },
                     child: Icon(
                       IconData(0xe16a, fontFamily: 'MaterialIcons'),
-                      color: Color.fromARGB(255, 38, 58, 167),
+                      color: Colors.white,
                     )),
-                     Spacer(),
-            Text("Medecins",
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 38, 58, 167))),
-            Spacer(),
+                Spacer(),
+                Text("Medecins",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+                Spacer(),
               ],
             ),
             shadowColor: Colors.transparent,
-            backgroundColor: Color.fromARGB(255, 246, 246, 246),
+            backgroundColor: Color.fromARGB(255, 27, 62, 92),
             automaticallyImplyLeading: false,
             centerTitle: false,
             actions: [
@@ -72,7 +72,7 @@ class _MedcinsListScreenState extends State<MedcinsListScreen>
                   },
                   child: Icon(
                     IconData(0xe047, fontFamily: 'MaterialIcons'),
-                    color: Color.fromARGB(255, 38, 58, 167),
+                    color: Colors.white,
                   ))
             ]),
         backgroundColor: Colors.white,
@@ -113,7 +113,6 @@ class _MedcinsListScreenState extends State<MedcinsListScreen>
                       scrollDirection: Axis.vertical,
                       itemCount: snapshot.data!.length,
                       itemBuilder: (ctx, index) {
-                        
                         return InkWell(
                           onTap: () {
                             print(snapshot.data![index].id);

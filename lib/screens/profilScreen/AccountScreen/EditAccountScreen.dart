@@ -32,6 +32,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   TextEditingController bloodController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
   late Uint8List image;
 
   late int numberOfDaysInMonth;
@@ -388,6 +389,39 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
             ),
           ],
         ),
+        Divider(
+          color: Colors.grey,
+          height: 2,
+          indent: 52,
+          endIndent: 0,
+        ),
+        Row(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(left: 16, right: 16),
+              width: 10,
+              child: Icon(
+                Icons.man,
+                color: Colors.blue,
+              ),
+            ),
+            Container(
+              width: size.width - 60,
+              child: TextFormField(
+                controller: genderController,
+                decoration: InputDecoration(
+                  hintText: 'Gender',
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ]),
     );
   }
@@ -449,6 +483,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     password: passwordController.text,
                     tele: teleController.text,
                     blood: bloodController.text,
+                    gender: genderController.text,
                     image: image);
 
                 userService.updateUser(update, widget.userId);
@@ -497,6 +532,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     TextEditingController(text: user.age.toString());
                 emailController = TextEditingController(text: user.email);
                 passwordController = TextEditingController(text: user.password);
+                genderController = TextEditingController(text: user.gender);
 
                 image = user.image;
 
