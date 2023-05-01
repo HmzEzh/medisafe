@@ -14,13 +14,19 @@ class HomeProvider with ChangeNotifier {
   }
 
   DateTime getCurentdate() {
-    try{
+    try {
       return DateTime.parse('$selectedYear-0$selectedMonth-$selectedDay');
-    }catch(e){
+    } catch (e) {
       return DateTime.parse('$selectedYear-$selectedMonth-$selectedDay');
     }
-    
-    
+  }
+
+  DateTime getCurentdateB(String time) {
+    try {
+      return DateTime.parse('$selectedYear-0$selectedMonth-$selectedDay $time');
+    } catch (e) {
+      return DateTime.parse('$selectedYear-$selectedMonth-$selectedDay $time');
+    }
   }
 
   void setSelectedMonth(int x) {
@@ -39,7 +45,6 @@ class HomeProvider with ChangeNotifier {
   }
 
   int getSelectedDay() {
-    print(selectedDay);
     return selectedDay;
   }
 
