@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:medisafe/screens/profilScreen/rendezVousScreen/RendezVousListScreen.dart';
+import 'package:medisafe/screens/profilScreen/reportMedicaments/reportMedicaments.dart';
 import 'package:share/share.dart';
 import 'MedecinScreen/MedcinsListScreen.dart';
 import 'AccountScreen/AccountScreen.dart';
@@ -363,7 +364,14 @@ class _ProfilScreen extends State<ProfilScreen> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                 Navigator.push<dynamic>(
+                                  context,
+                                  MaterialPageRoute<dynamic>(
+                                      builder: (BuildContext context) =>
+                                        ReportMedicamentsScreen()),
+                                );
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                     border:
