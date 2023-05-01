@@ -373,7 +373,8 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getMedicamentById(int id) async {
     await init();
-    return _db.query('medicament', orderBy: "id", where: 'id = ?', whereArgs: [id]);
+    return _db
+        .query('medicament', orderBy: "id", where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> deleteMedicament(int id) async {
@@ -540,6 +541,7 @@ class DatabaseHelper {
     }
     return dozes;
   }
+
   Future<List<Map<String, dynamic>>> getDozeById(int id) async {
     await init();
     return _db.query('doze', orderBy: "id", where: 'id = ?', whereArgs: [id]);
@@ -566,14 +568,16 @@ class DatabaseHelper {
   }
 
   //for report page
-  Future<Map<String, Map<String, List<Raport>>>> raportApi(DateTime datedebut, DateTime datefin, Medicament? med) async {
+  Future<Map<String, Map<String, List<Raport>>>> raportApi(
+      DateTime datedebut, DateTime datefin, Medicament? med) async {
     String debut = Utils.formatDate(datedebut);
     String fin = Utils.formatDate(datefin);
     Map<String, Map<String, List<Raport>>> res = {};
-    List<Map<String, dynamic>> results1 = await db.rawQuery(
-        "SELECT DISTINCT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu");
-    for (var i = datedebut;i.compareTo(datefin) <= 0;i = i.add(const Duration(days: 1))) {
-      res[Utils.formatDate2(i)] = await HistpPrisNonPrisPerdate(Utils.formatDate(i), med);
+    for (var i = datedebut;
+        i.compareTo(datefin) <= 0;
+        i = i.add(const Duration(days: 1))) {
+      res[Utils.formatDate2(i)] =
+          await HistpPrisNonPrisPerdate(Utils.formatDate(i), med);
     }
 
     return res;
@@ -606,11 +610,11 @@ class DatabaseHelper {
         raport.datePrevu = HistoriqueDoze.fromMap(item).datePrevu;
         raport.remarque = HistoriqueDoze.fromMap(item).remarque;
         raport.valeur = HistoriqueDoze.fromMap(item).valeur;
-        List<Map<String, dynamic>> medRslt = await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament) ;
-        Medicament med =  Medicament.fromMap(medRslt[0]);
-        List<Map<String, dynamic>> doseRslt = await getDozeById(HistoriqueDoze.fromMap(item).idDoze) ;
-        Doze doze =Doze.fromMap(doseRslt[0]) ;
-        raport.name = med.title ;
+        List<Map<String, dynamic>> medRslt =await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament);
+        Medicament med = Medicament.fromMap(medRslt[0]);
+        List<Map<String, dynamic>> doseRslt =await getDozeById(HistoriqueDoze.fromMap(item).idDoze);
+        Doze doze = Doze.fromMap(doseRslt[0]);
+        raport.name = med.title;
         raport.dateEnrg = doze.heure;
         raport.imagePath = med.imagePath;
         res['pris']!.add(raport);
@@ -619,21 +623,55 @@ class DatabaseHelper {
     for (Map<String, dynamic> item in loop2) {
       if (res.containsKey('non pris')) {
         // Add the HistoriqueDoze object to the existing List
-         Raport raport = new Raport();
+        Raport raport = new Raport();
         raport.datePrevu = HistoriqueDoze.fromMap(item).datePrevu;
         raport.remarque = HistoriqueDoze.fromMap(item).remarque;
         raport.valeur = HistoriqueDoze.fromMap(item).valeur;
-        List<Map<String, dynamic>> medRslt = await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament) ;
-        Medicament med =  Medicament.fromMap(medRslt[0]);
-        List<Map<String, dynamic>> doseRslt = await getDozeById(HistoriqueDoze.fromMap(item).idDoze) ;
-        Doze doze =Doze.fromMap(doseRslt[0]) ;
-        raport.name = med.title ;
+        List<Map<String, dynamic>> medRslt =
+            await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament);
+        Medicament med = Medicament.fromMap(medRslt[0]);
+        List<Map<String, dynamic>> doseRslt =
+            await getDozeById(HistoriqueDoze.fromMap(item).idDoze);
+        Doze doze = Doze.fromMap(doseRslt[0]);
+        raport.name = med.title;
         raport.dateEnrg = doze.heure;
-         raport.imagePath = med.imagePath;
+        raport.imagePath = med.imagePath;
         res['non pris']!.add(raport);
       }
     }
     //res.removeWhere((key, value) => value.isEmpty);
+    return res;
+  }
+
+  // report pdf
+  Future<List<Raport>> raportApiPdf(DateTime datedebut, DateTime datefin, Medicament? med) async {
+    String debut = Utils.formatDate(datedebut);
+    String fin = Utils.formatDate(datefin);
+    List<Raport> res = [];
+     late List<Map<String, Object?>> loop1;
+    if (med == null) {
+      loop1 = await db.rawQuery("SELECT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu AND idMedicament");
+     
+    } else {
+      int idMed = med.id;
+      loop1 = await db.query("historiqueDoze WHERE idMedicament = $idMed AND datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu AND idMedicament");
+     
+    }
+    for (var item in loop1) {
+      Raport raport = new Raport();
+      List<Map<String, dynamic>> medRslt =await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament);
+      List<Map<String, dynamic>> doseRslt =await getDozeById(HistoriqueDoze.fromMap(item).idDoze);
+      Medicament med = Medicament.fromMap(medRslt[0]);
+      Doze doze = Doze.fromMap(doseRslt[0]);
+      raport.name = med.title;
+      raport.imagePath = med.imagePath;
+      raport.datePrevu = HistoriqueDoze.fromMap(item).datePrevu;
+      raport.remarque = HistoriqueDoze.fromMap(item).remarque;
+      raport.valeur = HistoriqueDoze.fromMap(item).valeur;
+      raport.dateEnrg = doze.heure;
+      res.add(raport) ;
+    }
+
     return res;
   }
 
@@ -721,7 +759,8 @@ class DatabaseHelper {
     return id;
   }
 
-  Future<int> insertMesureForGraph(int idTracker, double value, String date) async {
+  Future<int> insertMesureForGraph(
+      int idTracker, double value, String date) async {
     await init();
     DateTime now = DateTime.now();
     String dateDebut = "${now.day}-${now.month}-${now.year}";

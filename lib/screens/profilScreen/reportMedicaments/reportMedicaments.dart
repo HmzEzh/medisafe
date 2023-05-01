@@ -8,7 +8,10 @@ import '../../../helpers/DatabaseHelper.dart';
 import '../../../models/HistoriqueDoze.dart';
 import '../../../models/medicament.dart';
 import '../../../provider/HomeProvider.dart';
+import '../../../service/raportService/pdf_report_api.dart';
 import '../../../utils/utils.dart';
+import 'package:badges/badges.dart' as badges;
+
 
 class ReportMedicamentsScreen extends StatefulWidget {
   const ReportMedicamentsScreen({
@@ -400,21 +403,13 @@ class _ReportMedicamentsScreenState extends State<ReportMedicamentsScreen> {
                   splashFactory: NoSplash.splashFactory,
                 ),
                 onPressed: () async {
-                  //TODO:
-                  Map<String, Map<String, List<Raport>>> ha =
-                      await db.raportApi(datedebut, datefin, medicament);
-                  for (var item in ha.entries) {
-                    String i = item.key;
-                    print("######### $i #############");
-                    print("######### pris #############");
-                    for (var j in item.value['pris']!) {
-                      print(j.name);
-                    }
-                    print("######### non pris #############");
-                    for (var j in item.value['non pris']!) {
-                      print(j.name);
-                    }
-                  }
+                  List<Raport> raport =
+                      await db.raportApiPdf(datedebut, datefin, medicament);
+                  PdfReportApi.generate(datedebut, datefin, raport) ;
+                  // for (var item in raport) {
+                  //   print("###################");
+                  //   print(item.name);
+                  // }
                 },
                 child: const Text(
                   "Envoyer",
@@ -459,77 +454,84 @@ class _ReportMedicamentsScreenState extends State<ReportMedicamentsScreen> {
                                     radius:
                                         BorderRadius.all(Radius.circular(8))),
                                 Container(
-                                   //color: Color.fromARGB(255, 202, 199, 199),
-                                   padding: EdgeInsets.only(top: 8,bottom: 8),
+                                  //color: Color.fromARGB(255, 202, 199, 199),
+                                  padding: EdgeInsets.only(top: 8, bottom: 8),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       AppSkoleton(
-                                      width: size.width / 4,
-                                      height: 20,
-                                      margin:
-                                          EdgeInsets.only(left: 32, bottom: 8),
-                                      radius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: const BouncingScrollPhysics(),
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: 3,
-                                      itemBuilder: (ctx, index) {
-                                        return Row(
-                                          children: [
-                                            AppSkoleton(
-                                                width: 40,
-                                                height: 40,
-                                                margin: EdgeInsets.only(
-                                                    left: 32 + 16, bottom: 8),
-                                                radius: BorderRadius.all(
-                                                    Radius.circular(90))),
-                                            AppSkoleton(
-                                                width: size.width / (index+2),
-                                                height: 20,
-                                                margin: EdgeInsets.only(
-                                                    left: 8, bottom: 8),
-                                                radius: BorderRadius.all(
-                                                    Radius.circular(8))),
-                                          ],
-                                        );
-                                      }),
-                                  AppSkoleton(
-                                      width: size.width / 4,
-                                      height: 20,
-                                      margin:
-                                          EdgeInsets.only(left: 32, bottom: 8),
-                                      radius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                          ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: const BouncingScrollPhysics(),
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: 2,
-                                      itemBuilder: (ctx, index) {
-                                        return Row(
-                                          children: [
-                                            AppSkoleton(
-                                                width: 40,
-                                                height: 40,
-                                                margin: EdgeInsets.only(
-                                                    left: 32 + 16, bottom: 8),
-                                                radius: BorderRadius.all(
-                                                    Radius.circular(90))),
-                                            AppSkoleton(
-                                                width: size.width /(index+2),
-                                                height: 20,
-                                                margin: EdgeInsets.only(
-                                                    left: 8, bottom: 8),
-                                                radius: BorderRadius.all(
-                                                    Radius.circular(8))),
-                                          ],
-                                        );
-                                      }),
+                                          width: size.width / 4,
+                                          height: 20,
+                                          margin: EdgeInsets.only(
+                                              left: 32, bottom: 8),
+                                          radius: BorderRadius.all(
+                                              Radius.circular(8))),
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: 3,
+                                          itemBuilder: (ctx, index) {
+                                            return Row(
+                                              children: [
+                                                AppSkoleton(
+                                                    width: 40,
+                                                    height: 40,
+                                                    margin: EdgeInsets.only(
+                                                        left: 32 + 16,
+                                                        bottom: 8),
+                                                    radius: BorderRadius.all(
+                                                        Radius.circular(90))),
+                                                AppSkoleton(
+                                                    width: size.width /
+                                                        (index + 2),
+                                                    height: 20,
+                                                    margin: EdgeInsets.only(
+                                                        left: 8, bottom: 8),
+                                                    radius: BorderRadius.all(
+                                                        Radius.circular(8))),
+                                              ],
+                                            );
+                                          }),
+                                      AppSkoleton(
+                                          width: size.width / 4,
+                                          height: 20,
+                                          margin: EdgeInsets.only(
+                                              left: 32, bottom: 8),
+                                          radius: BorderRadius.all(
+                                              Radius.circular(8))),
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: 2,
+                                          itemBuilder: (ctx, index) {
+                                            return Row(
+                                              children: [
+                                                AppSkoleton(
+                                                    width: 40,
+                                                    height: 40,
+                                                    margin: EdgeInsets.only(
+                                                        left: 32 + 16,
+                                                        bottom: 8),
+                                                    radius: BorderRadius.all(
+                                                        Radius.circular(90))),
+                                                AppSkoleton(
+                                                    width: size.width /
+                                                        (index + 2),
+                                                    height: 20,
+                                                    margin: EdgeInsets.only(
+                                                        left: 8, bottom: 8),
+                                                    radius: BorderRadius.all(
+                                                        Radius.circular(8))),
+                                              ],
+                                            );
+                                          }),
                                     ],
                                   ),
                                 )
@@ -544,29 +546,32 @@ class _ReportMedicamentsScreenState extends State<ReportMedicamentsScreen> {
                     );
                   } else if (snapshot.hasData) {
                     if (snapshot.data!.isEmpty) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: Image.asset("assets/images/emptyState.png",
-                                scale: 1.2),
-                          ),
-                          Container(
-                              margin: EdgeInsets.only(top: 16),
-                              child: Text("Pas de médicament",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600))),
-                          Container(
-                              margin:
-                                  EdgeInsets.only(top: 8, left: 32, right: 32),
-                              child: Text(
-                                  "Ajouter vos médicaments pour recevoire un rappel et suivre votre santé",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 17)))
-                        ],
+                      return Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              child: Image.asset("assets/images/emptyState.png",
+                                  scale: 1.2),
+                            ),
+                            Container(
+                                margin: EdgeInsets.only(top: 16),
+                                child: Text("Pas de médicament",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w600))),
+                            Container(
+                                margin: EdgeInsets.only(
+                                    top: 8, left: 32, right: 32),
+                                child: Text(
+                                    "Ajouter vos médicaments pour recevoire un rappel et suivre votre santé",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 17)))
+                          ],
+                        ),
                       );
                     }
                     return ListView.builder(
@@ -647,8 +652,22 @@ class _ReportMedicamentsScreenState extends State<ReportMedicamentsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        child: Image.asset(data['non pris']![index].imagePath,
-                            scale: 4),
+                        child:badges.Badge(
+                                    position: badges.BadgePosition.topEnd(
+                                        top: -5, end: -6),
+                                    showBadge: true,
+                                    ignorePointer: false,
+                                    badgeContent: Icon(Icons.close,
+                                        color: Colors.white, size: 10),
+                                    badgeStyle: badges.BadgeStyle(
+                                      shape: badges.BadgeShape.circle,
+                                      badgeColor: Colors.red,
+                                      padding: EdgeInsets.all(3),
+                                    ),
+                                    child: Image.asset(
+                                       data['non pris']![index].imagePath,
+                                        scale: 4),
+                                  ),
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 8),
@@ -689,8 +708,22 @@ class _ReportMedicamentsScreenState extends State<ReportMedicamentsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        child: Image.asset(data['pris']![index].imagePath,
-                            scale: 4),
+                        child:badges.Badge(
+                                    position: badges.BadgePosition.topEnd(
+                                         top: -5, end: -6),
+                                    showBadge: true,
+                                    ignorePointer: false,
+                                    badgeContent: Icon(Icons.check,
+                                        color: Colors.white, size: 10),
+                                    badgeStyle: badges.BadgeStyle(
+                                      shape: badges.BadgeShape.circle,
+                                      badgeColor: Colors.green,
+                                      padding: EdgeInsets.all(3),
+                                    ),
+                                    child: Image.asset(
+                                       data['pris']![index].imagePath,
+                                        scale: 4),
+                                  ),
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 8),
