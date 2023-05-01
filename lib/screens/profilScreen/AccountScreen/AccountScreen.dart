@@ -379,6 +379,33 @@ class _AccountScreenState extends State<AccountScreen> {
                                     )
                                   ],
                                 ),
+                                const Divider(
+                                  color: Colors.black,
+                                ),
+                                Padding(padding: EdgeInsets.all(haille * 0.01)),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 10),
+                                      child: const Text(
+                                        "Gender : ",
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        "${user.gender}",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color:
+                                              Color.fromARGB(255, 83, 82, 82),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ],
                             ),
                           ),

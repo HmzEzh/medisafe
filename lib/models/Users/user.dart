@@ -17,6 +17,7 @@ class User {
   late String password;
   late String tele;
   late String blood;
+  late String gender;
   late Uint8List image;
 
   User(
@@ -32,6 +33,7 @@ class User {
       required this.password,
       required this.tele,
       required this.blood,
+      required this.gender,
       required this.image});
 
   User.id(
@@ -46,7 +48,8 @@ class User {
       required this.email,
       required this.password,
       required this.tele,
-      required this.blood});
+      required this.blood,
+      required this.gender});
 
   User.init(
       {required this.nom,
@@ -59,7 +62,8 @@ class User {
       required this.email,
       required this.password,
       required this.tele,
-      required this.blood});
+      required this.blood,
+      required this.gender});
 
   Map<String, dynamic> toMap() {
     return {
@@ -74,6 +78,7 @@ class User {
       'password': password,
       'tele': tele,
       'blood': blood,
+      'gender': gender,
       'image': image
     };
   }
@@ -92,6 +97,7 @@ class User {
         password: map['password'] as String,
         tele: map['tele'] as String,
         blood: map['blood'] as String,
+        gender: map['gender'] as String,
         image: map['image'] as Uint8List);
   }
 

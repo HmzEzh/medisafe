@@ -18,7 +18,6 @@ import 'package:path/path.dart';
 import 'dart:io';
 import 'dart:math';
 
-
 class DatabaseHelper {
   static UserService userService = UserService();
   static User utili = User.init(
@@ -32,7 +31,8 @@ class DatabaseHelper {
       email: "jhondoe@gmail.com",
       password: "testjhon",
       tele: "+212 615-91203",
-      blood: "A+");
+      blood: "A+",
+      gender: 'Male');
 
   static const _databaseName = "medisafe";
   static const _databaseVersion = 1;
@@ -157,13 +157,14 @@ class DatabaseHelper {
         password TEXT NOT NULL,
         tele TEXT NOT NULL,
         blood TEXT NOT NULL,
+        gender TEXT NOT NULL,
         image BLOB
       );
     ''');
 
     await db.execute('''
-  INSERT INTO user (nom, prenom, date_naissance, address, age, taille, poids, email, password, tele, blood, image)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  INSERT INTO user (nom, prenom, date_naissance, address, age, taille, poids, email, password, tele, blood, gender, image)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''', [
       utili.nom,
       utili.prenom,
@@ -176,6 +177,7 @@ class DatabaseHelper {
       utili.password,
       utili.tele,
       utili.blood,
+      utili.gender,
       imageBytes
     ]);
 
@@ -560,34 +562,43 @@ class DatabaseHelper {
   }
 
   //for report page
-  Future<Map<String, Map<String, List<HistoriqueDoze>>>> reportApi(DateTime datedebut, DateTime datefin,Medicament? med) async {
+  Future<Map<String, Map<String, List<HistoriqueDoze>>>> reportApi(
+      DateTime datedebut, DateTime datefin, Medicament? med) async {
     String debut = Utils.formatDate(datedebut);
     String fin = Utils.formatDate(datefin);
     Map<String, Map<String, List<HistoriqueDoze>>> res = {};
-    List<Map<String, dynamic>> results1 =     await db.rawQuery("SELECT DISTINCT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu");
-    for (var i = datedebut; i.compareTo(datefin) <= 0; i = i.add(const Duration(days: 1))) {
-      res[Utils.formatDate2(i)] = await HistpPrisNonPrisPerdate(Utils.formatDate(i),med);
+    List<Map<String, dynamic>> results1 = await db.rawQuery(
+        "SELECT DISTINCT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu");
+    for (var i = datedebut;
+        i.compareTo(datefin) <= 0;
+        i = i.add(const Duration(days: 1))) {
+      res[Utils.formatDate2(i)] =
+          await HistpPrisNonPrisPerdate(Utils.formatDate(i), med);
     }
     // for (Map<String, dynamic> result in results1) {HistoriqueDoze histo = HistoriqueDoze.fromMap(result);
     //   res[histo.datePrevu] = await HistpPrisNonPrisPerdate(histo.datePrevu,idMed);
     // }
     return res;
   }
-  Future<Map<String, List<HistoriqueDoze>>> HistpPrisNonPrisPerdate(String datePrevu,Medicament? med) async {
+
+  Future<Map<String, List<HistoriqueDoze>>> HistpPrisNonPrisPerdate(
+      String datePrevu, Medicament? med) async {
     Map<String, List<HistoriqueDoze>> res = {};
     res["pris"] = [];
     res["non pris"] = [];
-    late List<Map<String, Object?>> loop1 ;
-    late List<Map<String, Object?>> loop2 ;
-    if (med == null){
-      loop1 = await db.rawQuery("SELECT * FROM historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Pris'  ORDER BY idMedicament");
-      loop2 = await db.rawQuery("SELECT * FROM historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Non pris' ORDER BY idMedicament") ;
-
-    }else{
-      int idMed = med.id ;
-      loop1 = await db.query("historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Pris' AND idMedicament = $idMed ORDER BY idMedicament");
-      loop2=await db.query("historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Non pris' AND idMedicament = $idMed ORDER BY idMedicament") ;
-
+    late List<Map<String, Object?>> loop1;
+    late List<Map<String, Object?>> loop2;
+    if (med == null) {
+      loop1 = await db.rawQuery(
+          "SELECT * FROM historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Pris'  ORDER BY idMedicament");
+      loop2 = await db.rawQuery(
+          "SELECT * FROM historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Non pris' ORDER BY idMedicament");
+    } else {
+      int idMed = med.id;
+      loop1 = await db.query(
+          "historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Pris' AND idMedicament = $idMed ORDER BY idMedicament");
+      loop2 = await db.query(
+          "historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Non pris' AND idMedicament = $idMed ORDER BY idMedicament");
     }
 
     for (Map<String, dynamic> item in loop1) {
@@ -666,7 +677,6 @@ class DatabaseHelper {
     return trackers;
   }
 
-
   //mesures of Tracker
 
   Future<int> insertMesure(int idTracker, double value) async {
@@ -711,9 +721,11 @@ class DatabaseHelper {
   // }
   Future<double> getHighest(int idTracker) async {
     try {
-      final results = await _db.query("mesure",
-          where: 'idTracker = ?', whereArgs: [idTracker]);
-      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
+      final results = await _db
+          .query("mesure", where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results
+          .map((mesure) => double.parse(mesure['value'] as String))
+          .toList();
       final maxValue = values.isNotEmpty ? values.reduce(max) : 0.0;
       return maxValue;
     } on FormatException catch (e) {
@@ -727,12 +739,13 @@ class DatabaseHelper {
     }
   }
 
-
   Future<double> getLowest(int idTracker) async {
     try {
-      final results = await _db.query("mesure",
-          where: 'idTracker = ?', whereArgs: [idTracker]);
-      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
+      final results = await _db
+          .query("mesure", where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results
+          .map((mesure) => double.parse(mesure['value'] as String))
+          .toList();
       final minValue = values.isNotEmpty ? values.reduce(min) : 0.0;
       return minValue;
     } on FormatException catch (e) {
@@ -745,7 +758,6 @@ class DatabaseHelper {
       return 0.0;
     }
   }
-
 
   Future<List<Mesure>> getMesuresByIdTracker(int id) async {
     await init();
@@ -766,8 +778,4 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
-
-
-
-
 }
