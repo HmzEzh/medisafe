@@ -18,6 +18,7 @@ import 'package:path/path.dart';
 import 'dart:io';
 import 'dart:math';
 
+import '../models/raport.dart';
 
 class DatabaseHelper {
   static UserService userService = UserService();
@@ -370,8 +371,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getMedicamentById(int id) async {
     await init();
-    return _db
-        .query('medicament', orderBy: "id", where: 'id = ?', whereArgs: [id]);
+    return _db.query('medicament', orderBy: "id", where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> deleteMedicament(int id) async {
@@ -538,6 +538,10 @@ class DatabaseHelper {
     }
     return dozes;
   }
+  Future<List<Map<String, dynamic>>> getDozeById(int id) async {
+    await init();
+    return _db.query('doze', orderBy: "id", where: 'id = ?', whereArgs: [id]);
+  }
 
   Future<List<String>> getTableNames() async {
     final result =
@@ -560,46 +564,71 @@ class DatabaseHelper {
   }
 
   //for report page
-  Future<Map<String, Map<String, List<HistoriqueDoze>>>> reportApi(DateTime datedebut, DateTime datefin,Medicament? med) async {
+  Future<Map<String, Map<String, List<Raport>>>> raportApi(DateTime datedebut, DateTime datefin, Medicament? med) async {
     String debut = Utils.formatDate(datedebut);
     String fin = Utils.formatDate(datefin);
-    Map<String, Map<String, List<HistoriqueDoze>>> res = {};
-    List<Map<String, dynamic>> results1 =     await db.rawQuery("SELECT DISTINCT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu");
-    for (var i = datedebut; i.compareTo(datefin) <= 0; i = i.add(const Duration(days: 1))) {
-      res[Utils.formatDate2(i)] = await HistpPrisNonPrisPerdate(Utils.formatDate(i),med);
+    Map<String, Map<String, List<Raport>>> res = {};
+    List<Map<String, dynamic>> results1 = await db.rawQuery(
+        "SELECT DISTINCT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu");
+    for (var i = datedebut;i.compareTo(datefin) <= 0;i = i.add(const Duration(days: 1))) {
+      res[Utils.formatDate2(i)] = await HistpPrisNonPrisPerdate(Utils.formatDate(i), med);
     }
-    // for (Map<String, dynamic> result in results1) {HistoriqueDoze histo = HistoriqueDoze.fromMap(result);
-    //   res[histo.datePrevu] = await HistpPrisNonPrisPerdate(histo.datePrevu,idMed);
-    // }
+
     return res;
   }
-  Future<Map<String, List<HistoriqueDoze>>> HistpPrisNonPrisPerdate(String datePrevu,Medicament? med) async {
-    Map<String, List<HistoriqueDoze>> res = {};
+
+  Future<Map<String, List<Raport>>> HistpPrisNonPrisPerdate(
+      String datePrevu, Medicament? med) async {
+    Map<String, List<Raport>> res = {};
     res["pris"] = [];
     res["non pris"] = [];
-    late List<Map<String, Object?>> loop1 ;
-    late List<Map<String, Object?>> loop2 ;
-    if (med == null){
-      loop1 = await db.rawQuery("SELECT * FROM historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Pris'  ORDER BY idMedicament");
-      loop2 = await db.rawQuery("SELECT * FROM historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Non pris' ORDER BY idMedicament") ;
-
-    }else{
-      int idMed = med.id ;
-      loop1 = await db.query("historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Pris' AND idMedicament = $idMed ORDER BY idMedicament");
-      loop2=await db.query("historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Non pris' AND idMedicament = $idMed ORDER BY idMedicament") ;
-
+    late List<Map<String, Object?>> loop1;
+    late List<Map<String, Object?>> loop2;
+    if (med == null) {
+      loop1 = await db.rawQuery(
+          "SELECT * FROM historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Pris'  ORDER BY idMedicament");
+      loop2 = await db.rawQuery(
+          "SELECT * FROM historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Non pris' ORDER BY idMedicament");
+    } else {
+      int idMed = med.id;
+      loop1 = await db.query(
+          "historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Pris' AND idMedicament = $idMed ORDER BY idMedicament");
+      loop2 = await db.query(
+          "historiqueDoze WHERE datePrevu LIKE '$datePrevu%' AND valeur = 'Non pris' AND idMedicament = $idMed ORDER BY idMedicament");
     }
 
     for (Map<String, dynamic> item in loop1) {
       if (res.containsKey('pris')) {
         // Add the HistoriqueDoze object to the existing List
-        res['pris']!.add(HistoriqueDoze.fromMap(item));
+        Raport raport = new Raport();
+        raport.datePrevu = HistoriqueDoze.fromMap(item).datePrevu;
+        raport.remarque = HistoriqueDoze.fromMap(item).remarque;
+        raport.valeur = HistoriqueDoze.fromMap(item).valeur;
+        List<Map<String, dynamic>> medRslt = await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament) ;
+        Medicament med =  Medicament.fromMap(medRslt[0]);
+        List<Map<String, dynamic>> doseRslt = await getDozeById(HistoriqueDoze.fromMap(item).idDoze) ;
+        Doze doze =Doze.fromMap(doseRslt[0]) ;
+        raport.name = med.title ;
+        raport.dateEnrg = doze.heure;
+        raport.imagePath = med.imagePath;
+        res['pris']!.add(raport);
       }
     }
     for (Map<String, dynamic> item in loop2) {
       if (res.containsKey('non pris')) {
         // Add the HistoriqueDoze object to the existing List
-        res['non pris']!.add(HistoriqueDoze.fromMap(item));
+         Raport raport = new Raport();
+        raport.datePrevu = HistoriqueDoze.fromMap(item).datePrevu;
+        raport.remarque = HistoriqueDoze.fromMap(item).remarque;
+        raport.valeur = HistoriqueDoze.fromMap(item).valeur;
+        List<Map<String, dynamic>> medRslt = await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament) ;
+        Medicament med =  Medicament.fromMap(medRslt[0]);
+        List<Map<String, dynamic>> doseRslt = await getDozeById(HistoriqueDoze.fromMap(item).idDoze) ;
+        Doze doze =Doze.fromMap(doseRslt[0]) ;
+        raport.name = med.title ;
+        raport.dateEnrg = doze.heure;
+         raport.imagePath = med.imagePath;
+        res['non pris']!.add(raport);
       }
     }
     //res.removeWhere((key, value) => value.isEmpty);
@@ -666,7 +695,6 @@ class DatabaseHelper {
     return trackers;
   }
 
-
   //mesures of Tracker
 
   Future<int> insertMesure(int idTracker, double value) async {
@@ -732,9 +760,11 @@ class DatabaseHelper {
   // }
   Future<double> getHighest(int idTracker) async {
     try {
-      final results = await _db.query("mesure",
-          where: 'idTracker = ?', whereArgs: [idTracker]);
-      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
+      final results = await _db
+          .query("mesure", where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results
+          .map((mesure) => double.parse(mesure['value'] as String))
+          .toList();
       final maxValue = values.isNotEmpty ? values.reduce(max) : 0.0;
       return maxValue;
     } on FormatException catch (e) {
@@ -748,12 +778,13 @@ class DatabaseHelper {
     }
   }
 
-
   Future<double> getLowest(int idTracker) async {
     try {
-      final results = await _db.query("mesure",
-          where: 'idTracker = ?', whereArgs: [idTracker]);
-      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
+      final results = await _db
+          .query("mesure", where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results
+          .map((mesure) => double.parse(mesure['value'] as String))
+          .toList();
       final minValue = values.isNotEmpty ? values.reduce(min) : 0.0;
       return minValue;
     } on FormatException catch (e) {
@@ -766,7 +797,6 @@ class DatabaseHelper {
       return 0.0;
     }
   }
-
 
   Future<List<Mesure>> getMesuresByIdTracker(int id) async {
     await init();
@@ -787,8 +817,4 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
-
-
-
-
 }

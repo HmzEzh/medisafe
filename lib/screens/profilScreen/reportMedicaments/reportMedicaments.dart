@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:medisafe/models/raport.dart';
 import 'package:provider/provider.dart';
+import '../../../app_skoleton/appSkoleton.dart';
 import '../../../helpers/DatabaseHelper.dart';
 import '../../../models/HistoriqueDoze.dart';
 import '../../../models/medicament.dart';
@@ -19,14 +21,17 @@ class ReportMedicamentsScreen extends StatefulWidget {
 
 class _ReportMedicamentsScreenState extends State<ReportMedicamentsScreen> {
   DatabaseHelper db = DatabaseHelper.instance;
-  DateTime datedebut = DateTime.now();
+  DateTime datedebut = DateTime.now().subtract(const Duration(days: 8));
   DateTime datefin = DateTime.now();
   String debut = "";
   String fin = "";
   Medicament? medicament;
 
   @override
-  void initState() {}
+  void initState() {
+    debut = Utils.formatDate2(datedebut);
+    fin = Utils.formatDate2(datefin);
+  }
 
   Widget section1(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -361,6 +366,7 @@ class _ReportMedicamentsScreenState extends State<ReportMedicamentsScreen> {
   @override
   Widget build(BuildContext context) {
     var changes = Provider.of<HomeProvider>(context, listen: true);
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
           title: Row(
@@ -395,17 +401,18 @@ class _ReportMedicamentsScreenState extends State<ReportMedicamentsScreen> {
                 ),
                 onPressed: () async {
                   //TODO:
-                  Map<String, Map<String, List<HistoriqueDoze>>> ha = await db.reportApi(datedebut, datefin, medicament);
+                  Map<String, Map<String, List<Raport>>> ha =
+                      await db.raportApi(datedebut, datefin, medicament);
                   for (var item in ha.entries) {
                     String i = item.key;
                     print("######### $i #############");
                     print("######### pris #############");
                     for (var j in item.value['pris']!) {
-                      print(j.idMedicament);
+                      print(j.name);
                     }
                     print("######### non pris #############");
                     for (var j in item.value['non pris']!) {
-                      print(j.idMedicament);
+                      print(j.name);
                     }
                   }
                 },
@@ -422,8 +429,288 @@ class _ReportMedicamentsScreenState extends State<ReportMedicamentsScreen> {
           height: 2,
           indent: 0,
           endIndent: 0,
+        ),
+        SizedBox(height: 8),
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: FutureBuilder<Map<String, Map<String, List<Raport>>>>(
+                future: db.raportApi(datedebut, datefin, medicament),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: 6,
+                        itemBuilder: (ctx, index) {
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 8),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                AppSkoleton(
+                                    width: size.width / 3,
+                                    height: 25,
+                                    margin:
+                                        EdgeInsets.only(left: 16, bottom: 8),
+                                    radius:
+                                        BorderRadius.all(Radius.circular(8))),
+                                Container(
+                                   //color: Color.fromARGB(255, 202, 199, 199),
+                                   padding: EdgeInsets.only(top: 8,bottom: 8),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      AppSkoleton(
+                                      width: size.width / 4,
+                                      height: 20,
+                                      margin:
+                                          EdgeInsets.only(left: 32, bottom: 8),
+                                      radius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                  ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: 3,
+                                      itemBuilder: (ctx, index) {
+                                        return Row(
+                                          children: [
+                                            AppSkoleton(
+                                                width: 40,
+                                                height: 40,
+                                                margin: EdgeInsets.only(
+                                                    left: 32 + 16, bottom: 8),
+                                                radius: BorderRadius.all(
+                                                    Radius.circular(90))),
+                                            AppSkoleton(
+                                                width: size.width / (index+2),
+                                                height: 20,
+                                                margin: EdgeInsets.only(
+                                                    left: 8, bottom: 8),
+                                                radius: BorderRadius.all(
+                                                    Radius.circular(8))),
+                                          ],
+                                        );
+                                      }),
+                                  AppSkoleton(
+                                      width: size.width / 4,
+                                      height: 20,
+                                      margin:
+                                          EdgeInsets.only(left: 32, bottom: 8),
+                                      radius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                          ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: 2,
+                                      itemBuilder: (ctx, index) {
+                                        return Row(
+                                          children: [
+                                            AppSkoleton(
+                                                width: 40,
+                                                height: 40,
+                                                margin: EdgeInsets.only(
+                                                    left: 32 + 16, bottom: 8),
+                                                radius: BorderRadius.all(
+                                                    Radius.circular(90))),
+                                            AppSkoleton(
+                                                width: size.width /(index+2),
+                                                height: 20,
+                                                margin: EdgeInsets.only(
+                                                    left: 8, bottom: 8),
+                                                radius: BorderRadius.all(
+                                                    Radius.circular(8))),
+                                          ],
+                                        );
+                                      }),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                  } else if (snapshot.hasError) {
+                    final error = snapshot.error;
+                    return Center(
+                      child: Text(error.toString()),
+                    );
+                  } else if (snapshot.hasData) {
+                    if (snapshot.data!.isEmpty) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Image.asset("assets/images/emptyState.png",
+                                scale: 1.2),
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(top: 16),
+                              child: Text("Pas de médicament",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600))),
+                          Container(
+                              margin:
+                                  EdgeInsets.only(top: 8, left: 32, right: 32),
+                              child: Text(
+                                  "Ajouter vos médicaments pour recevoire un rappel et suivre votre santé",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 17)))
+                        ],
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (ctx, index) {
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          ),
+                          //margin: EdgeInsets.only(bottom: 20, left: 24, right: 24),
+                          padding: EdgeInsets.only(bottom: 8),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(bottom: 8, left: 16),
+                                child: Text(
+                                    snapshot.data!.keys.elementAt(index),
+                                    style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500)),
+                              ),
+                              body(context,
+                                  snapshot.data!.values.elementAt(index))
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return Container();
+                }),
+          ),
         )
       ]),
+    );
+  }
+
+  body(BuildContext context, Map<String, List<Raport>> data) {
+    Size size = MediaQuery.of(context).size;
+    int prisCompt = data['pris']!.length;
+    int manqueCompt = data['non pris']!.length;
+    return Container(
+      padding: EdgeInsets.only(top: 8, bottom: 8, left: 32),
+      width: size.width,
+      //height: 200,
+      color: Color.fromARGB(255, 246, 246, 246),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            child: Text("MANQUÉ ($manqueCompt)",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[500],
+                )),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 16),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: data['non pris']!.length,
+              itemBuilder: (ctx, index) {
+                return Container(
+                  margin: EdgeInsets.only(bottom: 8, top: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: Image.asset(data['non pris']![index].imagePath,
+                            scale: 4),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text(
+                            data['non pris']![index].name +
+                                ', ' +
+                                data['non pris']![index]
+                                    .datePrevu
+                                    .split(" ")[1],
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          Container(
+              child: Text(
+            "PRIS ($prisCompt)",
+            style: TextStyle(fontSize: 16, color: Colors.grey[500]),
+          )),
+          Container(
+            margin: EdgeInsets.only(left: 16),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: data['pris']!.length,
+              itemBuilder: (ctx, index) {
+                return Container(
+                  margin: EdgeInsets.only(bottom: 8, top: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: Image.asset(data['pris']![index].imagePath,
+                            scale: 4),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: Text(
+                            data['pris']![index].name +
+                                ', ' +
+                                data['pris']![index].datePrevu.split(" ")[1],
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 }

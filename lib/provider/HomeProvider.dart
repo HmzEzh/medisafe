@@ -14,8 +14,9 @@ class HomeProvider with ChangeNotifier {
   }
 
   DateTime getCurentdate() {
+   
     try {
-      return DateTime.parse('$selectedYear-0$selectedMonth-$selectedDay');
+      return DateTime.parse('$selectedYear-0$selectedMonth-0$selectedDay');
     } catch (e) {
       return DateTime.parse('$selectedYear-$selectedMonth-$selectedDay');
     }
@@ -23,7 +24,7 @@ class HomeProvider with ChangeNotifier {
 
   DateTime getCurentdateB(String time) {
     try {
-      return DateTime.parse('$selectedYear-0$selectedMonth-$selectedDay $time');
+      return DateTime.parse('$selectedYear-0$selectedMonth-0$selectedDay $time');
     } catch (e) {
       return DateTime.parse('$selectedYear-$selectedMonth-$selectedDay $time');
     }

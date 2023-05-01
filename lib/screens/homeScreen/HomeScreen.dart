@@ -1971,6 +1971,7 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                             ? medicamentDoze[index].historique!.valeur ==
                                     'Non pris'
                                 ? Container(
+                                  width:MediaQuery.of(context).size.width/2,
                                     //color: Colors.red,
                                     child: Text(
                                     medicamentDoze[index].historique!.remarque,
