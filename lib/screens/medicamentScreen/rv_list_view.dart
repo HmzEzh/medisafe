@@ -161,9 +161,14 @@ class _CategoryViewState extends State<CategoryView> {
                 );
               } else if (snapshot.hasData) {
                 if (snapshot.data!.isEmpty) {
-                  return Center(
-                    child: Text("isEmpty"),
-                  );
+                  return
+                      Container(
+                        child:
+                        Transform.scale(
+                          scale: 0.8,
+                          child: Image.asset("assets/images/addcalendar.png"),
+                        ),
+                      );
                 }
                 return ListView.builder(
                     scrollDirection: Axis.horizontal,

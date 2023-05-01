@@ -1,6 +1,8 @@
 class Raport {
+  late int id;
   late String name;
-  late String idDoze;
+  late int idDoze;
+  late int idMedicament;
   late String valeur;
   late String remarque;
   late String datePrevu;

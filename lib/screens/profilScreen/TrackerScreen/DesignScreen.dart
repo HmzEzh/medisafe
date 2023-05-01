@@ -57,6 +57,9 @@ class _DesignScreenState extends State<DesignScreen> with TickerProviderStateMix
         typeController.text = tracker.type;
         nom = tracker.nom;
         idPrincipale = tracker.id;
+        // trackerservice.insertMesureForGraph(1,85,'23-04-2023' );
+        // trackerservice.insertMesureForGraph(1,100,'24-04-2023' );
+        // trackerservice.insertMesureForGraph(1,125,'25-04-2023' );
     }).catchError((error) {
       // Handle errors here
     });
