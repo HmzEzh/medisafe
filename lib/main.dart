@@ -12,6 +12,7 @@ import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
 import 'package:medisafe/screens/recomScreen/RecomScreen.dart';
 import 'package:medisafe/service/notification_service.dart';
 import 'package:medisafe/service/notifService.dart';
+import 'package:medisafe/service/serviceLocator.dart';
 import 'package:provider/provider.dart';
 import 'helpers/DatabaseHelper.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
@@ -56,7 +57,7 @@ void rendezVousTask() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  setup();
   // Workmanager().initialize(callbackDispatcher);
   // initialize the database
   await AndroidAlarmManager.initialize();

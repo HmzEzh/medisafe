@@ -1,6 +1,6 @@
 class Endpoints {
   Endpoints._();
-  static const String baseUrl = "http://localhost:2023";
+  static const String baseUrl = "http://192.168.0.146:2023";
   static const Duration receiveTimeout = Duration(seconds: 60);
   static const Duration connectionTimeout = Duration(seconds: 60);
   static const String category = '/category';
@@ -18,4 +18,9 @@ class Endpoints {
   static const String favorites = "/course/favorites/100";
   static const String joined = "/user/me/course";
   //BigItemSection.categoryId
+
+
+  //dialna
+
+  static const String createTracker = "/Tracker/add";
 }

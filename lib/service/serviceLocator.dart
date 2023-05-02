@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:medisafe/network/api/TrackerApi.dart';
+import 'package:medisafe/network/repositories/TrackerRepository.dart';
+import 'package:medisafe/screens/controllers/TrackerController.dart';
 import '../network/dioClient.dart';
 
 final getIt = GetIt.instance;
@@ -7,6 +10,10 @@ Future<void> setup() async {
   getIt.registerSingleton(Dio());
   getIt.registerSingleton(DioClient(getIt<Dio>()));
 
+  getIt.registerSingleton(TrackerApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(TrackerRepository(getIt<TrackerApi>()));
+
+  getIt.registerSingleton(TrackerController());
   // // login
   // getIt.registerSingleton(LogInApi(dioClient: getIt<DioClient>()));
   // getIt.registerSingleton(LogInRepository(getIt.get<LogInApi>()));
