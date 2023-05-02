@@ -19,6 +19,10 @@ import 'dart:io';
 import 'dart:math';
 import '../models/raport.dart';
 
+import '../screens/controllers/TrackerController.dart';
+import '../service/serviceLocator.dart';
+
+
 class DatabaseHelper {
   static UserService userService = UserService();
   static User utili = User.init(
@@ -34,7 +38,7 @@ class DatabaseHelper {
       tele: "+212 615-91203",
       blood: "A+",
       gender: 'Male');
-
+  final trackerController = getIt.get<TrackerController>();
   static const _databaseName = "medisafe";
   static const _databaseVersion = 1;
   DatabaseHelper._privateConstructor();
@@ -158,7 +162,6 @@ class DatabaseHelper {
         password TEXT NOT NULL,
         tele TEXT NOT NULL,
         blood TEXT NOT NULL,
-        gender TEXT NOT NULL,
         image BLOB
       );
     ''');
@@ -651,11 +654,11 @@ class DatabaseHelper {
      late List<Map<String, Object?>> loop1;
     if (med == null) {
       loop1 = await db.rawQuery("SELECT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu AND idMedicament");
-     
+
     } else {
       int idMed = med.id;
       loop1 = await db.query("historiqueDoze WHERE idMedicament = $idMed AND datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu AND idMedicament");
-     
+
     }
     for (var item in loop1) {
       Raport raport = new Raport();
@@ -695,7 +698,9 @@ class DatabaseHelper {
       'dateFin': dateFin,
     };
     int id = await _db.insert("tracker", data);
+print(data);
 
+    await trackerController.createTracker(2, name, dateDebut, dateFin, type);
     return id;
   }
 
@@ -801,11 +806,9 @@ class DatabaseHelper {
   // }
   Future<double> getHighest(int idTracker) async {
     try {
-      final results = await _db
-          .query("mesure", where: 'idTracker = ?', whereArgs: [idTracker]);
-      final values = results
-          .map((mesure) => double.parse(mesure['value'] as String))
-          .toList();
+      final results = await _db.query("mesure",
+          where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
       final maxValue = values.isNotEmpty ? values.reduce(max) : 0.0;
       return maxValue;
     } on FormatException catch (e) {
@@ -819,13 +822,12 @@ class DatabaseHelper {
     }
   }
 
+
   Future<double> getLowest(int idTracker) async {
     try {
-      final results = await _db
-          .query("mesure", where: 'idTracker = ?', whereArgs: [idTracker]);
-      final values = results
-          .map((mesure) => double.parse(mesure['value'] as String))
-          .toList();
+      final results = await _db.query("mesure",
+          where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
       final minValue = values.isNotEmpty ? values.reduce(min) : 0.0;
       return minValue;
     } on FormatException catch (e) {

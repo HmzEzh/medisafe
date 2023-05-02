@@ -9,9 +9,12 @@ import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/Rappel.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
+import 'package:medisafe/screens/controllers/TrackerController.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/use/MyModel.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
+
+import '../../../service/serviceLocator.dart';
 
 
 class AddTrackerScreen extends StatefulWidget {
@@ -289,9 +292,10 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                           children: <Widget>[
                             Expanded(
                               child: InkWell(
-                                onTap: () {
+                                onTap: () async {
 
                                   dozeservice.insertTracker(nameController.text, typeController.text, _currentSliderValue.round() );
+
                                   Navigator.pop(context);
                                   selectedDay.setChanges();
                                   ScaffoldMessenger.of(context)
