@@ -2,10 +2,13 @@ import 'dart:isolate';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/date_symbol_data_file.dart';
 import 'package:medisafe/models/RendezVous.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
+import 'package:medisafe/screens/flashscreen.dart';
 import 'package:medisafe/screens/homeScreen/HomeScreen.dart';
+import 'package:medisafe/screens/loginScreen.dart';
 import 'package:medisafe/screens/medicamentScreen/MedicamentScreen.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/screens/profilScreen/ProfilScreen.dart';
@@ -56,6 +59,7 @@ void rendezVousTask() async {
 }
 
 Future<void> main() async {
+ 
   WidgetsFlutterBinding.ensureInitialized();
   setup();
   // Workmanager().initialize(callbackDispatcher);
@@ -69,60 +73,89 @@ Future<void> main() async {
   ]);
   await dbHelper.init();
   await Noti.initialize(flutterLocalNotificationsPlugin);
-  runApp(MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
-      ],
-      child: const MyApp(
-        nbr: 0,
-      )));
-
   // Define the task constraints
-
+  setup();
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeProvider()),
       ],
-      child: const MyApp(
-        nbr: 0,
-      )));
+      child: const MyApp()));
 
   Medicament.addCat();
 }
+enum LogMode {loggedin,loggedOut,flashscreen}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.nbr});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+  @override
+  State<StatefulWidget> createState() {
+    return MyAppState();
+  }
+}
 
-  final int nbr;
-  // This widget is the root of your application.
+class MyAppState extends State<MyApp> {
+  final storage = const FlutterSecureStorage();
+  LogMode logmode = LogMode.flashscreen;
+  void getToken() async {
+    String? token = await storage.read(key: 'token');
+    if (token == null) {
+      setState(() {
+        logmode = LogMode.loggedOut;
+      });
+    } else {
+      setState(() {
+        logmode = LogMode.loggedin;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getToken();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(
-        title: 'Flutter Demo Home Page',
-        nbr: nbr,
-      ),
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => logmode == LogMode.flashscreen ? FlashScreen() : logmode == LogMode.loggedOut ? const LoginScreen() :  MyHomePage(
+       
+      )
+        // {
+        //   if (logmode == LogMode.loggedOut) {
+        //     return const LoginScreen();
+        //   } else {
+        //     return const MyHomePage();
+        //   }
+        // }
+
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        //'/second': (context) => const SecondScreen(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
+
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.nbr});
-  final String title;
-  final int nbr;
+  const MyHomePage({super.key});
+  
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState(nbr);
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   late int nbr = 0;
-  _MyHomePageState(this.nbr);
+  _MyHomePageState();
   late int _selectedIndex = nbr;
   @override
   void initState() {
