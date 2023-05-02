@@ -3,7 +3,16 @@ import 'package:get_it/get_it.dart';
 import 'package:medisafe/network/api/TrackerApi.dart';
 import 'package:medisafe/network/repositories/TrackerRepository.dart';
 import 'package:medisafe/screens/controllers/TrackerController.dart';
+import '../controller/user/createUserController.dart';
+import '../controller/user/logOutController.dart';
+import '../controller/user/loginController.dart';
+import '../network/api/user/createUserApi.dart';
+import '../network/api/user/logOutApi.dart';
+import '../network/api/user/loginApi.dart';
 import '../network/dioClient.dart';
+import '../network/repository/user/createUserRepository.dart';
+import '../network/repository/user/loginRepository.dart';
+import '../network/repository/user/logoutRepository.dart';
 
 final getIt = GetIt.instance;
 Future<void> setup() async {
@@ -23,6 +32,16 @@ Future<void> setup() async {
   // // create user
   // getIt.registerSingleton(CreateUserApi(dioClient: getIt<DioClient>()));
   // getIt.registerSingleton(CreateUserRepository(getIt<CreateUserApi>()));
+  // create user
+  getIt.registerSingleton(CreateUserApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(CreateUserRepository(getIt<CreateUserApi>()));
+  // login
+  getIt.registerSingleton(LogInApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(LogInRepository(getIt.get<LogInApi>()));
+  // logout
+  getIt.registerSingleton(LogOutApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(LogOutRepository(getIt.get<LogOutApi>()));
+
   // //user information
   // getIt.registerSingleton(UserDetailApi(dioClient: getIt<DioClient>()));
   // getIt.registerSingleton(UserDetailRepository(getIt<UserDetailApi>()));
@@ -44,12 +63,15 @@ Future<void> setup() async {
   // //favorites/joined courses
   // getIt.registerSingleton(JoinedFavoritesCoursesApi(dioClient: getIt<DioClient>()));
   // getIt.registerSingleton(JoinedFavoritesCoursesRepository(getIt<JoinedFavoritesCoursesApi>()));
-  // //login controller
-  // getIt.registerSingleton(LoginController());
-  // // logout controller
-  // getIt.registerSingleton(LogoutController());
-  // // craete user controller
-  // getIt.registerSingleton(CreateUserController());
+
+  //login controller
+  getIt.registerSingleton(LoginController());
+  // logout controller
+  getIt.registerSingleton(LogoutController());
+  // craete user controller
+  getIt.registerSingleton(CreateUserController());
+
+
   // //user information controller
   // getIt.registerSingleton(UserDetailController());
   // //update user information controller

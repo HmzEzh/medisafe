@@ -1,9 +1,15 @@
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:medisafe/screens/profilScreen/rendezVousScreen/RendezVousListScreen.dart';
 import 'package:medisafe/screens/profilScreen/reportMedicaments/reportMedicaments.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:share/share.dart';
+import '../../controller/user/logOutController.dart';
+import '../../service/serviceLocator.dart';
+import '../loginScreen.dart';
 import 'MedecinScreen/MedcinsListScreen.dart';
 import 'AccountScreen/AccountScreen.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
@@ -22,8 +28,10 @@ class ProfilScreen extends StatefulWidget {
 
 class _ProfilScreen extends State<ProfilScreen> {
   final UserService userService = UserService();
+   final logoutController = getIt<LogoutController>();
 
   late Future<User> _user;
+  final storage = new FlutterSecureStorage();
 
   @override
   void initState() {
@@ -31,6 +39,108 @@ class _ProfilScreen extends State<ProfilScreen> {
 
     super.initState();
     _user = userService.getUserById(widget.userId);
+  }
+   deleteToken() async {
+    await storage.delete(key: 'token');
+  }
+   Future logout() async {
+    Navigator.pop(context);
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: Color.fromARGB(0, 0, 0, 0),
+        context: context,
+        builder: (BuildContext context) => WillPopScope(
+              onWillPop: () async => false,
+              child: Center(
+                  child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(90),
+                    color: Color.fromARGB(36, 81, 86, 90)),
+                child: Center(
+                    child: CupertinoActivityIndicator(
+                  radius: 20,
+                )),
+              )),
+            ));
+    try {
+      bool response = await logoutController.logout(await PlatformDeviceId.getDeviceId ?? "");
+      print(await PlatformDeviceId.getDeviceId ?? "");
+      if(response){
+        deleteToken();
+        Navigator.pop(context) ;
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (route) => false);
+      }
+      else{
+        Navigator.pop(context) ;
+      }
+      //TODO: delete all data in all tabels
+      // Provider.of<CollectionProvider>(context, listen: false).deleteData();
+      // Provider.of<UserProvider>(context, listen: false).deleteData();
+    } catch (e) {
+      Navigator.pop(context);
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                 
+                  buttonPadding: EdgeInsets.zero,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  contentPadding:
+                      const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
+                  title: const Text(
+                    'La connexion a échoué',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(
+                            left: 8, right: 8, bottom: 24),
+                        child: Text(
+                          e.toString(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: InkWell(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                            ),
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                top: BorderSide(color: Colors.grey),
+                              )),
+                              height: 50,
+                              child: const Center(
+                                child: Text("OK",
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.w600)),
+                              ),
+                            ),
+                          ))
+                        ],
+                      )
+                    ],
+                  ),
+                ));
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //   content: Text('Error: ${e.toString()}'),
+        //   backgroundColor: Colors.red.shade300,
+        // ));
+      }
   }
 
   @override
@@ -564,7 +674,99 @@ class _ProfilScreen extends State<ProfilScreen> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                               showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    insetPadding:
+                                        EdgeInsets.symmetric(horizontal: 60),
+                                    buttonPadding: EdgeInsets.zero,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0))),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        0.0, 24.0, 0.0, 0.0),
+                                    title: const Text(
+                                      'Déconnexion',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 200,
+                                          margin: const EdgeInsets.only(
+                                              left: 8, right: 8, bottom: 24),
+                                          child: const Text(
+                                            "Voulez-vous vraiment vous déconnecter ?",
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                                child: InkWell(
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                bottomLeft: Radius.circular(10),
+                                              ),
+                                              onTap: () =>
+                                                  Navigator.pop(context),
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                    border: Border(
+                                                        top: BorderSide(
+                                                            color: Colors.grey),
+                                                        right: BorderSide(
+                                                            color:
+                                                                Colors.grey))),
+                                                height: 50,
+                                                child: const Center(
+                                                  child: Text("Annuler",
+                                                      style: TextStyle(
+                                                          color: Colors.blue,
+                                                          fontWeight:
+                                                              FontWeight.w600)),
+                                                ),
+                                              ),
+                                            )),
+                                            Expanded(
+                                                child: InkWell(
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                              ),
+                                              onTap: () => logout(),
+                                              child: Container(
+                                                decoration: const BoxDecoration(
+                                                    border: Border(
+                                                  top: BorderSide(
+                                                      color: Colors.grey),
+                                                )),
+                                                height: 50,
+                                                child: const Center(
+                                                  child: Text(
+                                                    "Déconnexion",
+                                                    style: TextStyle(
+                                                        color: Colors.blue),
+                                                  ),
+                                                ),
+                                              ),
+                                            ))
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ));
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                     border:
@@ -631,3 +833,4 @@ class _ProfilScreen extends State<ProfilScreen> {
     );
   }
 }
+

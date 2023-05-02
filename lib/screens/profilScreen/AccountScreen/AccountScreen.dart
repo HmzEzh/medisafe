@@ -49,14 +49,7 @@ class _AccountScreenState extends State<AccountScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.push<dynamic>(
-              context,
-              MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => const MyHomePage(
-                        nbr: 3,
-                        title: 'back to profil',
-                      )),
-            );
+            Navigator.pop(context);
           },
         ),
         title: const Text(
@@ -103,7 +96,7 @@ class _AccountScreenState extends State<AccountScreen> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData && snapshot.data!.toMap().isNotEmpty) {
                 var user = snapshot.data!;
-                Uint8List imageBytes = user.image;
+                Uint8List imageBytes = user.image!;
                 return Container(
                   color: Colors.blue[100],
                   child: ListView(
