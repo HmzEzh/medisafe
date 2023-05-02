@@ -19,7 +19,6 @@ class Endpoints {
   static const String joined = "/user/me/course";
   //BigItemSection.categoryId
 
-
   //dialna
 
   static const String createTracker = "/Tracker/add";
