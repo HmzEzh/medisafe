@@ -37,6 +37,7 @@ class DatabaseHelper {
       tele: "+212 615-91203",
       blood: "A+",
       gender: 'Male');
+
   final trackerController = getIt.get<TrackerController>();
   static const _databaseName = "medisafe";
   static const _databaseVersion = 1;
@@ -705,7 +706,7 @@ class DatabaseHelper {
     int id = await _db.insert("tracker", data);
     print(data);
 
-    await trackerController.createTracker(2, name, dateDebut, dateFin, type);
+    //await trackerController.createTracker(10, name, dateDebut, dateFin, type);
     return id;
   }
 
@@ -714,6 +715,11 @@ class DatabaseHelper {
     List<Tracker> trackers = [];
     for (Map<String, dynamic> item in await _db.query("tracker")) {
       trackers.add(Tracker.fromMap(item));
+    }
+    //print("avant");
+    for(Tracker aa in await trackerController.getAllTrackers()){
+      print(aa.nom);
+      await insertTracker(aa.nom, aa.type, 7);
     }
 
     return trackers;

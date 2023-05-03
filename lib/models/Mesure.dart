@@ -1,5 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'Mesure.g.dart';
+
+@JsonSerializable()
 class Mesure {
-  int? id;
+  late int id;
   late int idTracker;
   late String value;
   late String date;
@@ -37,4 +41,9 @@ class Mesure {
       heure: map['heure'] as String,
     );
   }
+
+  factory Mesure.fromJson(Map<String, dynamic> json) =>
+      _$MesureFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MesureToJson(this);
 }

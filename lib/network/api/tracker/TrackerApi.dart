@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../dioClient.dart';
-import 'Endpoints.dart';
+import '../../dioClient.dart';
+import '../Endpoints.dart';
 
 class TrackerApi {
   final DioClient dioClient;
@@ -15,9 +15,22 @@ class TrackerApi {
             "nom":nom,
             "debut": dateDebut,
             "fin": dateFin,
-            "type_track":type
+            "type_track":type,
+            "user":{
+              "id":1,
+            }
           }
       );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
+  Future<Response> getAllTrackers() async {
+    try {
+      final Response response = await dioClient.get(Endpoints.allTrackers);
       return response;
     } catch (e) {
       rethrow;

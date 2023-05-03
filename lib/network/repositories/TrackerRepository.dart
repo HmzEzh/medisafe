@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../api/TrackerApi.dart';
+import '../api/tracker/TrackerApi.dart';
 import '../dioException.dart';
 
 class TrackerRepository {

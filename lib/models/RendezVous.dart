@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
-// part 'rendezVous.g.dart';
+
+
+part 'RendezVous.g.dart';
 
 @JsonSerializable()
 class RendezVous {
@@ -49,6 +51,6 @@ class RendezVous {
     );
   }
 
-  // factory RendezVous.fromJson(Map<String, dynamic> json) => _$RendezVousFromJson(json);
-  // Map<String, dynamic> toJson() => _$RendezVousToJson(this);
+// factory RendezVous.fromJson(Map<String, dynamic> json) => _$RendezVousFromJson(json);
+// Map<String, dynamic> toJson() => _$RendezVousToJson(this);
 }

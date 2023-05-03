@@ -1,5 +1,8 @@
 import 'package:medisafe/helpers/DatabaseHelper.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'medicament.g.dart';
 
+@JsonSerializable()
 class Medicament {
   Medicament({
     required this.id ,
@@ -91,7 +94,10 @@ class Medicament {
   }
 
 
-  static List<Medicament> popularCourseList = <Medicament>[
+  static List<Medicament> popularCourseList = <Medicament>[];
 
-  ];
+  factory Medicament.fromJson(Map<String, dynamic> json) =>
+      _$MedicamentFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MedicamentToJson(this);
 }

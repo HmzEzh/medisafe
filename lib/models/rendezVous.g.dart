@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'rendezVous.dart';
+part of 'RendezVous.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

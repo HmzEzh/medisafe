@@ -1,19 +1,22 @@
 import 'package:medisafe/helpers/DatabaseHelper.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'Tracker.g.dart';
 
+@JsonSerializable()
 class Tracker {
   Tracker({
     required this.id ,
-    this.nom = '',
-    this.dateDebut ="",
-    this.dateFin ="",
-    this.type = "",
+    required this.nom ,
+    required this.dateDebut ,
+    required this.dateFin ,
+    required this.type ,
   });
 
-  int id;
-  String nom;
-  String dateDebut;
-  String dateFin;
-  String type = "";
+  late int id;
+  late String nom;
+  late String dateDebut;
+  late String dateFin;
+  late String type ;
 
   static List<Tracker> categoryList = <Tracker>[
     Tracker(
@@ -62,7 +65,12 @@ class Tracker {
   }
 
 
-  static List<Tracker> trackerList = <Tracker>[
+  static List<Tracker> trackerList = <Tracker>[];
 
-  ];
+
+  factory Tracker.fromJson(Map<String, dynamic> json) =>
+      _$TrackerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TrackerToJson(this);
 }
+

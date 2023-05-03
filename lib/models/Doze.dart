@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'Doze.g.dart';
+
+@JsonSerializable()
 class Doze {
   int? id;
   late int idMedicament;
@@ -30,4 +34,8 @@ class Doze {
       suspend: map['suspend']==0?false:true as bool,
     );
   }
+
+  factory Doze.fromJson(Map<String, dynamic> json) =>
+      _$DozeFromJson(json);
+  Map<String, dynamic> toJson() => _$DozeToJson(this);
 }

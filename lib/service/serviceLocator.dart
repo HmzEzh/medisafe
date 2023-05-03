@@ -1,21 +1,27 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:medisafe/controller/user/UpdateUserController.dart';
-import 'package:medisafe/network/api/TrackerApi.dart';
-import 'package:medisafe/network/api/user/UpdateUserApi.dart';
-import 'package:medisafe/network/repositories/TrackerRepository.dart';
-import 'package:medisafe/network/repositories/User/UpdateUserRepository.dart';
+import 'package:medisafe/network/api/tracker/TrackerApi.dart';
+import 'package:medisafe/network/repository/tracker/TrackerRepository.dart';
 import 'package:medisafe/screens/controllers/TrackerController.dart';
 import '../controller/user/createUserController.dart';
 import '../controller/user/logOutController.dart';
 import '../controller/user/loginController.dart';
+import '../network/api/dose/DoseApi.dart';
+import '../network/api/medicament/MedicamentApi.dart';
+import '../network/api/mesure/MesureApi.dart';
 import '../network/api/user/createUserApi.dart';
 import '../network/api/user/logOutApi.dart';
 import '../network/api/user/loginApi.dart';
 import '../network/dioClient.dart';
+import '../network/repository/Medicament/MedicamentRepository.dart';
+import '../network/repository/Mesure/MesureRepository.dart';
+import '../network/repository/dose/DoseRepository.dart';
 import '../network/repository/user/createUserRepository.dart';
 import '../network/repository/user/loginRepository.dart';
 import '../network/repository/user/logoutRepository.dart';
+import '../screens/controllers/DoseController.dart';
+import '../screens/controllers/MedicamentController.dart';
+import '../screens/controllers/MesureController.dart';
 
 final getIt = GetIt.instance;
 Future<void> setup() async {
@@ -26,6 +32,27 @@ Future<void> setup() async {
   getIt.registerSingleton(TrackerRepository(getIt<TrackerApi>()));
 
   getIt.registerSingleton(TrackerController());
+
+  //Dose
+
+  getIt.registerSingleton(DoseApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(DoseRepository(getIt<DoseApi>()));
+
+  getIt.registerSingleton(DoseController());
+
+  //Mesure
+
+  getIt.registerSingleton(MesureApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(MesureRepository(getIt<MesureApi>()));
+
+  getIt.registerSingleton(MesureController());
+
+  //Medicament
+
+  getIt.registerSingleton(MedicamentApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(MedicamentRepository(getIt<MedicamentApi>()));
+
+  getIt.registerSingleton(MedicamentController());
   // // login
   // getIt.registerSingleton(LogInApi(dioClient: getIt<DioClient>()));
   // getIt.registerSingleton(LogInRepository(getIt.get<LogInApi>()));
@@ -74,6 +101,7 @@ Future<void> setup() async {
   // craete user controller
   getIt.registerSingleton(CreateUserController());
 
+
   // //user information controller
   // getIt.registerSingleton(UserDetailController());
   // //update user information controller
@@ -88,8 +116,4 @@ Future<void> setup() async {
   //  getIt.registerSingleton(CollectionController());
   // //favorites/joined courses
   //  getIt.registerSingleton(JoinedFavoritesCoursesController());
-
-  getIt.registerSingleton(UpdateUserApi(dioClient: getIt<DioClient>()));
-  getIt.registerSingleton(UpdateUserRepository(getIt<UpdateUserApi>()));
-  getIt.registerSingleton(UpdateUserController());
 }

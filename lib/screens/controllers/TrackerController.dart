@@ -1,6 +1,5 @@
-
-
-import '../../network/repositories/TrackerRepository.dart';
+import '../../models/Tracker.dart';
+import '../../network/repository/tracker/TrackerRepository.dart';
 import '../../service/serviceLocator.dart';
 
 class TrackerController {
@@ -11,5 +10,12 @@ class TrackerController {
 
     final res = await createTracke.create( id,  nom,  dateDebut,  dateFin,  type);
     return res;
+  }
+
+
+  Future<List<Tracker>> getAllTrackers() async {
+    print("1");
+    final allTrackers = await createTracke.getAllTrackers();
+    return allTrackers;
   }
 }
