@@ -1,4 +1,4 @@
-import 'package:medisafe/network/repositories/User/UpdateUserRepository.dart';
+import 'package:medisafe/network/repository/user/UpdateUserRepository.dart';
 import 'package:medisafe/service/serviceLocator.dart';
 
 class UpdateUserController {

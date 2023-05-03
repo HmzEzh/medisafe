@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import 'package:medisafe/utils/utils.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
+import '../controller/TrackerController.dart';
 import '../models/Mesure.dart';
 import '../models/HistoriqueDoze.dart';
 import '../models/RendezVous.dart';
@@ -19,8 +21,11 @@ import 'dart:io';
 import 'dart:math';
 import '../models/raport.dart';
 
-import '../screens/controllers/TrackerController.dart';
 import '../service/serviceLocator.dart';
+import 'package:cryptography/cryptography.dart';
+import 'package:cryptography_flutter/cryptography_flutter.dart';
+
+
 
 class DatabaseHelper {
   static UserService userService = UserService();
@@ -43,6 +48,8 @@ class DatabaseHelper {
   static const _databaseVersion = 1;
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
+
+
 
   late Database _db;
   Future<Database> get database async {
@@ -705,7 +712,6 @@ class DatabaseHelper {
     };
     int id = await _db.insert("tracker", data);
     print(data);
-
     //await trackerController.createTracker(10, name, dateDebut, dateFin, type);
     return id;
   }

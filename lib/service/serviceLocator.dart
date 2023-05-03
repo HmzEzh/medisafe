@@ -1,8 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:medisafe/controller/user/UpdateUserController.dart';
 import 'package:medisafe/network/api/tracker/TrackerApi.dart';
+import 'package:medisafe/network/api/user/UpdateUserApi.dart';
 import 'package:medisafe/network/repository/tracker/TrackerRepository.dart';
-import 'package:medisafe/screens/controllers/TrackerController.dart';
+import 'package:medisafe/network/repository/user/UpdateUserRepository.dart';
+import '../controller/MesureController.dart';
+import '../controller/TrackerController.dart';
 import '../controller/user/createUserController.dart';
 import '../controller/user/logOutController.dart';
 import '../controller/user/loginController.dart';
@@ -19,9 +23,8 @@ import '../network/repository/dose/DoseRepository.dart';
 import '../network/repository/user/createUserRepository.dart';
 import '../network/repository/user/loginRepository.dart';
 import '../network/repository/user/logoutRepository.dart';
-import '../screens/controllers/DoseController.dart';
-import '../screens/controllers/MedicamentController.dart';
-import '../screens/controllers/MesureController.dart';
+import '../controller/DoseController.dart';
+import '../controller/MedicamentController.dart';
 
 final getIt = GetIt.instance;
 Future<void> setup() async {
@@ -72,6 +75,9 @@ Future<void> setup() async {
   getIt.registerSingleton(LogOutApi(dioClient: getIt<DioClient>()));
   getIt.registerSingleton(LogOutRepository(getIt.get<LogOutApi>()));
 
+  getIt.registerSingleton(UpdateUserApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(UpdateUserRepository(getIt.get<UpdateUserApi>()));
+
   // //user information
   // getIt.registerSingleton(UserDetailApi(dioClient: getIt<DioClient>()));
   // getIt.registerSingleton(UserDetailRepository(getIt<UserDetailApi>()));
@@ -100,6 +106,8 @@ Future<void> setup() async {
   getIt.registerSingleton(LogoutController());
   // craete user controller
   getIt.registerSingleton(CreateUserController());
+
+  getIt.registerSingleton(UpdateUserController());
 
 
   // //user information controller

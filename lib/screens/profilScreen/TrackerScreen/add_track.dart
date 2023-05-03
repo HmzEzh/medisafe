@@ -9,7 +9,6 @@ import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/Rappel.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
-import 'package:medisafe/screens/controllers/TrackerController.dart';
 import 'package:medisafe/screens/profilScreen/TrackerScreen/use/MyModel.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';

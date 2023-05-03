@@ -1,6 +1,6 @@
-import '../../models/Doze.dart';
-import '../../network/repository/dose/DoseRepository.dart';
-import '../../service/serviceLocator.dart';
+import '../models/Doze.dart';
+import '../network/repository/dose/DoseRepository.dart';
+import '../service/serviceLocator.dart';
 
 class DoseController {
   final creatDose = getIt.get<DoseRepository>();

@@ -1,6 +1,6 @@
-import '../../models/medicament.dart';
-import '../../network/repository/Medicament/MedicamentRepository.dart';
-import '../../service/serviceLocator.dart';
+import '../models/medicament.dart';
+import '../network/repository/Medicament/MedicamentRepository.dart';
+import '../service/serviceLocator.dart';
 
 class MedicamentController {
   final creatMedicament = getIt.get<MedicamentRepository>();
