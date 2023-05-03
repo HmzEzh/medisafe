@@ -161,10 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     splashFactory: NoSplash.splashFactory,
                   ),
                   onPressed: () async {
-                    List dozes = await databaseHelper.historiqueDoze();
+                    /*List dozes = await databaseHelper.historiqueDoze();
                     for (var histo in dozes) {
                       print(histo.datePrevu);
-                    }
+                    }*/
                   },
                   child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons'),
                       color: Colors.white))
@@ -1983,13 +1983,16 @@ class _HomeScreenContentState extends State<HomeScreenContent>
                             ? medicamentDoze[index].historique!.valeur ==
                                     'Non pris'
                                 ? Container(
-                                  width:MediaQuery.of(context).size.width/2,
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
                                     //color: Colors.red,
                                     child: Text(
-                                    medicamentDoze[index].historique!.remarque,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                  ))
+                                      medicamentDoze[index]
+                                          .historique!
+                                          .remarque,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ))
                                 : SizedBox.shrink()
                             : SizedBox.shrink(),
                         medicamentDoze[index].historique != null

@@ -1,6 +1,6 @@
 class Endpoints {
   Endpoints._();
-  static const String baseUrl = "http://10.0.2.2:2023";
+  static const String baseUrl = "http://192.168.11.107:2023";
   static const Duration receiveTimeout = Duration(seconds: 60);
   static const Duration connectionTimeout = Duration(seconds: 60);
   static const String login = "/user/login";
@@ -15,7 +15,7 @@ class Endpoints {
 
   static const String creatsUser = "/user";
   static const String userInfo = "/user/me/details";
-  static const String updateUserInfo = "/user/me";
+  //static const String updateUserInfo = "/user/me";
   static const String resetPassword = "/user/resetpassword";
   static const String collection = "/course/collection/7";
   static const String favorites = "/course/favorites/100";
@@ -25,4 +25,6 @@ class Endpoints {
   //dialna
 
   static const String createTracker = "/Tracker/add";
+
+  static const String updateUserInfo = "/user/update";
 }

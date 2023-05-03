@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:medisafe/controller/user/UpdateUserController.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
@@ -25,7 +26,6 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   TextEditingController prenomController = TextEditingController();
   TextEditingController naissanceController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
   TextEditingController tailleController = TextEditingController();
   TextEditingController poidsController = TextEditingController();
   TextEditingController teleController = TextEditingController();
@@ -41,6 +41,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
 
   //DatabaseHelper userService = DatabaseHelper.instance;
   UserService userService = UserService();
+  UpdateUserController updateUserController = UpdateUserController();
+
   late Future<User> _user;
 
   @override
@@ -239,9 +241,6 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                       String formattedDate =
                           DateFormat('yyyy-MM-dd').format(pickedDate);
                       naissanceController.text = formattedDate;
-                      ageController.text =
-                          calculateAge(DateTime.parse(naissanceController.text))
-                              .toString();
                     }
                   },
                 )),
@@ -433,12 +432,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
           title: Row(children: [
             InkWell(
                 onTap: () {
-                  Navigator.push<dynamic>(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) =>
-                            AccountScreen(userId: widget.userId)),
-                  );
+                  Navigator.pop(context);
                 },
                 child: const Icon(
                   IconData(0xe16a, fontFamily: 'MaterialIcons'),
@@ -474,9 +468,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     id: widget.userId,
                     nom: nomController.text,
                     prenom: prenomController.text,
+                    cin: "BH193819",
                     date_naissance: naissanceController.text,
                     address: addressController.text,
-                    age: int.parse(ageController.text),
                     taille: int.parse(tailleController.text),
                     poids: int.parse(poidsController.text),
                     email: emailController.text,
@@ -501,6 +495,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                   backgroundColor: Color.fromARGB(255, 75, 138, 220),
                   margin: EdgeInsets.only(bottom: 20, left: 25, right: 25),
                 ));
+                updateUserController.updateUserInfo(update.toMap());
+                //print(update.toMap()['id']);
               },
               child: const Icon(
                 Icons.save,
@@ -528,8 +524,6 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     TextEditingController(text: user.poids.toString());
                 teleController = TextEditingController(text: user.tele);
                 bloodController = TextEditingController(text: user.blood);
-                ageController =
-                    TextEditingController(text: user.age.toString());
                 emailController = TextEditingController(text: user.email);
                 passwordController = TextEditingController(text: user.password);
                 genderController = TextEditingController(text: user.gender);

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:medisafe/controller/user/UpdateUserController.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/main.dart';
 import 'package:medisafe/models/Users/user.dart';
@@ -24,6 +25,7 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   //DatabaseHelper userService = DatabaseHelper.instance;
   UserService userService = UserService();
+  UpdateUserController updateUserController = UpdateUserController();
   //UserService userService = UserService();
   late Future<User> _user;
 
@@ -96,7 +98,7 @@ class _AccountScreenState extends State<AccountScreen> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData && snapshot.data!.toMap().isNotEmpty) {
                 var user = snapshot.data!;
-                Uint8List imageBytes = user.image!;
+                Uint8List imageBytes = user.image;
                 return Container(
                   color: Colors.blue[100],
                   child: ListView(
@@ -163,6 +165,23 @@ class _AccountScreenState extends State<AccountScreen> {
                                             Uint8List.fromList(fileBytes);
                                         userService.updateUserImage(
                                             widget.userId, fileBytes);
+                                        User update = User(
+                                            id: widget.userId,
+                                            nom: user.nom,
+                                            prenom: user.prenom,
+                                            cin: user.cin,
+                                            date_naissance: user.date_naissance,
+                                            address: user.address,
+                                            taille: user.taille,
+                                            poids: user.poids,
+                                            email: user.email,
+                                            password: user.password,
+                                            tele: user.tele,
+                                            blood: user.blood,
+                                            gender: user.gender,
+                                            image: imageUint8List);
+                                        updateUserController
+                                            .updateUserInfo(update.toMap());
                                         //Uint8List bytes = await result.files[0].readAsBytes();
                                       } else {
                                         // Handle the case where the user cancelled the file selection operation
@@ -281,6 +300,33 @@ class _AccountScreenState extends State<AccountScreen> {
                                     Container(
                                       child: Text(
                                         "${user.email}",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color:
+                                              Color.fromARGB(255, 83, 82, 82),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const Divider(
+                                  color: Colors.black,
+                                ),
+                                Padding(padding: EdgeInsets.all(haille * 0.01)),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 10),
+                                      child: const Text(
+                                        "CIN : ",
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        "${user.cin}",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,

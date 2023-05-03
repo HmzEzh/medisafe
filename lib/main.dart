@@ -59,7 +59,6 @@ void rendezVousTask() async {
 }
 
 Future<void> main() async {
- 
   WidgetsFlutterBinding.ensureInitialized();
   setup();
   // Workmanager().initialize(callbackDispatcher);
@@ -75,15 +74,14 @@ Future<void> main() async {
   await Noti.initialize(flutterLocalNotificationsPlugin);
   // Define the task constraints
   setup();
-  runApp(MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => HomeProvider()),
-      ],
-      child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => HomeProvider()),
+  ], child: const MyApp()));
 
   Medicament.addCat();
 }
-enum LogMode {loggedin,loggedOut,flashscreen}
+
+enum LogMode { loggedin, loggedOut, flashscreen }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -118,16 +116,18 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-       title: 'Flutter Demo',
+      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => logmode == LogMode.flashscreen ? FlashScreen() : logmode == LogMode.loggedOut ? const LoginScreen() :  MyHomePage(
-       
-      )
+        '/': (context) => logmode == LogMode.flashscreen
+            ? FlashScreen()
+            : logmode == LogMode.loggedOut
+                ? const LoginScreen()
+                : MyHomePage()
         // {
         //   if (logmode == LogMode.loggedOut) {
         //     return const LoginScreen();
@@ -144,10 +144,8 @@ class MyAppState extends State<MyApp> {
   }
 }
 
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
-  
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();

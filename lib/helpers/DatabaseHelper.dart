@@ -22,15 +22,14 @@ import '../models/raport.dart';
 import '../screens/controllers/TrackerController.dart';
 import '../service/serviceLocator.dart';
 
-
 class DatabaseHelper {
   static UserService userService = UserService();
   static User utili = User.init(
       nom: "DOE",
       prenom: "Jhon",
+      cin: "BH193819",
       date_naissance: "1993-07-23",
       address: "3474 Tail Ends Road",
-      age: 32,
       taille: 183,
       poids: 85,
       email: "jhondoe@gmail.com",
@@ -153,28 +152,29 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nom TEXT NOT NULL,
         prenom TEXT NOT NULL,
+        cin TEXT NOT NULL,
         date_naissance TEXT NOT NULL,
         address TEXT NOT NULL,
-        age INTEGER NOT NULL,
         taille INTEGER NOT NULL,
         poids INTEGER NOT NULL,
         email TEXT NOT NULL,
         password TEXT NOT NULL,
         tele TEXT NOT NULL,
         blood TEXT NOT NULL,
+        gender TEXT NOT NULL,
         image BLOB
       );
     ''');
 
-    await db.execute('''
-  INSERT INTO user (nom, prenom, date_naissance, address, age, taille, poids, email, password, tele, blood, gender, image)
+    /*await db.execute('''
+  INSERT INTO user (nom, prenom, cin, date_naissance, address, taille, poids, email, password, tele, blood, gender, image)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''', [
       utili.nom,
       utili.prenom,
+      utili.cin,
       utili.date_naissance,
       utili.address,
-      utili.age,
       utili.taille,
       utili.poids,
       utili.email,
@@ -183,7 +183,7 @@ class DatabaseHelper {
       utili.blood,
       utili.gender,
       imageBytes
-    ]);
+    ]);*/
 
     print("creating tables!!!!!!!!");
   }
@@ -613,9 +613,11 @@ class DatabaseHelper {
         raport.datePrevu = HistoriqueDoze.fromMap(item).datePrevu;
         raport.remarque = HistoriqueDoze.fromMap(item).remarque;
         raport.valeur = HistoriqueDoze.fromMap(item).valeur;
-        List<Map<String, dynamic>> medRslt =await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament);
+        List<Map<String, dynamic>> medRslt =
+            await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament);
         Medicament med = Medicament.fromMap(medRslt[0]);
-        List<Map<String, dynamic>> doseRslt =await getDozeById(HistoriqueDoze.fromMap(item).idDoze);
+        List<Map<String, dynamic>> doseRslt =
+            await getDozeById(HistoriqueDoze.fromMap(item).idDoze);
         Doze doze = Doze.fromMap(doseRslt[0]);
         raport.name = med.title;
         raport.dateEnrg = doze.heure;
@@ -647,23 +649,26 @@ class DatabaseHelper {
   }
 
   // report pdf
-  Future<List<Raport>> raportApiPdf(DateTime datedebut, DateTime datefin, Medicament? med) async {
+  Future<List<Raport>> raportApiPdf(
+      DateTime datedebut, DateTime datefin, Medicament? med) async {
     String debut = Utils.formatDate(datedebut);
     String fin = Utils.formatDate(datefin);
     List<Raport> res = [];
-     late List<Map<String, Object?>> loop1;
+    late List<Map<String, Object?>> loop1;
     if (med == null) {
-      loop1 = await db.rawQuery("SELECT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu AND idMedicament");
-
+      loop1 = await db.rawQuery(
+          "SELECT * FROM historiqueDoze WHERE datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu AND idMedicament");
     } else {
       int idMed = med.id;
-      loop1 = await db.query("historiqueDoze WHERE idMedicament = $idMed AND datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu AND idMedicament");
-
+      loop1 = await db.query(
+          "historiqueDoze WHERE idMedicament = $idMed AND datePrevu BETWEEN '$debut' AND '$fin' ORDER BY datePrevu AND idMedicament");
     }
     for (var item in loop1) {
       Raport raport = new Raport();
-      List<Map<String, dynamic>> medRslt =await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament);
-      List<Map<String, dynamic>> doseRslt =await getDozeById(HistoriqueDoze.fromMap(item).idDoze);
+      List<Map<String, dynamic>> medRslt =
+          await getMedicamentById(HistoriqueDoze.fromMap(item).idMedicament);
+      List<Map<String, dynamic>> doseRslt =
+          await getDozeById(HistoriqueDoze.fromMap(item).idDoze);
       Medicament med = Medicament.fromMap(medRslt[0]);
       Doze doze = Doze.fromMap(doseRslt[0]);
       raport.name = med.title;
@@ -672,7 +677,7 @@ class DatabaseHelper {
       raport.remarque = HistoriqueDoze.fromMap(item).remarque;
       raport.valeur = HistoriqueDoze.fromMap(item).valeur;
       raport.dateEnrg = doze.heure;
-      res.add(raport) ;
+      res.add(raport);
     }
 
     return res;
@@ -698,7 +703,7 @@ class DatabaseHelper {
       'dateFin': dateFin,
     };
     int id = await _db.insert("tracker", data);
-print(data);
+    print(data);
 
     await trackerController.createTracker(2, name, dateDebut, dateFin, type);
     return id;
@@ -806,9 +811,11 @@ print(data);
   // }
   Future<double> getHighest(int idTracker) async {
     try {
-      final results = await _db.query("mesure",
-          where: 'idTracker = ?', whereArgs: [idTracker]);
-      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
+      final results = await _db
+          .query("mesure", where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results
+          .map((mesure) => double.parse(mesure['value'] as String))
+          .toList();
       final maxValue = values.isNotEmpty ? values.reduce(max) : 0.0;
       return maxValue;
     } on FormatException catch (e) {
@@ -822,12 +829,13 @@ print(data);
     }
   }
 
-
   Future<double> getLowest(int idTracker) async {
     try {
-      final results = await _db.query("mesure",
-          where: 'idTracker = ?', whereArgs: [idTracker]);
-      final values = results.map((mesure) => double.parse(mesure['value'] as String)).toList();
+      final results = await _db
+          .query("mesure", where: 'idTracker = ?', whereArgs: [idTracker]);
+      final values = results
+          .map((mesure) => double.parse(mesure['value'] as String))
+          .toList();
       final minValue = values.isNotEmpty ? values.reduce(min) : 0.0;
       return minValue;
     } on FormatException catch (e) {

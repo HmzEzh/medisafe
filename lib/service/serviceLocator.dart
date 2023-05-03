@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:medisafe/controller/user/UpdateUserController.dart';
 import 'package:medisafe/network/api/TrackerApi.dart';
+import 'package:medisafe/network/api/user/UpdateUserApi.dart';
 import 'package:medisafe/network/repositories/TrackerRepository.dart';
+import 'package:medisafe/network/repositories/User/UpdateUserRepository.dart';
 import 'package:medisafe/screens/controllers/TrackerController.dart';
 import '../controller/user/createUserController.dart';
 import '../controller/user/logOutController.dart';
@@ -71,7 +74,6 @@ Future<void> setup() async {
   // craete user controller
   getIt.registerSingleton(CreateUserController());
 
-
   // //user information controller
   // getIt.registerSingleton(UserDetailController());
   // //update user information controller
@@ -86,4 +88,8 @@ Future<void> setup() async {
   //  getIt.registerSingleton(CollectionController());
   // //favorites/joined courses
   //  getIt.registerSingleton(JoinedFavoritesCoursesController());
+
+  getIt.registerSingleton(UpdateUserApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(UpdateUserRepository(getIt<UpdateUserApi>()));
+  getIt.registerSingleton(UpdateUserController());
 }

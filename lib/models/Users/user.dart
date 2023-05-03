@@ -8,9 +8,9 @@ class User {
   late int id;
   late String nom;
   late String prenom;
+  late String cin;
   late String date_naissance;
   late String address;
-  late int age;
   late int taille;
   late int poids;
   late String email;
@@ -24,9 +24,24 @@ class User {
       {required this.id,
       required this.nom,
       required this.prenom,
+      required this.cin,
       required this.date_naissance,
       required this.address,
-      required this.age,
+      required this.taille,
+      required this.poids,
+      required this.email,
+      required this.password,
+      required this.tele,
+      required this.blood,
+      required this.gender,
+      required this.image});
+
+  User.create(
+      {required this.nom,
+      required this.prenom,
+      required this.cin,
+      required this.date_naissance,
+      required this.address,
       required this.taille,
       required this.poids,
       required this.email,
@@ -40,9 +55,9 @@ class User {
       {required this.id,
       required this.nom,
       required this.prenom,
+      required this.cin,
       required this.date_naissance,
       required this.address,
-      required this.age,
       required this.taille,
       required this.poids,
       required this.email,
@@ -54,9 +69,9 @@ class User {
   User.init(
       {required this.nom,
       required this.prenom,
+      required this.cin,
       required this.date_naissance,
       required this.address,
-      required this.age,
       required this.taille,
       required this.poids,
       required this.email,
@@ -67,11 +82,12 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'nom': nom,
       'prenom': prenom,
+      'cin': cin,
       'date_naissance': date_naissance,
       'address': address,
-      'age': age,
       'taille': taille,
       'poids': poids,
       'email': email,
@@ -83,14 +99,14 @@ class User {
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
+  factory User.fromMap(Map<dynamic, dynamic> map) {
     return User(
         id: map['id'] as int,
         nom: map['nom'] as String,
         prenom: map['prenom'] as String,
+        cin: map['cin'] as String,
         date_naissance: map['date_naissance'] as String,
         address: map['address'] as String,
-        age: map['age'] as int,
         taille: map['taille'] as int,
         poids: map['poids'] as int,
         email: map['email'] as String,

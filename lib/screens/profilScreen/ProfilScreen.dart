@@ -28,7 +28,7 @@ class ProfilScreen extends StatefulWidget {
 
 class _ProfilScreen extends State<ProfilScreen> {
   final UserService userService = UserService();
-   final logoutController = getIt<LogoutController>();
+  final logoutController = getIt<LogoutController>();
 
   late Future<User> _user;
   final storage = new FlutterSecureStorage();
@@ -40,10 +40,12 @@ class _ProfilScreen extends State<ProfilScreen> {
     super.initState();
     _user = userService.getUserById(widget.userId);
   }
-   deleteToken() async {
+
+  deleteToken() async {
     await storage.delete(key: 'token');
   }
-   Future logout() async {
+
+  Future logout() async {
     Navigator.pop(context);
     showDialog(
         barrierDismissible: false,
@@ -65,82 +67,81 @@ class _ProfilScreen extends State<ProfilScreen> {
               )),
             ));
     try {
-      bool response = await logoutController.logout(await PlatformDeviceId.getDeviceId ?? "");
+      bool response = await logoutController
+          .logout(await PlatformDeviceId.getDeviceId ?? "");
+      userService.deleteUser(1);
       print(await PlatformDeviceId.getDeviceId ?? "");
-      if(response){
+      if (response) {
         deleteToken();
-        Navigator.pop(context) ;
+        Navigator.pop(context);
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-          (route) => false);
-      }
-      else{
-        Navigator.pop(context) ;
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (route) => false);
+      } else {
+        Navigator.pop(context);
       }
       //TODO: delete all data in all tabels
       // Provider.of<CollectionProvider>(context, listen: false).deleteData();
       // Provider.of<UserProvider>(context, listen: false).deleteData();
     } catch (e) {
       Navigator.pop(context);
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                 
-                  buttonPadding: EdgeInsets.zero,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  contentPadding:
-                      const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
-                  title: const Text(
-                    'La connexion a échoué',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(
-                            left: 8, right: 8, bottom: 24),
-                        child: Text(
-                          e.toString(),
-                          textAlign: TextAlign.center,
-                        ),
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                buttonPadding: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                contentPadding: const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
+                title: const Text(
+                  'La connexion a échoué',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin:
+                          const EdgeInsets.only(left: 8, right: 8, bottom: 24),
+                      child: Text(
+                        e.toString(),
+                        textAlign: TextAlign.center,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                              child: InkWell(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: InkWell(
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                          ),
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                                border: Border(
+                              top: BorderSide(color: Colors.grey),
+                            )),
+                            height: 50,
+                            child: const Center(
+                              child: Text("OK",
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w600)),
                             ),
-                            onTap: () => Navigator.pop(context),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                top: BorderSide(color: Colors.grey),
-                              )),
-                              height: 50,
-                              child: const Center(
-                                child: Text("OK",
-                                    style: TextStyle(
-                                        color: Colors.blue,
-                                        fontWeight: FontWeight.w600)),
-                              ),
-                            ),
-                          ))
-                        ],
-                      )
-                    ],
-                  ),
-                ));
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //   content: Text('Error: ${e.toString()}'),
-        //   backgroundColor: Colors.red.shade300,
-        // ));
-      }
+                          ),
+                        ))
+                      ],
+                    )
+                  ],
+                ),
+              ));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text('Error: ${e.toString()}'),
+      //   backgroundColor: Colors.red.shade300,
+      // ));
+    }
   }
 
   @override
@@ -475,11 +476,11 @@ class _ProfilScreen extends State<ProfilScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                 Navigator.push<dynamic>(
+                                Navigator.push<dynamic>(
                                   context,
                                   MaterialPageRoute<dynamic>(
                                       builder: (BuildContext context) =>
-                                        ReportMedicamentsScreen()),
+                                          ReportMedicamentsScreen()),
                                 );
                               },
                               child: Container(
@@ -675,97 +676,110 @@ class _ProfilScreen extends State<ProfilScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                               showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    insetPadding:
-                                        EdgeInsets.symmetric(horizontal: 60),
-                                    buttonPadding: EdgeInsets.zero,
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0))),
-                                    contentPadding: const EdgeInsets.fromLTRB(
-                                        0.0, 24.0, 0.0, 0.0),
-                                    title: const Text(
-                                      'Déconnexion',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Container(
-                                          width: 200,
-                                          margin: const EdgeInsets.only(
-                                              left: 8, right: 8, bottom: 24),
-                                          child: const Text(
-                                            "Voulez-vous vraiment vous déconnecter ?",
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          insetPadding: EdgeInsets.symmetric(
+                                              horizontal: 60),
+                                          buttonPadding: EdgeInsets.zero,
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0))),
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  0.0, 24.0, 0.0, 0.0),
+                                          title: const Text(
+                                            'Déconnexion',
                                             textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600),
                                           ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                child: InkWell(
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                bottomLeft: Radius.circular(10),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                width: 200,
+                                                margin: const EdgeInsets.only(
+                                                    left: 8,
+                                                    right: 8,
+                                                    bottom: 24),
+                                                child: const Text(
+                                                  "Voulez-vous vraiment vous déconnecter ?",
+                                                  textAlign: TextAlign.center,
+                                                ),
                                               ),
-                                              onTap: () =>
-                                                  Navigator.pop(context),
-                                              child: Container(
-                                                decoration: const BoxDecoration(
-                                                    border: Border(
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                      child: InkWell(
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      bottomLeft:
+                                                          Radius.circular(10),
+                                                    ),
+                                                    onTap: () =>
+                                                        Navigator.pop(context),
+                                                    child: Container(
+                                                      decoration: const BoxDecoration(
+                                                          border: Border(
+                                                              top: BorderSide(
+                                                                  color: Colors
+                                                                      .grey),
+                                                              right: BorderSide(
+                                                                  color: Colors
+                                                                      .grey))),
+                                                      height: 50,
+                                                      child: const Center(
+                                                        child: Text("Annuler",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.blue,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600)),
+                                                      ),
+                                                    ),
+                                                  )),
+                                                  Expanded(
+                                                      child: InkWell(
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      bottomRight:
+                                                          Radius.circular(10),
+                                                    ),
+                                                    onTap: () {
+                                                      logout();
+                                                      /*userService
+                                                          .truncateTable();*/
+                                                    },
+                                                    child: Container(
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                              border: Border(
                                                         top: BorderSide(
                                                             color: Colors.grey),
-                                                        right: BorderSide(
-                                                            color:
-                                                                Colors.grey))),
-                                                height: 50,
-                                                child: const Center(
-                                                  child: Text("Annuler",
-                                                      style: TextStyle(
-                                                          color: Colors.blue,
-                                                          fontWeight:
-                                                              FontWeight.w600)),
-                                                ),
-                                              ),
-                                            )),
-                                            Expanded(
-                                                child: InkWell(
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                bottomRight:
-                                                    Radius.circular(10),
-                                              ),
-                                              onTap: () => logout(),
-                                              child: Container(
-                                                decoration: const BoxDecoration(
-                                                    border: Border(
-                                                  top: BorderSide(
-                                                      color: Colors.grey),
-                                                )),
-                                                height: 50,
-                                                child: const Center(
-                                                  child: Text(
-                                                    "Déconnexion",
-                                                    style: TextStyle(
-                                                        color: Colors.blue),
-                                                  ),
-                                                ),
-                                              ),
-                                            ))
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ));
+                                                      )),
+                                                      height: 50,
+                                                      child: const Center(
+                                                        child: Text(
+                                                          "Déconnexion",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.blue),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ))
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ));
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -833,4 +847,3 @@ class _ProfilScreen extends State<ProfilScreen> {
     );
   }
 }
-

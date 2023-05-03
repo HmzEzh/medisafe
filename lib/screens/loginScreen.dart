@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medisafe/service/UserServices/UserService.dart';
 
 import '../controller/user/loginController.dart';
 import '../main.dart';
@@ -27,10 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool passwdListner = false;
   bool emailListner = false;
 
-   
-   final loginController = getIt<LoginController>();
+  final loginController = getIt<LoginController>();
 
-
+  UserService userService = UserService();
 
   // final resetpassword = getIt.get<DioClient>();
 
@@ -58,12 +61,47 @@ class _LoginScreenState extends State<LoginScreen> {
               ));
       try {
         //TODO:
-        Map user = await loginController.login(emailController.text, passwordController.text);
-        print(user["email"]) ;
+        Map _user = await loginController.login(
+            emailController.text, passwordController.text);
+        print(_user);
+        print("the nom of the user is ${_user["nom"]}");
+        print("the prenom of the user is ${_user["prenom"]}");
+        print("the cin of the user is ${_user["cin"]}");
+        print("the naissance of the user is ${_user["date_naissance"]}");
+        print("the address of the user is ${_user["address"]}");
+        print("the taille of the user is ${_user["taille"]}");
+        print("the poids of the user is ${_user["poids"]}");
+        print("the email of the user is ${_user["email"]}");
+        print("the password of the user is ${_user["password"]}");
+        print("the tele of the user is ${_user["tele"]}");
+        print("the blood of the user is ${_user["blood"]}");
+        print("the gender of the user is ${_user["gender"]}");
+
+        //User user = User.fromMap(_user);
+        User user = User.create(
+            nom: _user["nom"],
+            prenom: _user["prenom"],
+            cin: _user["cin"],
+            date_naissance: _user["date_naissance"],
+            address: _user["address"],
+            taille: double.parse(_user["taille"]).truncate(),
+            poids: double.parse(_user["poids"]).truncate(),
+            email: _user["email"],
+            password: _user["password"],
+            tele: _user["tele"],
+            blood: _user["blood"],
+            gender: _user["gender"],
+            image: base64.decode(_user["image"]));
+
+        userService.insertUser(user);
+        /*var count = userService.getUsersCount(); 
+        print("the number of users is ${count}");*/
+        //print(base64.decode(_user["image"]));
+        //print(user.toMap());
+
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) =>  MyHomePage()),
+            MaterialPageRoute(builder: (context) => MyHomePage()),
             (route) => false);
-        
       } catch (e) {
         Navigator.pop(context);
         showDialog(
@@ -265,7 +303,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     right: 16,
                                                     bottom: 24),
                                                 child: Text(
-                                                 
                                                   'Nous venons d\'envoyer un e-mail de réinitialisation de mot de passe à  $email. quand vous recevez cet e-mail, cliquez sur le lien qu\'il contient pour réinitialiser votre mot de passe',
                                                   textAlign: TextAlign.center,
                                                   style:
@@ -439,7 +476,8 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               child: Text(
                 "S'inscrire plus tard",
-                style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 15),
+                style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255), fontSize: 15),
               )),
         ),
         body: Form(
@@ -459,7 +497,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                           SizedBox(height: size.height * 0.04),
+                        SizedBox(height: size.height * 0.04),
                         // Center(
                         //   child: Container(
                         //     margin: const EdgeInsets.only(

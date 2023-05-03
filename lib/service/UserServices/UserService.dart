@@ -9,7 +9,25 @@ class UserService {
 
   void insertUser(User user) async {
     Database db = await instance.database;
-    db.insert("user", user.toMap());
+    //db.insert("user", user.toMap());
+    await db.execute('''
+  INSERT INTO user (nom, prenom, cin, date_naissance, address, taille, poids, email, password, tele, blood, gender, image)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+''', [
+      user.nom,
+      user.prenom,
+      user.cin,
+      user.date_naissance,
+      user.address,
+      user.taille,
+      user.poids,
+      user.email,
+      user.password,
+      user.tele,
+      user.blood,
+      user.gender,
+      user.image
+    ]);
   }
 
   Future<List<User>> getAllUsers() async {
@@ -38,6 +56,15 @@ class UserService {
     );
   }
 
+  Future<int> deleteUser(int id) async {
+    Database db = await instance.database;
+    return await db.delete(
+      "rendezVous",
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
   Future<int> updateUserImage(int id, List<int> imageBytes) async {
     final db = await instance.database;
     return await db.update(
@@ -60,5 +87,11 @@ class UserService {
         await db.rawQuery('SELECT name FROM sqlite_master WHERE type="table"');
     final tableNames = result.map((row) => row['name'] as String).toList();
     return tableNames;
+  }
+
+  Future<void> truncateTable() async {
+    final db = await instance.database;
+    await db.execute('DELETE FROM user');
+    //await db.execute('VACUUM'); // optional: reclaim the unused disk space
   }
 }

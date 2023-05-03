@@ -1,5 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:medisafe/main.dart';
+import 'package:medisafe/models/Users/user.dart';
+import 'package:medisafe/service/UserServices/UserService.dart';
+import 'package:provider/provider.dart';
 
 import '../controller/user/createUserController.dart';
 import '../network/dioClient.dart';
@@ -24,8 +31,12 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   bool emailListner = false;
   bool firstnameListner = false;
   bool lastnameListner = false;
+
+  UserService userService = UserService();
+  CreateUserController createUserController = CreateUserController();
+
   //TODO:
-   final craeteUserController = getIt.get<CreateUserController>();
+  final craeteUserController = getIt.get<CreateUserController>();
 
   Future<void> create() async {
     if (_formKey.currentState!.validate()) {
@@ -34,8 +45,8 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
           barrierColor: Color.fromARGB(0, 0, 0, 0),
           context: context,
           builder: (BuildContext context) => WillPopScope(
-             onWillPop: () async => false,
-            child: Center(
+                onWillPop: () async => false,
+                child: Center(
                     child: Container(
                   width: 100,
                   height: 100,
@@ -47,7 +58,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                     radius: 20,
                   )),
                 )),
-          ));
+              ));
       try {
         //TODO:
         dynamic response = await craeteUserController.createuser(
@@ -75,7 +86,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                             left: 8, right: 8, bottom: 24),
                         child: Text(
                           //TODO:
-                           "Nous venons d'envoyer un e-mail de confirmation à ${emailController.text}, quand vous recevez cet e-mail, cliquez sur le lien qu'il contient pour confirmer votre inscription",
+                          "Nous venons d'envoyer un e-mail de confirmation à ${emailController.text}, quand vous recevez cet e-mail, cliquez sur le lien qu'il contient pour confirmer votre inscription",
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -210,7 +221,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           shadowColor: Colors.transparent,
-          backgroundColor:Color.fromARGB(255, 27, 62, 92),
+          backgroundColor: Color.fromARGB(255, 27, 62, 92),
           title: TextButton.icon(
             style: ButtonStyle(
               // minimumSize : MaterialStateProperty.all(Size(0,0)),
@@ -223,13 +234,14 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             },
             label: Text(
               "Retour",
-              style: TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: 15),
+              style: TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255), fontSize: 15),
             ),
             icon: Container(
                 width: 10,
                 height: 30,
-                child:
-                    Icon(Icons.arrow_back_ios, size: 18, color: Color.fromARGB(255, 255, 255, 255))),
+                child: Icon(Icons.arrow_back_ios,
+                    size: 18, color: Color.fromARGB(255, 255, 255, 255))),
           ),
         ),
         backgroundColor: Colors.white,
@@ -240,8 +252,9 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
               width: size.width,
               child: Container(
                 alignment: Alignment.center,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30,),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                 ),
@@ -255,7 +268,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                         //   child: Container(
                         //       margin: const EdgeInsets.only(bottom: 8, ),
                         //       width: 128,
-                             
+
                         //     child: Image(image: AssetImage(
                         //                   "assets/images/logo_.png")),
                         //     ),
@@ -428,7 +441,36 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                                         firstnameListner &&
                                         lastnameListner
                                     ? create
-                                    : () {},
+                                    : () async {
+                                        final ByteData imageData =
+                                            await rootBundle.load(
+                                                'assets/images/default.png');
+                                        final Uint8List image =
+                                            imageData.buffer.asUint8List();
+                                        User user = User.create(
+                                            nom: firstnameController.text,
+                                            prenom: lastnameController.text,
+                                            cin: '',
+                                            date_naissance: '',
+                                            address: '',
+                                            taille: 0,
+                                            poids: 0,
+                                            email: emailController.text,
+                                            password: passwordController.text,
+                                            tele: '',
+                                            blood: '',
+                                            gender: '',
+                                            image: image);
+
+                                        userService.insertUser(user);
+
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MyHomePage()),
+                                                (route) => false);
+                                      },
                                 style: ElevatedButton.styleFrom(
                                     shadowColor: Colors.transparent,
                                     splashFactory: emailListner && passwdListner
