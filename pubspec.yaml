@@ -65,8 +65,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   device_info_plus: ^8.2.2
   platform_device_id: ^1.0.1
-  cryptography: ^2.5.0
-  cryptography_flutter: ^2.3.0
+  encrypt: ^5.0.1
 
 
 

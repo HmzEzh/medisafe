@@ -7,7 +7,7 @@ part of 'Doze.dart';
 // **************************************************************************
 
 Doze _$DozeFromJson(Map<String, dynamic> json) => Doze(
-      id: json['id'] as int?,
+      id: json['id'] as int,
       idMedicament: json['idMedicament'] as int,
       heure: json['heure'] as String,
       suspend: json['suspend'] as bool,

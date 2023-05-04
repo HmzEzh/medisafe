@@ -7,6 +7,7 @@ class Rappel extends ChangeNotifier {
   int nombre=0;
   int idTracker = 0;
   String type="";
+  String motDePasse="";
   List horaires=[];
 
   static double youssef=0;
@@ -49,6 +50,10 @@ class Rappel extends ChangeNotifier {
     category = t;
     notifyListeners();
   }
+  void setMotDePasse(String t){
+    motDePasse = t;
+    notifyListeners();
+  }
   String getNom(){
     return nom;
   }
@@ -63,6 +68,9 @@ class Rappel extends ChangeNotifier {
   }
   String getCategory(){
     return category;
+  }
+  String getMotDePasse(){
+    return motDePasse;
   }
 
 }

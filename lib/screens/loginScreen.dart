@@ -3,10 +3,13 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
 
 import '../controller/user/loginController.dart';
+import '../helpers/MyEncryptionDecryption.dart';
 import '../main.dart';
+import '../models/Rappel.dart';
 import '../models/Users/user.dart';
 import '../network/dioClient.dart';
 import '../service/serviceLocator.dart';
@@ -32,6 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool emailListner = false;
 
   final loginController = getIt<LoginController>();
+  final DatabaseHelper database = DatabaseHelper.instance;
 
   UserService userService = UserService();
 
@@ -108,6 +112,12 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => MyHomePage()),
             (route) => false);
+        var motdepasse = await dbHelper.getUsers();
+        var passe = motdepasse[0]["password"];
+        Rappel rap = Rappel();
+        rap.motDePasse = passe;
+        MyEncryptionDecryption();
+        database.insertAll();
       } catch (e) {
         Navigator.pop(context);
         showDialog(

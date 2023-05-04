@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/date_symbol_data_file.dart';
+import 'package:medisafe/helpers/MyEncryptionDecryption.dart';
+import 'package:medisafe/models/Rappel.dart';
 import 'package:medisafe/models/RendezVous.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/flashscreen.dart';
@@ -79,6 +81,11 @@ Future<void> main() async {
   ], child: const MyApp()));
 
   Medicament.addCat();
+  // var motdepasse = await dbHelper.getUsers();
+  //  var passe = motdepasse[0]["password"];
+  //  Rappel rap = Rappel();
+  //  rap.motDePasse = passe;
+  //  MyEncryptionDecryption();
 }
 
 enum LogMode { loggedin, loggedOut, flashscreen }
@@ -157,6 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late int _selectedIndex = nbr;
   @override
   void initState() {
+    dbHelper.doPasse();
     // Workmanager().registerPeriodicTask(
     //   'mTask',
     //   'mTask',
@@ -181,6 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         // appBar: AppBar(
         //   title: Text(appbar[_selectedIndex]),

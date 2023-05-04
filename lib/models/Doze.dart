@@ -3,7 +3,7 @@ part 'Doze.g.dart';
 
 @JsonSerializable()
 class Doze {
-  int? id;
+  late int id;
   late int idMedicament;
   late String heure;
   late bool suspend;
