@@ -15,8 +15,8 @@ User _$UserFromJson(Map<dynamic, dynamic> json) => User(
           ? "2023-05-05"
           : json['date_naissance'] as String,
       address: json['address'] == null ? "" : json['address'] as String,
-      taille: json['taille'] == null ? 0 : int.parse(json['taille']) as int,
-      poids: json['poids'] == null ? 0 : int.parse(json['poids']) as int,
+      taille: json['taille'] == null ? "0" : json['taille'] as String,
+      poids: json['poids'] == null ? "0" : json['poids'] as String,
       email: json['email'] == null ? "" : json['email'] as String,
       password: json['password'] == null ? "" : json['password'] as String,
       tele: json['tele'] == null ? "" : json['tele'] as String,

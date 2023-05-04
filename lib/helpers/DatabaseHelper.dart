@@ -31,7 +31,6 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 
 import 'MyEncryptionDecryption.dart';
 
-
 class DatabaseHelper {
   static UserService userService = UserService();
   static User utili = User.init(
@@ -40,8 +39,8 @@ class DatabaseHelper {
       cin: "BH193819",
       date_naissance: "1993-07-23",
       address: "3474 Tail Ends Road",
-      taille: 183,
-      poids: 85,
+      taille: "183",
+      poids: "85",
       email: "jhondoe@gmail.com",
       password: "testjhon",
       tele: "+212 615-91203",
@@ -56,8 +55,6 @@ class DatabaseHelper {
   static const _databaseVersion = 1;
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
-
-
 
   late Database _db;
   Future<Database> get database async {
@@ -171,8 +168,8 @@ class DatabaseHelper {
         cin TEXT NOT NULL,
         date_naissance TEXT NOT NULL,
         address TEXT NOT NULL,
-        taille INTEGER NOT NULL,
-        poids INTEGER NOT NULL,
+        taille TEXT NOT NULL,
+        poids TEXT NOT NULL,
         email TEXT NOT NULL,
         password TEXT NOT NULL,
         tele TEXT NOT NULL,
@@ -376,7 +373,6 @@ class DatabaseHelper {
     return id;
   }
 
-
   Future<List<Map<String, dynamic>>> getMedicaments() async {
     await init();
     return _db.query('medicament', orderBy: "id");
@@ -428,7 +424,6 @@ class DatabaseHelper {
     int id2 = await _db.insert("doze", data);
     return id2;
   }
-
 
   Future<List<Map<String, dynamic>>> getDozes() async {
     await init();
@@ -722,8 +717,10 @@ class DatabaseHelper {
     };
     int id = await _db.insert("tracker", data);
     print(data);
-    print("encryption de youssef: ${MyEncryptionDecryption.encryptAES("youssef").base64}");
-    print("decryption de youssef: ${MyEncryptionDecryption.decryptAES("CG78bi89duEuqIdf2NHHDg==")}");
+    print(
+        "encryption de youssef: ${MyEncryptionDecryption.encryptAES("youssef").base64}");
+    print(
+        "decryption de youssef: ${MyEncryptionDecryption.decryptAES("CG78bi89duEuqIdf2NHHDg==")}");
     //Encrypted.fromBase64("youssefo")
     //await trackerController.createTracker(10, name, dateDebut, dateFin, type);
     return id;
@@ -736,7 +733,7 @@ class DatabaseHelper {
       trackers.add(Tracker.fromMap(item));
     }
     //print("avant");
-    for(Tracker aa in await trackerController.getAllTrackers()){
+    for (Tracker aa in await trackerController.getAllTrackers()) {
       print(aa.nom);
       await insertTracker(aa.nom, aa.type, 7);
     }
@@ -793,7 +790,6 @@ class DatabaseHelper {
 
     return id;
   }
-
 
   Future<int> insertMesureForGraph(
       int idTracker, double value, String date) async {
@@ -895,13 +891,13 @@ class DatabaseHelper {
     );
   }
 
-
   //Synchronization
 
-  Future<int> insertMedicamentSync(int id, String name,String dateDebut, String dateFin, String type, String category, String forme) async {
+  Future<int> insertMedicamentSync(int id, String name, String dateDebut,
+      String dateFin, String type, String category, String forme) async {
     await init();
     final data = {
-      'id':id,
+      'id': id,
       'nom': MyEncryptionDecryption.decryptAES(name),
       'type': MyEncryptionDecryption.decryptAES(type),
       'category': MyEncryptionDecryption.decryptAES(category),
@@ -914,10 +910,11 @@ class DatabaseHelper {
     return id2;
   }
 
-  Future<int> insertTrackerSync(int idT, String name, String type, String dateDebut, String dateFin) async {
+  Future<int> insertTrackerSync(int idT, String name, String type,
+      String dateDebut, String dateFin) async {
     await init();
     final data = {
-      'id':39,
+      'id': 39,
       'nom': MyEncryptionDecryption.decryptAES(name),
       'type': MyEncryptionDecryption.decryptAES(type),
       'dateDebut': MyEncryptionDecryption.decryptAES(dateDebut),
@@ -932,10 +929,11 @@ class DatabaseHelper {
     return id;
   }
 
-  Future<int> insertMesureSync(int id, int idTracker, String value, String date, String heure) async {
+  Future<int> insertMesureSync(
+      int id, int idTracker, String value, String date, String heure) async {
     await init();
     final data = {
-      'id':id,
+      'id': id,
       'idTracker': idTracker,
       'value': MyEncryptionDecryption.decryptAES(value),
       'date': MyEncryptionDecryption.decryptAES(date),
@@ -946,10 +944,11 @@ class DatabaseHelper {
     return id2;
   }
 
-  Future<int> insertDoseSync(int id,int idMedicament, String heure,bool suspend ) async {
+  Future<int> insertDoseSync(
+      int id, int idMedicament, String heure, bool suspend) async {
     await init();
     final data = {
-      'id':id,
+      'id': id,
       'idMedicament': idMedicament,
       'heure': MyEncryptionDecryption.decryptAES(heure),
       'suspend': suspend
@@ -959,19 +958,20 @@ class DatabaseHelper {
   }
 
   Future<void> insertAll() async {
-    for(Tracker aa in await trackerController.getAllTrackers()){
+    for (Tracker aa in await trackerController.getAllTrackers()) {
       print(aa.nom);
-    await insertTrackerSync(aa.id, aa.nom, aa.type, aa.dateDebut, aa.dateFin);
+      await insertTrackerSync(aa.id, aa.nom, aa.type, aa.dateDebut, aa.dateFin);
     }
-    for(Medicament aa in await medicamentController.getAllMedicaments()){
+    for (Medicament aa in await medicamentController.getAllMedicaments()) {
       print(aa.title);
-      await insertMedicamentSync(aa.id, aa.title, aa.dateDebut, aa.dateFin, aa.type, aa.category, aa.forme);
+      await insertMedicamentSync(aa.id, aa.title, aa.dateDebut, aa.dateFin,
+          aa.type, aa.category, aa.forme);
     }
-    for(Mesure aa in await mesureController.getAllMesures()){
+    for (Mesure aa in await mesureController.getAllMesures()) {
       print(aa.value);
-      await insertMesureSync(aa.id, aa.idTracker,aa.value,aa.date,aa.heure);
+      await insertMesureSync(aa.id, aa.idTracker, aa.value, aa.date, aa.heure);
     }
-    for(Doze aa in await doseController.getAllDoses()){
+    for (Doze aa in await doseController.getAllDoses()) {
       print(aa.heure);
       await insertDoseSync(aa.id, aa.idMedicament, aa.heure, aa.suspend);
     }
@@ -984,5 +984,4 @@ class DatabaseHelper {
     rap.motDePasse = passe;
     MyEncryptionDecryption();
   }
-
 }

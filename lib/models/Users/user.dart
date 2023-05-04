@@ -12,8 +12,8 @@ class User {
   late String cin;
   late String date_naissance;
   late String address;
-  late int taille;
-  late int poids;
+  late String taille;
+  late String poids;
   late String email;
   late String password;
   late String tele;
@@ -108,8 +108,8 @@ class User {
         cin: map['cin'] as String,
         date_naissance: map['date_naissance'] as String,
         address: map['address'] as String,
-        taille: map['taille'] as int,
-        poids: map['poids'] as int,
+        taille: map['taille'] as String,
+        poids: map['poids'] as String,
         email: map['email'] as String,
         password: map['password'] as String,
         tele: map['tele'] as String,

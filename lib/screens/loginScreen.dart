@@ -103,6 +103,12 @@ class _LoginScreenState extends State<LoginScreen> {
         print("The user id after is ${user.id}");
         print(user);
 
+        User enc = userService.encryptUser(user);
+        User dec = userService.decryptUser(enc);
+
+        print(enc.toMap());
+        print(dec.toMap());
+
         userService.insertUser(user);
         /*var count = userService.getUsersCount(); 
         print("the number of users is ${count}");*/

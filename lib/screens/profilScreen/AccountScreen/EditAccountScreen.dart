@@ -275,6 +275,12 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
             ),
           ],
         ),
+        Divider(
+          color: Colors.grey,
+          height: 2,
+          indent: 52,
+          endIndent: 0,
+        ),
         Row(
           children: [
             Container(
@@ -289,7 +295,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
             Container(
               width: size.width - 60,
               child: TextFormField(
-                keyboardType: TextInputType.phone,
+                keyboardType: TextInputType.text,
                 controller: cinController,
                 decoration: InputDecoration(
                   hintText: 'CIN',
@@ -500,8 +506,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     cin: cinController.text,
                     date_naissance: naissanceController.text,
                     address: addressController.text,
-                    taille: int.parse(tailleController.text),
-                    poids: int.parse(poidsController.text),
+                    taille: tailleController.text,
+                    poids: poidsController.text,
                     email: emailController.text,
                     password: passwordController.text,
                     tele: teleController.text,

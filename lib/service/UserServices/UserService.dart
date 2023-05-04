@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:medisafe/helpers/MyEncryptionDecryption.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/models/Users/user.dart';
@@ -94,5 +95,46 @@ class UserService {
     final db = await instance.database;
     await db.execute('DELETE FROM user');
     //await db.execute('VACUUM'); // optional: reclaim the unused disk space
+  }
+
+  User encryptUser(User user) {
+    User new_user = User(
+        id: user.id,
+        nom: MyEncryptionDecryption.encryptAES(user.nom).base64,
+        prenom: MyEncryptionDecryption.encryptAES(user.prenom).base64,
+        cin: MyEncryptionDecryption.encryptAES(user.cin).base64,
+        date_naissance:
+            MyEncryptionDecryption.encryptAES(user.date_naissance).base64,
+        address: MyEncryptionDecryption.encryptAES(user.address).base64,
+        taille: MyEncryptionDecryption.encryptAES(user.taille).base64,
+        poids: MyEncryptionDecryption.encryptAES(user.poids).base64,
+        email: MyEncryptionDecryption.encryptAES(user.email).base64,
+        password: MyEncryptionDecryption.encryptAES(user.password).base64,
+        tele: MyEncryptionDecryption.encryptAES(user.tele).base64,
+        blood: MyEncryptionDecryption.encryptAES(user.blood).base64,
+        gender: MyEncryptionDecryption.encryptAES(user.gender).base64,
+        image: user.image);
+
+    return new_user;
+  }
+
+  User decryptUser(User user) {
+    User new_user = User(
+        id: user.id,
+        nom: MyEncryptionDecryption.decryptAES(user.nom),
+        prenom: MyEncryptionDecryption.decryptAES(user.prenom),
+        cin: MyEncryptionDecryption.decryptAES(user.cin),
+        date_naissance: MyEncryptionDecryption.decryptAES(user.date_naissance),
+        address: MyEncryptionDecryption.decryptAES(user.address),
+        taille: MyEncryptionDecryption.decryptAES(user.taille),
+        poids: MyEncryptionDecryption.decryptAES(user.poids),
+        email: MyEncryptionDecryption.decryptAES(user.email),
+        password: MyEncryptionDecryption.decryptAES(user.password),
+        tele: MyEncryptionDecryption.decryptAES(user.tele),
+        blood: MyEncryptionDecryption.decryptAES(user.blood),
+        gender: MyEncryptionDecryption.decryptAES(user.gender),
+        image: user.image);
+
+    return new_user;
   }
 }
