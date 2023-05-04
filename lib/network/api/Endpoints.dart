@@ -1,6 +1,8 @@
 class Endpoints {
   Endpoints._();
-  static const String baseUrl = "http://10.0.2.2:2023";
+  //static const String baseUrl = "http://10.0.2.2:2023";
+  static const String baseUrl = "http://192.168.11.107:2023";
+
   static const Duration receiveTimeout = Duration(seconds: 60);
   static const Duration connectionTimeout = Duration(seconds: 60);
   static const String login = "/user/login";
