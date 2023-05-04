@@ -55,7 +55,7 @@ class _AccountScreenState extends State<AccountScreen> {
           },
         ),
         title: const Text(
-          "Account",
+          "Compte",
           style: TextStyle(
             fontSize: 23,
             fontWeight: FontWeight.w500,
@@ -347,7 +347,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     Container(
                                       margin: EdgeInsets.only(bottom: 10),
                                       child: const Text(
-                                        "Phone number : ",
+                                        "Télèphone : ",
                                         style: TextStyle(fontSize: 14),
                                       ),
                                     ),
@@ -374,7 +374,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     Container(
                                       margin: EdgeInsets.only(bottom: 10),
                                       child: const Text(
-                                        "Address : ",
+                                        "Adresse : ",
                                         style: TextStyle(fontSize: 14),
                                       ),
                                     ),
@@ -401,7 +401,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     Container(
                                       margin: EdgeInsets.only(bottom: 10),
                                       child: const Text(
-                                        "Blood Type : ",
+                                        "Sang : ",
                                         style: TextStyle(fontSize: 14),
                                       ),
                                     ),
@@ -428,7 +428,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     Container(
                                       margin: EdgeInsets.only(bottom: 10),
                                       child: const Text(
-                                        "Gender : ",
+                                        "Genres : ",
                                         style: TextStyle(fontSize: 14),
                                       ),
                                     ),

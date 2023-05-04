@@ -251,6 +251,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                         fontWeight: FontWeight.w400,
                                         color: Color.fromARGB(255, 61, 77, 85),
                                       ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
                                       "nom, prenom, age, poids...",
@@ -260,6 +261,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                         color:
                                             Color.fromARGB(255, 102, 120, 129),
                                       ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
@@ -467,7 +469,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                           border:
                                               Border.all(color: Colors.white)),
                                       child: const Text(
-                                        "Doctors",
+                                        "Medecins",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
@@ -524,7 +526,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                           border: Border.all(
                                               color: Colors.transparent)),
                                       child: const Text(
-                                        "Report",
+                                        "Rapports",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
@@ -609,7 +611,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                           border:
                                               Border.all(color: Colors.white)),
                                       child: const Text(
-                                        "Settings",
+                                        "Paramètres",
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -668,7 +670,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                           border:
                                               Border.all(color: Colors.white)),
                                       child: const Text(
-                                        "Share",
+                                        "Partager",
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -822,7 +824,7 @@ class _ProfilScreen extends State<ProfilScreen> {
                                           border:
                                               Border.all(color: Colors.white)),
                                       child: const Text(
-                                        "Logout",
+                                        "Déconnexion",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,

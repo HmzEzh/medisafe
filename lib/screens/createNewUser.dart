@@ -51,8 +51,8 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       try {
         //TODO:
         dynamic response = await craeteUserController.createuser(
-            firstnameController.text,
             lastnameController.text,
+            firstnameController.text,
             emailController.text,
             passwordController.text);
         Navigator.pop(context);

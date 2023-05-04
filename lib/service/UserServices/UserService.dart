@@ -98,6 +98,7 @@ class UserService {
   }
 
   User encryptUser(User user) {
+    MyEncryptionDecryption.passe = user.password;
     User new_user = User(
         id: user.id,
         nom: MyEncryptionDecryption.encryptAES(user.nom).base64,
@@ -119,6 +120,7 @@ class UserService {
   }
 
   User decryptUser(User user) {
+    //MyEncryptionDecryption.passe = MyEncryptionDecryption.decryptAES(user.password);
     User new_user = User(
         id: user.id,
         nom: MyEncryptionDecryption.decryptAES(user.nom),

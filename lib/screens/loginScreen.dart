@@ -104,10 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
         print(user);
 
         User enc = userService.encryptUser(user);
-        User dec = userService.decryptUser(enc);
+        //User dec = userService.decryptUser(enc);
 
-        print(enc.toMap());
-        print(dec.toMap());
+        //print(enc.toMap());
+        /*print(dec.toMap());*/
 
         userService.insertUser(user);
         /*var count = userService.getUsersCount(); 

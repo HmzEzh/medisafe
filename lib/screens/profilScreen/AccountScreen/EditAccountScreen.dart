@@ -474,7 +474,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                   color: Colors.white,
                 )),
             const Spacer(),
-            const Text("Edit Profile",
+            const Text("Modifier Profil",
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
