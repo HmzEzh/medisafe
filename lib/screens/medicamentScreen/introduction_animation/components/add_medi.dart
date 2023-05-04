@@ -43,11 +43,13 @@ class _NameMediState extends State<NameMedi> {
     );
 
 
-    return SlideTransition(
-      position: _firstHalfAnimation,
-      child: SlideTransition(
-        position: _secondHalfAnimation,
-        child: name(),
+    return Scaffold(
+      body: SlideTransition(
+        position: _firstHalfAnimation,
+        child: SlideTransition(
+          position: _secondHalfAnimation,
+          child: name(),
+        ),
       ),
     );
   }
@@ -180,24 +182,24 @@ class contenu extends State<name> with TickerProviderStateMixin  {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    // ignore: prefer_const_constructors
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 36.0, left: 30, right: 30),
-                      child: Center(
-                        child: TextField(
-                          onChanged: (text) {
-                            Rappel rap = Rappel();
-                            rap.setNom(text);
+                  // Container(
+                  //   // ignore: prefer_const_constructors
+                  //   child: Padding(
+                  //     padding: EdgeInsets.only(top: 36.0, left: 30, right: 30),
+                  //     child: Center(
+                  //       child: TextField(
+                  //         onChanged: (text) {
+                  //           Rappel rap = Rappel();
+                  //           rap.setNom(text);
 
-                          },
-                          decoration: const InputDecoration(
-                            labelText: 'Enter medicament\'s name',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  //         },
+                  //         decoration: const InputDecoration(
+                  //           labelText: 'Enter medicament\'s name',
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   row2,
                   Row(
                     children: [
@@ -307,14 +309,14 @@ class contenu extends State<name> with TickerProviderStateMixin  {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  for (var i = 0; i < 2; i++)
+                  for (var i = 0; i < 3; i++)
                     Padding(
                       padding: const EdgeInsets.all(4),
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 480),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(32),
-                          color: 0 == i ? Color(0xff132137) : Color(0xffE3E4E4),
+                          color: 1 == i ? Color(0xff132137) : Color(0xffE3E4E4),
                         ),
                         width: 10,
                         height: 10,
@@ -326,10 +328,11 @@ class contenu extends State<name> with TickerProviderStateMixin  {
             FloatingActionButton(
               backgroundColor: Colors.deepPurple,
               onPressed: () {
+                
                 Navigator.push<dynamic>(
                   context,
                   MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) => CareView(),
+                    builder: (BuildContext context) => const CareView(),
                   ),
                 );
               },

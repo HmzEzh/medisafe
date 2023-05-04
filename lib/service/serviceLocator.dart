@@ -7,9 +7,11 @@ import 'package:medisafe/network/repository/tracker/TrackerRepository.dart';
 import 'package:medisafe/network/repository/user/UpdateUserRepository.dart';
 import '../controller/MesureController.dart';
 import '../controller/TrackerController.dart';
+import '../controller/SearchController.dart';
 import '../controller/user/createUserController.dart';
 import '../controller/user/logOutController.dart';
 import '../controller/user/loginController.dart';
+import '../network/api/SearchApi.dart';
 import '../network/api/dose/DoseApi.dart';
 import '../network/api/medicament/MedicamentApi.dart';
 import '../network/api/mesure/MesureApi.dart';
@@ -19,6 +21,7 @@ import '../network/api/user/loginApi.dart';
 import '../network/dioClient.dart';
 import '../network/repository/Medicament/MedicamentRepository.dart';
 import '../network/repository/Mesure/MesureRepository.dart';
+import '../network/repository/Searchrepository.dart';
 import '../network/repository/dose/DoseRepository.dart';
 import '../network/repository/user/createUserRepository.dart';
 import '../network/repository/user/loginRepository.dart';
@@ -30,6 +33,19 @@ final getIt = GetIt.instance;
 Future<void> setup() async {
   getIt.registerSingleton(Dio());
   getIt.registerSingleton(DioClient(getIt<Dio>()));
+
+  // create user
+  getIt.registerSingleton(CreateUserApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(CreateUserRepository(getIt<CreateUserApi>()));
+  // login
+  getIt.registerSingleton(LogInApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(LogInRepository(getIt.get<LogInApi>()));
+  // logout
+  getIt.registerSingleton(LogOutApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(LogOutRepository(getIt.get<LogOutApi>()));
+  // seggestion
+  getIt.registerSingleton(SearchApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(SearchRepository(getIt<SearchApi>()));
 
   getIt.registerSingleton(TrackerApi(dioClient: getIt<DioClient>()));
   getIt.registerSingleton(TrackerRepository(getIt<TrackerApi>()));
@@ -65,15 +81,6 @@ Future<void> setup() async {
   // // create user
   // getIt.registerSingleton(CreateUserApi(dioClient: getIt<DioClient>()));
   // getIt.registerSingleton(CreateUserRepository(getIt<CreateUserApi>()));
-  // create user
-  getIt.registerSingleton(CreateUserApi(dioClient: getIt<DioClient>()));
-  getIt.registerSingleton(CreateUserRepository(getIt<CreateUserApi>()));
-  // login
-  getIt.registerSingleton(LogInApi(dioClient: getIt<DioClient>()));
-  getIt.registerSingleton(LogInRepository(getIt.get<LogInApi>()));
-  // logout
-  getIt.registerSingleton(LogOutApi(dioClient: getIt<DioClient>()));
-  getIt.registerSingleton(LogOutRepository(getIt.get<LogOutApi>()));
 
   getIt.registerSingleton(UpdateUserApi(dioClient: getIt<DioClient>()));
   getIt.registerSingleton(UpdateUserRepository(getIt.get<UpdateUserApi>()));
@@ -106,6 +113,8 @@ Future<void> setup() async {
   getIt.registerSingleton(LogoutController());
   // craete user controller
   getIt.registerSingleton(CreateUserController());
+  // search controller
+  getIt.registerSingleton(SearchController());
 
   getIt.registerSingleton(UpdateUserController());
 

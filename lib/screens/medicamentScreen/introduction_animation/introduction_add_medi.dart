@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../main.dart';
+import 'components/add_name.dart';
 
 class IntroductionAnimationScreen extends StatefulWidget {
   const IntroductionAnimationScreen({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class _IntroductionAnimationScreenState
         child: Stack(
           children: [
            
-            NameMedi(
+            NameMedicament(
               animationController: _animationController!,
             ),
 

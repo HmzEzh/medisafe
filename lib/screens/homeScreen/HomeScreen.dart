@@ -49,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         getTheNumberOfDaysInMonth(DateTime.now().year, DateTime.now().month);
     super.initState();
     _user = userService.getUserById(widget.userId);
+    
   }
 
   final ScrollController _controller = ScrollController();

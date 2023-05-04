@@ -88,14 +88,14 @@ class _CareViewState extends State<CareView>with TickerProviderStateMixin {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                for (var i = 0; i < 2; i++)
+                for (var i = 0; i < 3; i++)
                   Padding(
                     padding: const EdgeInsets.all(4),
                     child: AnimatedContainer(
                       duration: Duration(milliseconds: 480),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32),
-                        color: 1 == i ? Color(0xff132137) : Color(0xffE3E4E4),
+                        color: 2 == i ? Color(0xff132137) : Color(0xffE3E4E4),
                       ),
                       width: 10,
                       height: 10,

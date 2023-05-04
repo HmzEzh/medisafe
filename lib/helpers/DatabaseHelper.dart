@@ -179,7 +179,7 @@ class DatabaseHelper {
       );
     ''');
 
-    /*await db.execute('''
+    await db.execute('''
   INSERT INTO user (nom, prenom, cin, date_naissance, address, taille, poids, email, password, tele, blood, gender, image)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''', [
@@ -196,7 +196,7 @@ class DatabaseHelper {
       utili.blood,
       utili.gender,
       imageBytes
-    ]);*/
+    ]);
 
     print("creating tables!!!!!!!!");
   }

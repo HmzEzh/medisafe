@@ -11,7 +11,8 @@ class LogOutRepository {
       final response = await logoutApi.logOutApi(deviceId);
       return response.data as bool;
     } on DioError catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
+      final errorMessage = DioExceptions(e,e.response!.data["message"]).toString();
+     
       throw errorMessage;
     }
   }
