@@ -12,6 +12,7 @@ import '../main.dart';
 import '../models/Rappel.dart';
 import '../models/Users/user.dart';
 import '../network/dioClient.dart';
+import '../network/dioException.dart';
 import '../service/serviceLocator.dart';
 import 'createNewUser.dart';
 import 'validator.dart';
@@ -118,6 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => MyHomePage()),
             (route) => false);
+      }on DioExceptions catch (e) {
         var motdepasse = await dbHelper.getUsers();
         var passe = motdepasse[0]["password"];
         Rappel rap = Rappel();
@@ -148,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         margin: const EdgeInsets.only(
                             left: 8, right: 8, bottom: 24),
                         child: Text(
-                          e.toString(),
+                          e.message,
                           textAlign: TextAlign.center,
                         ),
                       ),

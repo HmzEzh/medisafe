@@ -207,6 +207,7 @@ if(rap.horaires != null) {
                      Navigator.pop(context);
                      Navigator.pop(context);
                      Navigator.pop(context);
+                     Navigator.pop(context);
 
                   },
                   icon: Flexible(

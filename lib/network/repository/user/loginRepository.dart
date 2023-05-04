@@ -19,7 +19,9 @@ class LogInRepository {
       storeToken((await PlatformDeviceId.getDeviceId ?? ''));
       return response.data;
     } on DioError catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
+      final errorMessage = DioExceptions(e, e.response!.data["message"]);
+      print(errorMessage.message);
+
       throw errorMessage;
     }
   }
