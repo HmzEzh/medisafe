@@ -11,9 +11,10 @@ class UserService {
     Database db = await instance.database;
     //db.insert("user", user.toMap());
     await db.execute('''
-  INSERT INTO user (nom, prenom, cin, date_naissance, address, taille, poids, email, password, tele, blood, gender, image)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  INSERT INTO user (id, nom, prenom, cin, date_naissance, address, taille, poids, email, password, tele, blood, gender, image)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''', [
+      user.id,
       user.nom,
       user.prenom,
       user.cin,
@@ -59,7 +60,7 @@ class UserService {
   Future<int> deleteUser(int id) async {
     Database db = await instance.database;
     return await db.delete(
-      "rendezVous",
+      "user",
       where: 'id = ?',
       whereArgs: [id],
     );

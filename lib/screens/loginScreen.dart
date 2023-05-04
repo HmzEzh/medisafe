@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
         print("the gender of the user is ${_user["gender"]}");
 
         //User user = User.fromMap(_user);
-        User user = User.create(
+        /*User user = User.create(
             nom: _user["nom"],
             prenom: _user["prenom"],
             cin: _user["cin"],
@@ -91,7 +91,13 @@ class _LoginScreenState extends State<LoginScreen> {
             tele: _user["tele"],
             blood: _user["blood"],
             gender: _user["gender"],
-            image: base64.decode(_user["image"]));
+            image: base64.decode(_user["image"]));*/
+
+        User user = User.fromJson(_user);
+        print("The user id before is ${user.id}");
+        user.id = 1;
+        print("The user id after is ${user.id}");
+        print(user);
 
         userService.insertUser(user);
         /*var count = userService.getUsersCount(); 

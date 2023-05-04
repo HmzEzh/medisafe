@@ -70,6 +70,9 @@ class _ProfilScreen extends State<ProfilScreen> {
       bool response = await logoutController
           .logout(await PlatformDeviceId.getDeviceId ?? "");
       userService.deleteUser(1);
+      //userService.truncateTable();
+      print(
+          "deleted user number 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       print(await PlatformDeviceId.getDeviceId ?? "");
       if (response) {
         deleteToken();
@@ -150,7 +153,7 @@ class _ProfilScreen extends State<ProfilScreen> {
     final double haille = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
           title: const Text(
             "Profil",
@@ -164,7 +167,20 @@ class _ProfilScreen extends State<ProfilScreen> {
           backgroundColor: Color.fromARGB(255, 27, 62, 92),
           automaticallyImplyLeading: false,
           centerTitle: false,
-          actions: []),
+          actions: [
+            TextButton(
+                style: ButtonStyle(
+                  // minimumSize : MaterialStateProperty.all(Size(0,0)),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  splashFactory: NoSplash.splashFactory,
+                ),
+                onPressed: () async {
+                  logout();
+                  print("logout");
+                },
+                child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons'),
+                    color: Colors.white))
+          ]),
       body: Container(
         alignment: Alignment.center,
         child: FutureBuilder<User>(

@@ -24,6 +24,7 @@ class EditAccountScreen extends StatefulWidget {
 class _EditAccountScreenState extends State<EditAccountScreen> {
   TextEditingController nomController = TextEditingController();
   TextEditingController prenomController = TextEditingController();
+  TextEditingController cinController = TextEditingController();
   TextEditingController naissanceController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController tailleController = TextEditingController();
@@ -274,6 +275,34 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
             ),
           ],
         ),
+        Row(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(left: 16, right: 16),
+              width: 10,
+              child: Icon(
+                Icons.badge,
+                color: Colors.blue,
+              ),
+            ),
+            Container(
+              width: size.width - 60,
+              child: TextFormField(
+                keyboardType: TextInputType.phone,
+                controller: cinController,
+                decoration: InputDecoration(
+                  hintText: 'CIN',
+                  isDense: true,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ]),
     );
   }
@@ -468,7 +497,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     id: widget.userId,
                     nom: nomController.text,
                     prenom: prenomController.text,
-                    cin: "BH193819",
+                    cin: cinController.text,
                     date_naissance: naissanceController.text,
                     address: addressController.text,
                     taille: int.parse(tailleController.text),
@@ -481,7 +510,8 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                     image: image);
 
                 userService.updateUser(update, widget.userId);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+
+                /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Container(
                       padding: EdgeInsets.only(top: 0, bottom: 2),
                       child: Text(
@@ -494,8 +524,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                   behavior: SnackBarBehavior.floating,
                   backgroundColor: Color.fromARGB(255, 75, 138, 220),
                   margin: EdgeInsets.only(bottom: 20, left: 25, right: 25),
-                ));
+                ));*/
                 updateUserController.updateUserInfo(update.toMap());
+
+                Navigator.pop(context);
                 //print(update.toMap()['id']);
               },
               child: const Icon(
@@ -515,6 +547,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 final user = snapshot.data!;
                 nomController = TextEditingController(text: user.nom);
                 prenomController = TextEditingController(text: user.prenom);
+                cinController = TextEditingController(text: user.cin);
                 naissanceController =
                     TextEditingController(text: user.date_naissance);
                 addressController = TextEditingController(text: user.address);
