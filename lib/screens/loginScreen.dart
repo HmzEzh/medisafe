@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
         rap.motDePasse = passe;
         MyEncryptionDecryption();
         database.insertAll();
-      } catch (e) {
+      } on DioExceptions catch (e) {
         Navigator.pop(context);
         showDialog(
             context: context,

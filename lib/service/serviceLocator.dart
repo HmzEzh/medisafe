@@ -7,7 +7,6 @@ import 'package:medisafe/network/repository/tracker/TrackerRepository.dart';
 import 'package:medisafe/network/repository/user/UpdateUserRepository.dart';
 import '../controller/MesureController.dart';
 import '../controller/TrackerController.dart';
-import 'package:medisafe/screens/controllers/TrackerController.dart';
 import '../controller/SearchController.dart';
 import '../controller/user/createUserController.dart';
 import '../controller/user/logOutController.dart';
