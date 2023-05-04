@@ -1,12 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:medisafe/main.dart';
-import 'package:medisafe/models/Users/user.dart';
-import 'package:medisafe/service/UserServices/UserService.dart';
-import 'package:provider/provider.dart';
 
 import '../controller/user/createUserController.dart';
 import '../network/dioClient.dart';
@@ -31,10 +24,6 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   bool emailListner = false;
   bool firstnameListner = false;
   bool lastnameListner = false;
-
-  UserService userService = UserService();
-  CreateUserController createUserController = CreateUserController();
-
   //TODO:
   final craeteUserController = getIt.get<CreateUserController>();
 
@@ -441,36 +430,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                                         firstnameListner &&
                                         lastnameListner
                                     ? create
-                                    : () async {
-                                        final ByteData imageData =
-                                            await rootBundle.load(
-                                                'assets/images/default.png');
-                                        final Uint8List image =
-                                            imageData.buffer.asUint8List();
-                                        User user = User.create(
-                                            nom: firstnameController.text,
-                                            prenom: lastnameController.text,
-                                            cin: '',
-                                            date_naissance: '',
-                                            address: '',
-                                            taille: 0,
-                                            poids: 0,
-                                            email: emailController.text,
-                                            password: passwordController.text,
-                                            tele: '',
-                                            blood: '',
-                                            gender: '',
-                                            image: image);
-
-                                        userService.insertUser(user);
-
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MyHomePage()),
-                                                (route) => false);
-                                      },
+                                    : () {},
                                 style: ElevatedButton.styleFrom(
                                     shadowColor: Colors.transparent,
                                     splashFactory: emailListner && passwdListner
