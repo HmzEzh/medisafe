@@ -253,16 +253,16 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        // Center(
-                        //   child: Container(
-                        //       margin: const EdgeInsets.only(bottom: 8, ),
-                        //       width: 128,
+                        Center(
+                          child: Container(
+                              margin: const EdgeInsets.only(bottom: 8,top: 12),
+                              width: 128,
 
-                        //     child: Image(image: AssetImage(
-                        //                   "assets/images/logo_.png")),
-                        //     ),
-                        // ),
-                        // SizedBox(height: size.height * 0.08),
+                            child: Image(image: AssetImage(
+                                          "assets/images/medisafe.png")),
+                            ),
+                        ),
+                        //SizedBox(height: size.height * 0.08),
                         const Center(
                           child: Text(
                             "Medisafe",

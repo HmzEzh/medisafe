@@ -66,12 +66,9 @@ Future<void> main() async {
   // Workmanager().initialize(callbackDispatcher);
   // initialize the database
   await AndroidAlarmManager.initialize();
-  final int helloAlarmID = 3;
-  await AndroidAlarmManager.periodic(
-      const Duration(minutes: 1), helloAlarmID, rendezVousTask);
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  final int notifAlarmID = 0;
+  await AndroidAlarmManager.periodic(const Duration(minutes: 1), notifAlarmID, rendezVousTask);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]);
   await dbHelper.init();
   await Noti.initialize(flutterLocalNotificationsPlugin);
   // Define the task constraints
