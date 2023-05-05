@@ -14,7 +14,7 @@ class TrackerController {
 
 
   Future<List<Tracker>> getAllTrackers() async {
-    print("1");
+
     final allTrackers = await createTracke.getAllTrackers();
     return allTrackers;
   }

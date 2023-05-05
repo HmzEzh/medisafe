@@ -12,7 +12,7 @@ class TrackerRepository {
     print("g");
     try {
       final response = await trackerApi.createtrackerApi(id,  nom,  dateDebut,  dateFin,  type);
-      print("ggg");
+      print({id,  nom,  dateDebut,  dateFin,  type});
       String message = response.data["message"] as String;
       return "message";
     } on DioError catch (e) {
@@ -22,14 +22,11 @@ class TrackerRepository {
   }
 
   Future<List<Tracker>> getAllTrackers() async {
-    print("2");
     try {
 
       final response = await trackerApi.getAllTrackers();
-      print("3");
       List<Tracker> allTrackers =
       (response.data as List).map((e) => Tracker.fromJson(e)).toList();
-      print(allTrackers);
       return allTrackers;
     } on DioError catch (e) {
       //final errorMessage = DioExceptions.fromDioError(e).toString();

@@ -203,13 +203,13 @@ class _TrackerInfoState extends State<TrackerInfo>with TickerProviderStateMixin 
                                             borderRadius: BorderRadius.circular(10),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Colors.grey.withOpacity(0.5),
+                                                color: Colors.grey.withOpacity(0.1),
                                                 spreadRadius: 5,
                                                 blurRadius: 7,
                                                 offset: Offset(0, 3), // changes the position of the shadow
                                               ),
                                             ],
-                                            color: Color(0xFF1E90FF).withOpacity(0.3),
+                                            color: Color(0xFF1E90FF).withOpacity(0.1),
                                           ),
                                         ),
                                       ),
@@ -594,7 +594,7 @@ class _TrackerInfoState extends State<TrackerInfo>with TickerProviderStateMixin 
               children: [
                  Expanded(
                   child: Text(
-                   "${widget.tracker.type}\'s values",
+                   "Les mesures de ${widget.tracker.type}",
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -664,7 +664,22 @@ class _TrackerInfoState extends State<TrackerInfo>with TickerProviderStateMixin 
                       } else if (snapshot.hasData) {
                         if (snapshot.data!.isEmpty) {
                           return Center(
-                            child: Text("No reminder is set, Try to add one."),
+                            child: Text(
+                              'Pas de valeur insérées',
+                              style: TextStyle(
+                                color: Colors.grey.withOpacity(0.3),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 1.5,
+                                    color: Colors.black.withOpacity(0.5),
+                                    offset: Offset(2.0, 2.0),
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         }
 

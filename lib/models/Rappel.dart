@@ -8,6 +8,9 @@ class Rappel extends ChangeNotifier {
   int idTracker = 0;
   String type="";
   String motDePasse="";
+  String nomUtilisateur="";
+  String dateNaissance ="";
+  String telephone ="";
   List horaires=[];
 
   static double youssef=0;
@@ -54,6 +57,18 @@ class Rappel extends ChangeNotifier {
     motDePasse = t;
     notifyListeners();
   }
+  void setNomUtilisateur(String t){
+    nomUtilisateur = t;
+    notifyListeners();
+  }
+  void setDateNaissance(String t){
+    dateNaissance = t;
+    notifyListeners();
+  }
+  void setTelephone(String t){
+    telephone = t;
+    notifyListeners();
+  }
   String getNom(){
     return nom;
   }
@@ -71,6 +86,15 @@ class Rappel extends ChangeNotifier {
   }
   String getMotDePasse(){
     return motDePasse;
+  }
+  String getTelephone(){
+    return telephone;
+  }
+  String getDateNaissance(){
+    return motDePasse;
+  }
+  String getNomUtilisateur(){
+    return nomUtilisateur;
   }
 
 }

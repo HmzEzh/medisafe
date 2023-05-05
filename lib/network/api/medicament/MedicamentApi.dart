@@ -9,6 +9,7 @@ class MedicamentApi {
   MedicamentApi({required this.dioClient});
   Future<Response> createMedicamentApi(int id, String title, String dateDebut, String dateFin, String type, String category, String forme) async {
     try {
+
       final Response response = await dioClient.post(Endpoints.createMedicament,
           data: {
             "id": id,
@@ -18,7 +19,9 @@ class MedicamentApi {
             "type":type,
             "category": category,
             "forme":forme,
-            "user":1
+            "user":{
+              "id":1,
+            }
           }
       );
       return response;

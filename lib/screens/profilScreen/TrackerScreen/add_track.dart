@@ -84,13 +84,13 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                       onPressed: () { Navigator.pop(context);},
                                       icon: Icon(Icons.arrow_back_ios_new_rounded),
                                     ),
-                                    Text("Hi youssef !", style: TextStyle(fontSize: 35, color:Color.fromARGB(255, 27, 62, 92)),),
+                                    Text("Bienvenue !", style: TextStyle(fontSize: 35, color:Color.fromARGB(255, 27, 62, 92)),),
                                   ],
                                 )),
                               ),
                               Container(
                                 margin: EdgeInsets.only(top:MediaQuery.of(context).size.height * 0.04,bottom: 10),
-                                child: Text("Create your Tracker", style: TextStyle(fontSize: 26, color:Color.fromRGBO(0, 0, 0, 0.3)
+                                child: Text("Créer votre Tracker", style: TextStyle(fontSize: 26, color:Color.fromRGBO(0, 0, 0, 0.3)
                                 ,fontStyle: FontStyle.italic),),
                               ),
 
@@ -114,7 +114,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                   child: Column(
                     children: [
                       TextFieldWidget(
-                          'Name:', Icons.ssid_chart, nameController,(String? input){
+                          'Nom:', Icons.ssid_chart, nameController,(String? input){
 
                         if(input!.isEmpty){
                           return 'Name is required!';
@@ -137,7 +137,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                         Row(
                           children: [
                             Text(
-                              'Number of weeks:',
+                              'Nombre de semaines:',
                               style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -163,8 +163,8 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('1 week'),
-                                    Text('12 weeks'),
+                                    Text('1 semaine'),
+                                    Text('12 semaines'),
                                   ],
                                 ),
                                 Slider(
@@ -173,7 +173,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                   max: 12,
                                   activeColor: Color.fromARGB(255, 27, 62, 92),
                                   divisions: 11,
-                                  label: _currentSliderValue.round().toString() + ' weeks',
+                                  label: _currentSliderValue.round().toString() + ' semaines',
                                   onChanged: (double value) {
                                     setState(() {
                                       _currentSliderValue = value;
@@ -181,7 +181,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                   },
                                 ),
                                 Text(
-                                  _currentSliderValue.round().toString() + ' weeks',
+                                  _currentSliderValue.round().toString() + ' semaines',
                                   style: TextStyle(fontSize: 17),
                                 ),
                               ],
@@ -195,7 +195,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                       ),
                       Row(
                         children: [
-                          Text("Type of Tracker:",style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold,),),
+                          Text("Type de Tracker:",style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold,),),
                         ],
                       ),
 
@@ -303,7 +303,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                         padding: EdgeInsets.only(
                                             top: 0, bottom: 2),
                                         child: Text(
-                                          "Tracker created successfully",
+                                          "Tracker crée avec succès",
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500,
@@ -328,7 +328,7 @@ class _AddTrackerScreenState extends State<AddTrackerScreen> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Create',
+                                      'Créer',
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 27, 62, 92),
                                         fontSize: 16,

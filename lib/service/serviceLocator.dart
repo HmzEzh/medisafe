@@ -50,7 +50,7 @@ Future<void> setup() async {
   getIt.registerSingleton(TrackerApi(dioClient: getIt<DioClient>()));
   getIt.registerSingleton(TrackerRepository(getIt<TrackerApi>()));
 
-  getIt.registerSingleton(TrackerController());
+  getIt.registerSingleton<TrackerController>(TrackerController());
 
   //Dose
 

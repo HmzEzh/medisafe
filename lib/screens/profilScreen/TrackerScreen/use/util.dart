@@ -89,19 +89,19 @@ for (Mesure mesure in mesures) {
                     pw.Column(
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
-                        pw.Text('0687709922'),
-                        UrlText('ysfbenkamoun@gmail.com', 'ysfbenkamoun@gmail.com'),
-                        UrlText('@youssef._.bkm', '@youssef._.bkm'),
+                        pw.Text(rap.nomUtilisateur),
+                        pw.Text(rap.dateNaissance),
+                        pw.Text(rap.telephone),
                       ]
                     ),
                     pw.SizedBox(width: 70),
-                    pw.BarcodeWidget(
-                        data:'youssef',
-                    width: 40,
-                    height: 40,
-                    barcode: pw.Barcode.qrCode(),
-                    drawText: false
-                    ),
+                    // pw.BarcodeWidget(
+                    //     data:'youssef',
+                    // width: 40,
+                    // height: 40,
+                    // barcode: pw.Barcode.qrCode(),
+                    // drawText: false
+                    // ),
                     pw.Padding(padding: pw.EdgeInsets.zero),
                   ]
               )
@@ -160,7 +160,7 @@ for (Mesure mesure in mesures) {
               children: [
                 pw.TableRow(children: [
                 pw.Center(heightFactor: 2,child:pw.Text('Date', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-                pw.Center(heightFactor: 2,child:pw.Text('Value', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+                pw.Center(heightFactor: 2,child:pw.Text('Valeur', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
                 ]),
                 ...myObjects.map((object) {
                   return pw.TableRow(children: [
@@ -406,7 +406,7 @@ Future<Uint8List>sendToDoctor(final PdfPageFormat format, String email, int idTr
   for (Mesure mesure in mesures) {
     myts.add(double.parse(mesure.value));
   }
-
+  Rappel rap = Rappel();
   var unit ;
   unitType == "tension"? unit="mmHg":unit="mg/dl";
   final pageTheme = await _myPageTheme(format);
@@ -450,19 +450,19 @@ Future<Uint8List>sendToDoctor(final PdfPageFormat format, String email, int idTr
                             pw.Column(
                                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                                 children: [
-                                  pw.Text('0687709922'),
-                                  UrlText('ysfbenkamoun@gmail.com', 'ysfbenkamoun@gmail.com'),
-                                  UrlText('@youssef._.bkm', '@youssef._.bkm'),
+                                  pw.Text(rap.nomUtilisateur),
+                                  pw.Text(rap.dateNaissance),
+                                  pw.Text(rap.telephone),
                                 ]
                             ),
                             pw.SizedBox(width: 70),
-                            pw.BarcodeWidget(
-                                data:'youssef',
-                                width: 40,
-                                height: 40,
-                                barcode: pw.Barcode.qrCode(),
-                                drawText: false
-                            ),
+                            // pw.BarcodeWidget(
+                            //     data:'youssef',
+                            //     width: 40,
+                            //     height: 40,
+                            //     barcode: pw.Barcode.qrCode(),
+                            //     drawText: false
+                            // ),
                             pw.Padding(padding: pw.EdgeInsets.zero),
                           ]
                       )
@@ -521,7 +521,7 @@ Future<Uint8List>sendToDoctor(final PdfPageFormat format, String email, int idTr
                     children: [
                       pw.TableRow(children: [
                         pw.Center(child:pw.Text('Date', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-                        pw.Center(child:pw.Text('Value', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
+                        pw.Center(child:pw.Text('Valeur', style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
                       ]),
                       ...myObjects.map((object) {
                         return pw.TableRow(children: [

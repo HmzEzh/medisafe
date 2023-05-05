@@ -124,7 +124,7 @@ class _TrackerListScreenState extends State<TrackerListScreen>
                           Container(
                               margin: EdgeInsets.only(top: 16),
                               child: Text(
-                                'Add new Tracker',
+                                'Ajouter nouveau Tracker',
                                 style: TextStyle(
                                   color: Colors.grey.withOpacity(0.3),
                                   fontSize: 20,

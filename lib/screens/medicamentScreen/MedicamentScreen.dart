@@ -7,6 +7,7 @@ import 'package:medisafe/screens/profilScreen/TrackerScreen/TrackerScreen.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
 import 'package:provider/provider.dart';
 
+import 'introduction_animation/introduction_add_medi.dart';
 import 'home_design.dart';
 
 class MedicamentScreen extends StatefulWidget {
@@ -87,7 +88,7 @@ class _MedicamentScreenState extends State<MedicamentScreen> {
                   Navigator.push<dynamic>(
                     context,
                     MaterialPageRoute<dynamic>(
-                        builder: (BuildContext context) => TrackerScreen()),
+                        builder: (BuildContext context) => IntroductionAnimationScreen()),
                   );
                 },
                 child: Icon(IconData(0xe047, fontFamily: 'MaterialIcons'),

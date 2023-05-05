@@ -8,7 +8,7 @@ part of 'Mesure.dart';
 
 Mesure _$MesureFromJson(Map<String, dynamic> json) => Mesure(
       id: json['id'] as int,
-      idTracker: json['idTracker'] as int,
+      idTracker: json['idTracker']['id'] as int,
       value: json['value'] as String,
       date: json['date'] as String,
       heure: json['heure'] as String,

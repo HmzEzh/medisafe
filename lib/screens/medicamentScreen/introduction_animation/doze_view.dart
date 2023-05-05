@@ -73,7 +73,7 @@ class _HoraireState extends State<Horaire> {
                         ],
                       ),
                       child: Text(
-                        'reminders per day',
+                        'rappels par jour',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24.0,
@@ -136,7 +136,7 @@ class _HoraireState extends State<Horaire> {
       child: Row(
         children: [
           const Text(
-            'reminder: ',
+            'rappel: ',
             style: TextStyle(
               fontWeight: FontWeight.bold,
             ),
@@ -144,7 +144,7 @@ class _HoraireState extends State<Horaire> {
           SizedBox(width: 35.0),
           ElevatedButton(
             onPressed: () => _selectTime(context),
-            child: Text('Select Time'),
+            child: Text('choix d\'horaire'),
           ),
           Visibility(
             child: SizedBox(

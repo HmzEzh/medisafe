@@ -107,7 +107,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                     ),
                     Container(
                         margin: EdgeInsets.only(top: 16),
-                        child: Text("Add new medicament",
+                        child: Text("Ajouter nouveau medicament",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.w600))),
@@ -195,7 +195,7 @@ class _PopularCourseListViewState extends State<PopularCourseListView>
                                                   crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: <Widget>[
                                                     const Text(
-                                                      'End :',
+                                                      'Délai :',
                                                       textAlign: TextAlign.right,
                                                       style: TextStyle(
                                                         fontWeight: FontWeight.w200,

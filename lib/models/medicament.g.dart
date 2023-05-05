@@ -9,7 +9,7 @@ part of 'medicament.dart';
 Medicament _$MedicamentFromJson(Map<String, dynamic> json) => Medicament(
       id: json['id'] as int,
       title: json['title'] as String? ?? '',
-      imagePath: json['imagePath'] as String? ?? 'assets/images/medicine.png',
+      //imagePath: json['imagePath'] as String? ?? 'assets/images/medicine.png',
       dateDebut: json['dateDebut'] as String? ?? "",
       dateFin: json['dateFin'] as String? ?? "",
       type: json['type'] as String? ?? "",

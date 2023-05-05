@@ -19,14 +19,24 @@ import 'package:medisafe/service/notification_service.dart';
 import 'package:medisafe/service/notifService.dart';
 import 'package:medisafe/service/serviceLocator.dart';
 import 'package:provider/provider.dart';
+import 'controller/DoseController.dart';
+import 'controller/MedicamentController.dart';
+import 'controller/MesureController.dart';
+import 'controller/TrackerController.dart';
 import 'helpers/DatabaseHelper.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
-final dbHelper = DatabaseHelper.instance;
+import 'models/Doze.dart';
+import 'models/Mesure.dart';
+import 'models/Tracker.dart';
+
+
+var dbHelper = DatabaseHelper.instance;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 NotifService notifService = new NotifService();
+
 
 @pragma('vm:entry-point')
 void rendezVousTask() async {
@@ -61,14 +71,20 @@ void rendezVousTask() async {
 }
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   setup();
+  dbHelper = DatabaseHelper.instance;
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Workmanager().initialize(callbackDispatcher);
   // initialize the database
   await AndroidAlarmManager.initialize();
   final int notifAlarmID = 0;
   await AndroidAlarmManager.periodic(const Duration(minutes: 1), notifAlarmID, rendezVousTask);
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]);
+  await AndroidAlarmManager.periodic(
+      const Duration(seconds: 5), 4, insertAll);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   await dbHelper.init();
   await Noti.initialize(flutterLocalNotificationsPlugin);
   // Define the task constraints
@@ -78,13 +94,14 @@ Future<void> main() async {
   ], child: const MyApp()));
 
   Medicament.addCat();
-  // var motdepasse = await dbHelper.getUsers();
-  //  var passe = motdepasse[0]["password"];
-  //  Rappel rap = Rappel();
-  //  rap.motDePasse = passe;
-  //  MyEncryptionDecryption();
 }
+void insertAll() async {
+  setup();
+  DatabaseHelper database = DatabaseHelper.instance;
+  print("sunc 1");
+  await database.synchronizeAll();
 
+}
 enum LogMode { loggedin, loggedOut, flashscreen }
 
 class MyApp extends StatefulWidget {

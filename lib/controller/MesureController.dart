@@ -7,7 +7,6 @@ class MesureController {
 
   // -------------- Methods ---------------
   Future<String> createMesure(int id, int idTracker, String value, String date, String heure) async {
-
     final res = await creatMesure.create(id, idTracker, value, date, heure);
     return res;
   }

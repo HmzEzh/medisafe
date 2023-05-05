@@ -9,7 +9,9 @@ import 'package:medisafe/service/UserServices/UserService.dart';
 import '../controller/user/loginController.dart';
 import '../helpers/MyEncryptionDecryption.dart';
 import '../main.dart';
+import '../models/Mesure.dart';
 import '../models/Rappel.dart';
+import '../models/Tracker.dart';
 import '../models/Users/user.dart';
 import '../network/dioClient.dart';
 import '../network/dioException.dart';
@@ -43,6 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // final resetpassword = getIt.get<DioClient>();
 
   Future<void> login() async {
+
     if (_formKey.currentState!.validate()) {
       showDialog(
           useRootNavigator: false,
@@ -482,6 +485,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     var size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(

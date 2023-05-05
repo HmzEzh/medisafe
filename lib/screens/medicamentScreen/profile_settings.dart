@@ -56,13 +56,13 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
               TextField(
                 controller: TextEditingController(text: id.toString()),
                 decoration: InputDecoration(
-                  hintText: 'Enter your name',
+                  hintText: 'Entrer votre nom',
                 ),
               ),
               SizedBox(height: 16.0),
               TextField(
                 decoration: InputDecoration(
-                  hintText: 'Enter your email',
+                  hintText: 'Entrer votre email',
                 ),
               ),
               SizedBox(height: 16.0),
@@ -86,7 +86,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                         Navigator.pop(context);
                         // ... do something else ...
                       },
-                      child: Text('Update'),
+                      child: Text('Modifier'),
                     ),
                   ),
                   ElevatedButton(
@@ -98,7 +98,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
                     ),
-                    child: Text('Delete'),
+                    child: Text('Supprimer'),
                   ),
                 ],
               ),
@@ -211,7 +211,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                   child: Column(
                     children: [
                       TextFieldWidget(
-                          'Name', Icons.medication_liquid, nameController,(String? input){
+                          'Nom', Icons.medication_liquid, nameController,(String? input){
 
                             if(input!.isEmpty){
                               return 'Name is required!';
@@ -228,7 +228,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                         height: 10,
                       ),
                       TextFieldWidget(
-                          'Category', Icons.category_outlined, categoryController,(String? input){
+                          'Categorie', Icons.category_outlined, categoryController,(String? input){
 
                             if(input!.isEmpty){
                               return 'Home Address is required!';
@@ -520,7 +520,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                         contentPadding:
                                         const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
                                         title: const Text(
-                                          'update',
+                                          'Modifier',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: 20, fontWeight: FontWeight.w600),
@@ -535,7 +535,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                               margin: const EdgeInsets.only(
                                                   left: 8, right: 8, bottom: 24),
                                               child: const Text(
-                                                "Do you want to save changes ?",
+                                                "Voulez-vous garder la modification ?",
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
@@ -556,7 +556,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                                                     color: Colors.grey))),
                                                         height: 50,
                                                         child: const Center(
-                                                          child: Text("Cancel",
+                                                          child: Text("Annuler",
                                                               style: TextStyle(
                                                                   color: Colors.blue,
                                                                   fontWeight: FontWeight.w600)),
@@ -591,7 +591,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                                                 padding: EdgeInsets.only(
                                                                     top: 0, bottom: 2),
                                                                 child: Text(
-                                                                  "the medication reminder is updated",
+                                                                  "le rappel du medicament est modifié !!",
                                                                   style: TextStyle(
                                                                       fontSize: 16,
                                                                       fontWeight: FontWeight.w500,
@@ -613,7 +613,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                                         height: 50,
                                                         child: const Center(
                                                           child: Text(
-                                                            "Update",
+                                                            "Modifier",
                                                             style: TextStyle(color: Colors.blue),
                                                           ),
                                                         ),
@@ -636,7 +636,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Update',
+                                      'Modifier',
                                       style: TextStyle(
                                         color: Colors.lightBlueAccent,
                                         fontSize: 16,
@@ -661,7 +661,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                         contentPadding:
                                         const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
                                         title: const Text(
-                                          'Delete',
+                                          'Supprimer',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: 20, fontWeight: FontWeight.w600),
@@ -697,7 +697,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                                                     color: Colors.grey))),
                                                         height: 50,
                                                         child: const Center(
-                                                          child: Text("Cancel",
+                                                          child: Text("Annuler",
                                                               style: TextStyle(
                                                                   color: Colors.blue,
                                                                   fontWeight: FontWeight.w600)),
@@ -733,7 +733,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                                                 padding: EdgeInsets.only(
                                                                     top: 0, bottom: 2),
                                                                 child: Text(
-                                                                  "the medication reminder is deleted",
+                                                                  "le rappel du medicament est supprimé !!",
                                                                   style: TextStyle(
                                                                       fontSize: 16,
                                                                       fontWeight: FontWeight.w500,
@@ -778,7 +778,7 @@ DatabaseHelper medicamentService = DatabaseHelper.instance;
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Delete',
+                                      'Supprimer',
                                       style: TextStyle(
                                         color: Colors.red,
                                         fontSize: 16,
