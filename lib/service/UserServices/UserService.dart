@@ -123,18 +123,18 @@ class UserService {
     //MyEncryptionDecryption.passe = MyEncryptionDecryption.decryptAES(user.password);
     User new_user = User(
         id: user.id,
-        nom: MyEncryptionDecryption.decryptAES(user.nom),
-        prenom: MyEncryptionDecryption.decryptAES(user.prenom),
-        cin: MyEncryptionDecryption.decryptAES(user.cin),
-        date_naissance: MyEncryptionDecryption.decryptAES(user.date_naissance),
-        address: MyEncryptionDecryption.decryptAES(user.address),
-        taille: MyEncryptionDecryption.decryptAES(user.taille),
-        poids: MyEncryptionDecryption.decryptAES(user.poids),
+        nom: MyEncryptionDecryption.decryptAES(user.nom!),
+        prenom: MyEncryptionDecryption.decryptAES(user.prenom!),
+        cin: MyEncryptionDecryption.decryptAES(user.cin!),
+        date_naissance: MyEncryptionDecryption.decryptAES(user.date_naissance!),
+        address: MyEncryptionDecryption.decryptAES(user.address!),
+        taille: MyEncryptionDecryption.decryptAES(user.taille!),
+        poids: MyEncryptionDecryption.decryptAES(user.poids!),
         email: MyEncryptionDecryption.decryptAES(user.email),
         password: MyEncryptionDecryption.decryptAES(user.password),
-        tele: MyEncryptionDecryption.decryptAES(user.tele),
-        blood: MyEncryptionDecryption.decryptAES(user.blood),
-        gender: MyEncryptionDecryption.decryptAES(user.gender),
+        tele: MyEncryptionDecryption.decryptAES(user.tele!),
+        blood: MyEncryptionDecryption.decryptAES(user.blood!),
+        gender: MyEncryptionDecryption.decryptAES(user.gender!),
         image: user.image);
 
     return new_user;
