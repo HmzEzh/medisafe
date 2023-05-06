@@ -97,6 +97,7 @@ Future<void> main() async {
 }
 void insertAll() async {
   setup();
+  print("haha");
   DatabaseHelper database = DatabaseHelper.instance;
   print("sunc 1");
   await database.synchronizeAll();

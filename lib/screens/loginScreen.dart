@@ -122,7 +122,6 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => MyHomePage()),
             (route) => false);
-      }on DioExceptions catch (e) {
         var motdepasse = await dbHelper.getUsers();
         var passe = motdepasse[0]["password"];
         Rappel rap = Rappel();

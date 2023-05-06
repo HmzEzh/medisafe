@@ -34,19 +34,6 @@ Future<void> setup() async {
   getIt.registerSingleton(Dio());
   getIt.registerSingleton(DioClient(getIt<Dio>()));
 
-  // create user
-  getIt.registerSingleton(CreateUserApi(dioClient: getIt<DioClient>()));
-  getIt.registerSingleton(CreateUserRepository(getIt<CreateUserApi>()));
-  // login
-  getIt.registerSingleton(LogInApi(dioClient: getIt<DioClient>()));
-  getIt.registerSingleton(LogInRepository(getIt.get<LogInApi>()));
-  // logout
-  getIt.registerSingleton(LogOutApi(dioClient: getIt<DioClient>()));
-  getIt.registerSingleton(LogOutRepository(getIt.get<LogOutApi>()));
-  // seggestion
-  getIt.registerSingleton(SearchApi(dioClient: getIt<DioClient>()));
-  getIt.registerSingleton(SearchRepository(getIt<SearchApi>()));
-
   getIt.registerSingleton(TrackerApi(dioClient: getIt<DioClient>()));
   getIt.registerSingleton(TrackerRepository(getIt<TrackerApi>()));
 
@@ -72,6 +59,21 @@ Future<void> setup() async {
   getIt.registerSingleton(MedicamentRepository(getIt<MedicamentApi>()));
 
   getIt.registerSingleton(MedicamentController());
+
+  // create user
+  getIt.registerSingleton(CreateUserApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(CreateUserRepository(getIt<CreateUserApi>()));
+  // login
+  getIt.registerSingleton(LogInApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(LogInRepository(getIt.get<LogInApi>()));
+  // logout
+  getIt.registerSingleton(LogOutApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(LogOutRepository(getIt.get<LogOutApi>()));
+  // seggestion
+  getIt.registerSingleton(SearchApi(dioClient: getIt<DioClient>()));
+  getIt.registerSingleton(SearchRepository(getIt<SearchApi>()));
+
+
   // // login
   // getIt.registerSingleton(LogInApi(dioClient: getIt<DioClient>()));
   // getIt.registerSingleton(LogInRepository(getIt.get<LogInApi>()));
