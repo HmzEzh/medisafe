@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medisafe/helpers/MyEncryptionDecryption.dart';
+import 'package:medisafe/main.dart';
+import 'package:medisafe/models/Rappel.dart';
 
 import '../controller/user/createUserController.dart';
 import '../network/dioClient.dart';
@@ -50,11 +53,18 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
               ));
       try {
         //TODO:
+
+        dbHelper.setPasse(passwordController.text.trim());
+
         dynamic response = await craeteUserController.createuser(
-            lastnameController.text,
-            firstnameController.text,
-            emailController.text,
-            passwordController.text);
+            MyEncryptionDecryption.encryptAES(lastnameController.text.trim())
+                .base64,
+            MyEncryptionDecryption.encryptAES(firstnameController.text.trim())
+                .base64,
+            MyEncryptionDecryption.encryptAES(emailController.text.trim())
+                .base64,
+            MyEncryptionDecryption.encryptAES(passwordController.text.trim())
+                .base64);
         Navigator.pop(context);
         showDialog(
             context: context,
@@ -255,12 +265,12 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                       children: <Widget>[
                         Center(
                           child: Container(
-                              margin: const EdgeInsets.only(bottom: 8,top: 12),
-                              width: 128,
-
-                            child: Image(image: AssetImage(
-                                          "assets/images/medisafe.png")),
-                            ),
+                            margin: const EdgeInsets.only(bottom: 8, top: 12),
+                            width: 128,
+                            child: Image(
+                                image:
+                                    AssetImage("assets/images/medisafe.png")),
+                          ),
                         ),
                         //SizedBox(height: size.height * 0.08),
                         const Center(

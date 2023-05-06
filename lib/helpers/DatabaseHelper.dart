@@ -32,7 +32,6 @@ import 'package:encrypt/encrypt.dart' as encrypt;
 
 import 'MyEncryptionDecryption.dart';
 
-
 class DatabaseHelper {
   static UserService userService = UserService();
   static User utili = User.init(
@@ -57,8 +56,6 @@ class DatabaseHelper {
   static const _databaseVersion = 1;
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
-
-
 
   late Database _db;
   Future<Database> get database async {
@@ -183,7 +180,7 @@ class DatabaseHelper {
       );
     ''');
 
-    await db.execute('''
+    /*await db.execute('''
   INSERT INTO user (nom, prenom, cin, date_naissance, address, taille, poids, email, password, tele, blood, gender, image)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''', [
@@ -200,7 +197,7 @@ class DatabaseHelper {
       utili.blood,
       utili.gender,
       imageBytes
-    ]);
+    ]);*/
 
     print("creating tables!!!!!!!!");
   }
@@ -377,7 +374,6 @@ class DatabaseHelper {
     return id;
   }
 
-
   Future<List<Map<String, dynamic>>> getMedicaments() async {
     await init();
     return _db.query('medicament', orderBy: "id");
@@ -429,7 +425,6 @@ class DatabaseHelper {
     int id2 = await _db.insert("doze", data);
     return id2;
   }
-
 
   Future<List<Map<String, dynamic>>> getDozes() async {
     await init();
@@ -745,14 +740,14 @@ class DatabaseHelper {
       m.add(Medicament.fromMap(item));
     }
 
-    for(Tracker aa in trackers){
-      print({aa.id,aa.nom,aa.type,aa.dateFin});
+    for (Tracker aa in trackers) {
+      print({aa.id, aa.nom, aa.type, aa.dateFin});
     }
-    for(Mesure a in trs){
-      print({a.id,a.value,a.heure,a.date,a.idTracker});
+    for (Mesure a in trs) {
+      print({a.id, a.value, a.heure, a.date, a.idTracker});
     }
-    for(Medicament a in m){
-      print({a.id,a.title,a.category,a.dateDebut,a.dateFin});
+    for (Medicament a in m) {
+      print({a.id, a.title, a.category, a.dateDebut, a.dateFin});
     }
     print(MyEncryptionDecryption.decryptAES("G3LtejRTG+MsqoVd2tPFDA=="));
     //print("avant");
@@ -914,13 +909,13 @@ class DatabaseHelper {
     );
   }
 
-
   //Synchronization
 
-  Future<int> insertMedicamentSync(int id, String name,String dateDebut, String dateFin, String type, String category, String forme) async {
+  Future<int> insertMedicamentSync(int id, String name, String dateDebut,
+      String dateFin, String type, String category, String forme) async {
     await init();
     final data = {
-      'id':id,
+      'id': id,
       'nom': MyEncryptionDecryption.decryptAES(name),
       'type': MyEncryptionDecryption.decryptAES(type),
       'category': MyEncryptionDecryption.decryptAES(category),
@@ -933,10 +928,11 @@ class DatabaseHelper {
     return id2;
   }
 
-  Future<int> insertTrackerSync(int idT, String name, String type, String dateDebut, String dateFin) async {
+  Future<int> insertTrackerSync(int idT, String name, String type,
+      String dateDebut, String dateFin) async {
     await init();
     final data = {
-      'id':idT,
+      'id': idT,
       'nom': MyEncryptionDecryption.decryptAES(name),
       'type': MyEncryptionDecryption.decryptAES(type),
       'dateDebut': MyEncryptionDecryption.decryptAES(dateDebut),
@@ -951,10 +947,11 @@ class DatabaseHelper {
     return id;
   }
 
-  Future<int> insertMesureSync(int id, int idTracker, String value, String date, String heure) async {
+  Future<int> insertMesureSync(
+      int id, int idTracker, String value, String date, String heure) async {
     await init();
     final data = {
-      'id':id,
+      'id': id,
       'idTracker': idTracker,
       'value': MyEncryptionDecryption.decryptAES(value),
       'date': MyEncryptionDecryption.decryptAES(date),
@@ -965,10 +962,11 @@ class DatabaseHelper {
     return id2;
   }
 
-  Future<int> insertDoseSync(int id,int idMedicament, String heure,bool suspend ) async {
+  Future<int> insertDoseSync(
+      int id, int idMedicament, String heure, bool suspend) async {
     await init();
     final data = {
-      'id':id,
+      'id': id,
       'idMedicament': idMedicament,
       'heure': MyEncryptionDecryption.decryptAES(heure),
       'suspend': suspend
@@ -979,38 +977,37 @@ class DatabaseHelper {
 
   Future<void> insertAll() async {
     print("insertAll");
-    for(Tracker aa in await trackerController.getAllTrackers()){
-      try{
-        await insertTrackerSync(aa.id, aa.nom, aa.type, aa.dateDebut, aa.dateFin);
-      }catch (e) {
+    for (Tracker aa in await trackerController.getAllTrackers()) {
+      try {
+        await insertTrackerSync(
+            aa.id, aa.nom, aa.type, aa.dateDebut, aa.dateFin);
+      } catch (e) {
         print(e);
       }
-
     }
-    for(Medicament aa in await medicamentController.getAllMedicaments()){
-      try{
-        await insertMedicamentSync(aa.id, aa.title, aa.dateDebut, aa.dateFin, aa.type, aa.category, aa.forme);
-      }catch (e) {
+    for (Medicament aa in await medicamentController.getAllMedicaments()) {
+      try {
+        await insertMedicamentSync(aa.id, aa.title, aa.dateDebut, aa.dateFin,
+            aa.type, aa.category, aa.forme);
+      } catch (e) {
         print(e);
       }
-
     }
 
-    for(Doze aa in await doseController.getAllDoses()){
-      try{
+    for (Doze aa in await doseController.getAllDoses()) {
+      try {
         await insertDoseSync(aa.id, aa.idMedicament, aa.heure, aa.suspend);
-      }catch (e) {
+      } catch (e) {
         print(e);
       }
-
     }
-    for(Mesure aa in await mesureController.getAllMesures()){
-      try{
-        await insertMesureSync(aa.id, aa.idTracker,aa.value,aa.date,aa.heure);
-      }catch (e) {
+    for (Mesure aa in await mesureController.getAllMesures()) {
+      try {
+        await insertMesureSync(
+            aa.id, aa.idTracker, aa.value, aa.date, aa.heure);
+      } catch (e) {
         print(e);
       }
-
     }
   }
 
@@ -1019,7 +1016,6 @@ class DatabaseHelper {
     await _db.rawDelete('DELETE FROM mesure');
     await _db.rawDelete('DELETE FROM medicament');
     await _db.rawDelete('DELETE FROM tracker');
-
   }
 
   Future<void> doPasse() async {
@@ -1047,10 +1043,10 @@ class DatabaseHelper {
     print("2 3");
     for (Map<String, dynamic> item in await _db.query("tracker")) {
       print("2 4");
-    trackers.add(Tracker.fromMap(item));
+      trackers.add(Tracker.fromMap(item));
     }
     for (Map<String, dynamic> item in await _db.query("medicament")) {
-    medicaments.add(Medicament.fromMap(item));
+      medicaments.add(Medicament.fromMap(item));
     }
     for (Map<String, dynamic> item in await _db.query("doze")) {
       doses.add(Doze.fromMap(item));
@@ -1059,39 +1055,58 @@ class DatabaseHelper {
       mesures.add(Mesure.fromMap(item));
     }
     print("2 5");
-    for(Tracker aa in trackers){
-      try{
+    for (Tracker aa in trackers) {
+      try {
         print("youssefTracker");
-        await trackerController.createTracker(aa.id,MyEncryptionDecryption.encryptAES(aa.nom).base64,MyEncryptionDecryption.encryptAES(aa.dateDebut).base64,MyEncryptionDecryption.encryptAES(aa.dateFin).base64,MyEncryptionDecryption.encryptAES(aa.type).base64);
-      }catch (e) {
+        await trackerController.createTracker(
+            aa.id,
+            MyEncryptionDecryption.encryptAES(aa.nom).base64,
+            MyEncryptionDecryption.encryptAES(aa.dateDebut).base64,
+            MyEncryptionDecryption.encryptAES(aa.dateFin).base64,
+            MyEncryptionDecryption.encryptAES(aa.type).base64);
+      } catch (e) {
         print(e);
       }
     }
-    for(Mesure a in mesures){
-      try{
-        await mesureController.createMesure(a.id,a.idTracker,MyEncryptionDecryption.encryptAES(a.value).base64,MyEncryptionDecryption.encryptAES(a.date).base64,MyEncryptionDecryption.encryptAES(a.heure).base64);
-      }catch (e) {
+    for (Mesure a in mesures) {
+      try {
+        await mesureController.createMesure(
+            a.id,
+            a.idTracker,
+            MyEncryptionDecryption.encryptAES(a.value).base64,
+            MyEncryptionDecryption.encryptAES(a.date).base64,
+            MyEncryptionDecryption.encryptAES(a.heure).base64);
+      } catch (e) {
         print(e);
       }
     }
-    for(Medicament a in medicaments){
-      try{
-        await medicamentController.createMedicament(a.id,MyEncryptionDecryption.encryptAES(a.title).base64,MyEncryptionDecryption.encryptAES(a.dateDebut).base64,MyEncryptionDecryption.encryptAES(a.dateFin).base64,MyEncryptionDecryption.encryptAES(a.type).base64,MyEncryptionDecryption.encryptAES(a.category).base64,MyEncryptionDecryption.encryptAES(a.forme).base64);
-      }catch (e) {
+    for (Medicament a in medicaments) {
+      try {
+        await medicamentController.createMedicament(
+            a.id,
+            MyEncryptionDecryption.encryptAES(a.title).base64,
+            MyEncryptionDecryption.encryptAES(a.dateDebut).base64,
+            MyEncryptionDecryption.encryptAES(a.dateFin).base64,
+            MyEncryptionDecryption.encryptAES(a.type).base64,
+            MyEncryptionDecryption.encryptAES(a.category).base64,
+            MyEncryptionDecryption.encryptAES(a.forme).base64);
+      } catch (e) {
         print(e);
       }
-
     }
-    for(Doze a in doses){
-      try{
-        await doseController.createDose(a.id, a.idMedicament, MyEncryptionDecryption.encryptAES(a.heure).base64, a.suspend);
-      }catch (e) {
+    for (Doze a in doses) {
+      try {
+        await doseController.createDose(a.id, a.idMedicament,
+            MyEncryptionDecryption.encryptAES(a.heure).base64, a.suspend);
+      } catch (e) {
         print(e);
       }
     }
-
   }
 
-
-
+  void setPasse(String password) {
+    Rappel rap = Rappel();
+    rap.motDePasse = password;
+    MyEncryptionDecryption();
+  }
 }

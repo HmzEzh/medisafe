@@ -12,7 +12,7 @@ User _$UserFromJson(Map<dynamic, dynamic> json) => User(
       prenom: json['prenom'] == null ? "default" : json['prenom'] as String,
       cin: json['cin'] == null ? "" : json['cin'] as String,
       date_naissance: json['date_naissance'] == null
-          ? "2023-05-05"
+          ? "2020-01-01"
           : json['date_naissance'] as String,
       address: json['address'] == null ? "" : json['address'] as String,
       taille: json['taille'] == null ? "0" : json['taille'] as String,
