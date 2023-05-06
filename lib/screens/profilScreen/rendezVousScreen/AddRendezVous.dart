@@ -4,10 +4,12 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:medisafe/service/RendezVousService.dart';
 import 'package:provider/provider.dart';
 
+import '../../../controller/RendezVousController.dart';
 import '../../../helpers/DatabaseHelper.dart';
 import '../../../models/RendezVous.dart';
 import '../../../models/medcin.dart';
 import '../../../provider/HomeProvider.dart';
+import '../../../service/serviceLocator.dart';
 import '../../../utils/utils.dart';
 
 class AddRendezVous extends StatefulWidget {
@@ -25,6 +27,8 @@ class _AddRendezVousState extends State<AddRendezVous> {
   final TextEditingController remarqueController = TextEditingController();
   final TextEditingController heureController = TextEditingController();
   late Medcin medecin;
+  final rendezvousController = getIt<RendezVousController>();
+
   var a = "";
   var b = "";
 
@@ -474,7 +478,7 @@ class _AddRendezVousState extends State<AddRendezVous> {
                 ),
                 onPressed: () async {
                   if (medecinIdController.text == "") {
-                    RendezVous rendezVous = RendezVous(
+                    Rendezvous rendezVous = Rendezvous(
                         id: null,
                         medecinId: int.parse(medecinIdController.text),
                         nom: nomController.text,
@@ -544,14 +548,22 @@ class _AddRendezVousState extends State<AddRendezVous> {
                                 ),
                               ));
                     } else {
-                      RendezVous rendezVous = RendezVous.az(
+                      Rendezvous rendezVous = Rendezvous.az(
                           medecinId: int.parse(medecinIdController.text),
                           nom: nomController.text,
                           lieu: lieuController.text,
                           remarque: remarqueController.text,
                           heure: heureController.text);
-                      await rendezVousService
+                      
+                          try{
+                      int id = await rendezVousService
                           .insertRendezVous(rendezVous.toMap());
+                        rendezVous.id = id;
+                        rendezvousController.createRendezVous(rendezVous, 1);
+
+                     }catch(e){
+
+                     }
                       //print(await medcinService.queryRowCount());
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);

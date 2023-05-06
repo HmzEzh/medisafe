@@ -1,20 +1,21 @@
 import 'package:flutter/foundation.dart';
 
 class Rappel extends ChangeNotifier {
-  String nom="";
-  String category="";
-  String forme="";
-  int nombre=0;
+  String nom = "";
+  String category = "";
+  String forme = "";
+  int nombre = 0;
   int idTracker = 0;
-  String type="";
-  String motDePasse="";
+  String type = "";
+  String motDePasse = "";
+  int userId=0;
+  List horaires = [];
   String nomUtilisateur="";
   String dateNaissance ="";
   String telephone ="";
-  List horaires=[];
 
-  static double youssef=0;
-  
+  static double youssef = 0;
+
   static final Rappel _instance = Rappel._internal();
 
   factory Rappel() {
@@ -33,27 +34,32 @@ class Rappel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setNom(String n){
+  void setNom(String n) {
     nom = n;
     notifyListeners();
   }
-  void setNbr(int nr){
-      nombre = nr;
-      notifyListeners();
+
+  void setNbr(int nr) {
+    nombre = nr;
+    notifyListeners();
   }
-  void setType(String t){
+
+  void setType(String t) {
     type = t;
     notifyListeners();
   }
-  void setForme(String t){
+
+  void setForme(String t) {
     forme = t;
     notifyListeners();
   }
-  void setCategory(String t){
+
+  void setCategory(String t) {
     category = t;
     notifyListeners();
   }
-  void setMotDePasse(String t){
+
+  void setMotDePasse(String t) {
     motDePasse = t;
     notifyListeners();
   }
@@ -69,22 +75,28 @@ class Rappel extends ChangeNotifier {
     telephone = t;
     notifyListeners();
   }
-  String getNom(){
+
+  String getNom() {
     return nom;
   }
-  String getType(){
+
+  String getType() {
     return type;
   }
-  int getNombre(){
+
+  int getNombre() {
     return nombre;
   }
-  String getForme(){
+
+  String getForme() {
     return forme;
   }
-  String getCategory(){
+
+  String getCategory() {
     return category;
   }
-  String getMotDePasse(){
+
+  String getMotDePasse() {
     return motDePasse;
   }
   String getTelephone(){

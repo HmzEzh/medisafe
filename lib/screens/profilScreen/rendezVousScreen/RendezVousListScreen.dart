@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medisafe/models/medcin.dart';
-import 'package:medisafe/models/RendezVous.dart';
+import 'package:medisafe/models/rendezvous.dart';
 import 'package:medisafe/screens/profilScreen/MedecinScreen/MedcinsInfosScreen.dart';
 import 'package:provider/provider.dart';
 import '../../../helpers/DatabaseHelper.dart';

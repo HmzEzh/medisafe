@@ -104,6 +104,9 @@ class PdfReportApi {
       cellPadding :  EdgeInsets.zero,
       headerStyle: TextStyle(fontWeight: FontWeight.bold),
       headerDecoration: BoxDecoration(color: PdfColors.grey300),
+      
+      
+      
       cellHeight: 30,
       cellAlignments: {
         0: Alignment.center,

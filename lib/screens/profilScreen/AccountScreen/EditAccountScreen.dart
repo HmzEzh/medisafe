@@ -493,41 +493,48 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 splashFactory: NoSplash.splashFactory,
               ),
               onPressed: () async {
+                //await userService.insertUser(user.toMap());
+                //print(await userService.queryUsersCount());
+                /*List<Map<String, dynamic>> user =
+                    await userService.getUserById(1);
+                print(user[0]);*/
+                print(nomController.text);
                 User update = User(
                     id: widget.userId,
-                    nom: nomController.text == "" ? "-" : nomController.text,
-                    prenom: prenomController.text == ""
-                        ? "-"
-                        : prenomController.text,
-                    cin: cinController.text == "" ? "-" : cinController.text,
-                    date_naissance: naissanceController.text == ""
-                        ? "2020-01-01"
-                        : naissanceController.text,
-                    address: addressController.text == ""
-                        ? "-"
-                        : addressController.text,
-                    taille: tailleController.text == ""
-                        ? "0"
-                        : tailleController.text,
-                    poids:
-                        poidsController.text == "" ? "0" : poidsController.text,
+                    nom: nomController.text,
+                    prenom: prenomController.text,
+                    cin: cinController.text,
+                    date_naissance: naissanceController.text,
+                    address: addressController.text,
+                    taille: tailleController.text,
+                    poids: poidsController.text,
                     email: emailController.text,
                     password: passwordController.text,
-                    tele: teleController.text == "" ? "-" : teleController.text,
-                    blood:
-                        bloodController.text == "" ? "-" : bloodController.text,
-                    gender: genderController.text == ""
-                        ? "-"
-                        : genderController.text,
+                    tele: teleController.text,
+                    blood: bloodController.text,
+                    gender: genderController.text,
                     image: image);
 
-                print(update.toMap());
-
                 userService.updateUser(update, widget.userId);
-                update = userService.encryptUser(update);
+
+                /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Container(
+                      padding: EdgeInsets.only(top: 0, bottom: 2),
+                      child: Text(
+                        "Enregistré",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white),
+                      )),
+                  behavior: SnackBarBehavior.floating,
+                  backgroundColor: Color.fromARGB(255, 75, 138, 220),
+                  margin: EdgeInsets.only(bottom: 20, left: 25, right: 25),
+                ));*/
                 updateUserController.updateUserInfo(update.toMap());
 
                 Navigator.pop(context);
+                //print(update.toMap()['id']);
               },
               child: const Icon(
                 Icons.save,

@@ -30,11 +30,15 @@ class HomeProvider with ChangeNotifier {
   }
 
   DateTime getCurentdateB(String time) {
+    
     if (selectedDay > 9 && selectedMonth > 9) {
+      
       return DateTime.parse('$selectedYear-$selectedMonth-$selectedDay $time');
     }
     if (selectedDay < 9 && selectedMonth < 9) {
-      return DateTime.parse('$selectedYear-0$selectedMonth-0$selectedDay $time');
+     
+      return DateTime.parse(
+          '$selectedYear-0$selectedMonth-0$selectedDay $time');
     }
     if (selectedDay < 9 && selectedMonth > 9) {
       return DateTime.parse('$selectedYear-$selectedMonth-0$selectedDay $time');
@@ -43,7 +47,6 @@ class HomeProvider with ChangeNotifier {
       return DateTime.parse('$selectedYear-0$selectedMonth-$selectedDay $time');
     }
     return DateTime.now();
-    
   }
 
   void setSelectedMonth(int x) {

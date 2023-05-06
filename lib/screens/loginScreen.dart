@@ -6,6 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/DatabaseHelper.dart';
 import 'package:medisafe/service/UserServices/UserService.dart';
 
+import '../controller/DoseController.dart';
+import '../controller/HistoriqueDozeController.dart';
+import '../controller/MedecinController.dart';
+import '../controller/MedicamentController.dart';
+import '../controller/MesureController.dart';
+import '../controller/RendezVousController.dart';
+import '../controller/TrackerController.dart';
 import '../controller/user/loginController.dart';
 import '../helpers/MyEncryptionDecryption.dart';
 import '../main.dart';
@@ -31,6 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formForRestPassword = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final trackerController = getIt.get<TrackerController>();
+  final medicamentController = getIt.get<MedicamentController>();
+  final mesureController = getIt.get<MesureController>();
+  final doseController = getIt.get<DoseController>();
+  final histoController = getIt.get<HistoriqueDozeController>();
+  final medecinController = getIt.get<MedecinController>();
+  final rdvController = getIt.get<RendezVousController>();
   final TextEditingController emailForRestPasswController =
       TextEditingController();
   bool _showPassword = false;
@@ -45,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // final resetpassword = getIt.get<DioClient>();
 
   Future<void> login() async {
+
     if (_formKey.currentState!.validate()) {
       showDialog(
           useRootNavigator: false,
@@ -68,17 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ));
       try {
         //TODO:
-        dbHelper.setPasse(passwordController.text.trim());
-        //MyEncryptionDecryption.passe = passwordController.text;
         Map _user = await loginController.login(
-            MyEncryptionDecryption.encryptAES(emailController.text.trim())
-                .base64,
-            MyEncryptionDecryption.encryptAES(passwordController.text.trim())
-                .base64);
-
-        /*Map _user = await loginController.login(
-            emailController.text, passwordController.text);*/
-
+            emailController.text, passwordController.text);
         print(_user);
         print("the nom of the user is ${_user["nom"]}");
         print("the prenom of the user is ${_user["prenom"]}");
@@ -110,16 +116,12 @@ class _LoginScreenState extends State<LoginScreen> {
             image: base64.decode(_user["image"]));*/
 
         User user = User.fromJson(_user);
-
-        print(user.toMap());
-
-        user = userService.decryptUser(user);
         print("The user id before is ${user.id}");
         user.id = 1;
         print("The user id after is ${user.id}");
-        print(user.toMap());
+        print(user);
 
-        //User enc = userService.encryptUser(user);
+        User enc = userService.encryptUser(user);
         //User dec = userService.decryptUser(enc);
 
         //print(enc.toMap());
@@ -130,13 +132,22 @@ class _LoginScreenState extends State<LoginScreen> {
         print("the number of users is ${count}");*/
         //print(base64.decode(_user["image"]));
         //print(user.toMap());
+        var motdepasse = await dbHelper.getUsers();
+        var passe = motdepasse[0]["password"];
+        Rappel rap = Rappel();
+        rap.motDePasse = passe;
+        rap.userId = _user["id"];
+        MyEncryptionDecryption();
+        try{
+          database.insertAll(await trackerController.getAllTrackers(),await medicamentController.getAllMedicaments(),await doseController.getAllDoses(),await mesureController.getAllMesures(),await medecinController.getAllMeds(),await rdvController.getAllRdv(),await histoController.getAllHisto());
+        }catch(e){
+    }
+        
 
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => MyHomePage()),
             (route) => false);
-        dbHelper.setPasse(passwordController.text.trim());
-        database.insertAll();
-      } on DioExceptions catch (e) {
+      }on DioExceptions catch (e) {
         Navigator.pop(context);
         showDialog(
             context: context,
@@ -195,6 +206,66 @@ class _LoginScreenState extends State<LoginScreen> {
         //   content: Text('Error: ${e.toString()}'),
         //   backgroundColor: Colors.red.shade300,
         // ));
+      }catch(e){
+        Navigator.pop(context);
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  buttonPadding: EdgeInsets.zero,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  contentPadding:
+                      const EdgeInsets.fromLTRB(0.0, 24.0, 0.0, 0.0),
+                  title: const Text(
+                    'La connexion a échoué',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(
+                            left: 8, right: 8, bottom: 24),
+                        child: Text(
+                          e.toString(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: InkWell(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                            ),
+                            onTap: () => Navigator.pop(context),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  border: Border(
+                                top: BorderSide(color: Colors.grey),
+                              )),
+                              height: 50,
+                              child: const Center(
+                                child: Text("OK",
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.w600)),
+                              ),
+                            ),
+                          ))
+                        ],
+                      )
+                    ],
+                  ),
+                ));
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //   content: Text('Error: ${e.toString()}'),
+        //   backgroundColor: Colors.red.shade300,
+        // ));
+
       }
     }
   }
@@ -492,6 +563,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     var size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
@@ -539,8 +611,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             width: 128,
                             child: Image(
-                                image:
-                                    AssetImage("assets/images/medisafe.png")),
+                                image: AssetImage("assets/images/medisafe.png")),
                           ),
                         ),
                         //SizedBox(height: size.height * 0.08),
@@ -699,7 +770,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             CreateUserScreen()));
                               },
                               child: Text(
-                                "Vous n'avez pas un compte ? Créer un",
+                                "Vous débutez chez Lablib ? Créér un compte",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.indigo, fontSize: 16),

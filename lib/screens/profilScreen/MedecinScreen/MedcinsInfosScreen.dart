@@ -330,7 +330,7 @@ class _MedcinsInfosScreenState extends State<MedcinsInfosScreen> {
                 margin: EdgeInsets.only(left: 16, right: 16),
                 width: 10,
                 child: Icon(
-                  Icons.business_outlined,
+                 Icons.calendar_today,
                   color: Colors.blue,
                 ),
               ),
@@ -355,8 +355,10 @@ class _MedcinsInfosScreenState extends State<MedcinsInfosScreen> {
                 margin: EdgeInsets.only(left: 16, right: 16),
                 width: 10,
                 child: Icon(
-                  Icons.phone_iphone_outlined,
+                  Icons.medication_liquid,
                   color: Colors.blue,
+                  size:28
+               
                 ),
               ),
               Container(

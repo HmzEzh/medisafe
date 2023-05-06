@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+
+import '../helpers/MyEncryptionDecryption.dart';
 part 'medcin.g.dart';
 @JsonSerializable()
 class Medcin {
@@ -38,6 +40,17 @@ class Medcin {
       'adress': adress,
       'tele': tele,
       'bureau': bureau,
+    };
+  }
+   Map<String, dynamic> toMapEncrypt() {
+    return {
+      "id":id,
+      'nom': nom ==""? "":MyEncryptionDecryption.encryptAES(nom).base64,
+      'specialite': specialite==""? "": MyEncryptionDecryption.encryptAES(specialite).base64,
+      'email': email ==""? "": MyEncryptionDecryption.encryptAES(email).base64,
+      'adress': adress ==""? "": MyEncryptionDecryption.encryptAES(adress).base64,
+      'tele':  tele==""? "":MyEncryptionDecryption.encryptAES(tele).base64,
+      'bureau': bureau ==""? "":MyEncryptionDecryption.encryptAES(bureau).base64,
     };
   }
   factory Medcin.fromMap(Map map) {

@@ -180,8 +180,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                             blood: user.blood,
                                             gender: user.gender,
                                             image: imageUint8List);
-                                        update =
-                                            userService.encryptUser(update);
                                         updateUserController
                                             .updateUserInfo(update.toMap());
                                         //Uint8List bytes = await result.files[0].readAsBytes();
@@ -288,6 +286,33 @@ class _AccountScreenState extends State<AccountScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Padding(padding: EdgeInsets.all(haille * 0.01)),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 10),
+                                      child: const Text(
+                                        "Email : ",
+                                        style: TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        "${user.email}",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color:
+                                              Color.fromARGB(255, 83, 82, 82),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const Divider(
+                                  color: Colors.black,
+                                ),
                                 Padding(padding: EdgeInsets.all(haille * 0.01)),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

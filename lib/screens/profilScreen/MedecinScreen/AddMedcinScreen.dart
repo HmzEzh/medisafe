@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../controller/MedecinController.dart';
 import '../../../helpers/DatabaseHelper.dart';
 import '../../../models/medcin.dart';
 import '../../../provider/HomeProvider.dart';
+import '../../../service/serviceLocator.dart';
 import 'MedcinsListScreen.dart';
 
 class AddMedcinScreen extends StatefulWidget {
@@ -22,6 +24,8 @@ class _AddMedcinScreenState extends State<AddMedcinScreen> {
   final TextEditingController teleController = TextEditingController();
   final TextEditingController adresseController = TextEditingController();
   DatabaseHelper medcinService = DatabaseHelper.instance;
+  final medecinController = getIt<MedecinController>();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -343,7 +347,16 @@ class _AddMedcinScreenState extends State<AddMedcinScreen> {
                                 ),
                               ));
                     } else {
-                      await medcinService.insertMedecin(medcin.toMap());
+                     try{
+                       int id = await medcinService.insertMedecin(medcin.toMap());
+                        medcin.id = id;
+                        medecinController.createMedecin(medcin, 1);
+
+                     }catch(e){
+
+                     }
+                      
+
                       //print(await medcinService.queryRowCount());
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);

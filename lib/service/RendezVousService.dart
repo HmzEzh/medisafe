@@ -13,11 +13,11 @@ class RendezVousService {
     return await _db.insert("rendezVous", row);
   }
 
-  Future<List<RendezVous>> allRendezVous() async {
+  Future<List<Rendezvous>> allRendezVous() async {
     Database _db = await instance.database;
-    List<RendezVous> rendezVous = [];
+    List<Rendezvous> rendezVous = [];
     for (Map<String, dynamic> item in await _db.query("rendezVous")) {
-      rendezVous.add(RendezVous.fromMap(item));
+      rendezVous.add(Rendezvous.fromMap(item));
     }
     return rendezVous;
   }

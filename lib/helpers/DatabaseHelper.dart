@@ -1,14 +1,10 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-import 'package:encrypt/encrypt.dart';
 import 'package:flutter/services.dart';
 import 'package:medisafe/models/Doze.dart';
 import 'package:medisafe/models/Tracker.dart';
 import 'package:medisafe/models/medicament.dart';
 import 'package:medisafe/models/Users/user.dart';
 import 'package:medisafe/models/medicamentDoze.dart';
+import 'package:medisafe/screens/profilScreen/rendezVousScreen/AddRendezVous.dart';
 import 'package:medisafe/utils/utils.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -48,10 +44,10 @@ class DatabaseHelper {
       blood: "A+",
       gender: 'Male');
 
-  final trackerController = getIt.get<TrackerController>();
-  final medicamentController = getIt.get<MedicamentController>();
-  final mesureController = getIt.get<MesureController>();
-  final doseController = getIt.get<DoseController>();
+  // final trackerController = getIt.get<TrackerController>();
+  // final medicamentController = getIt.get<MedicamentController>();
+  // final mesureController = getIt.get<MesureController>();
+  // final doseController = getIt.get<DoseController>();
   static const _databaseName = "medisafe";
   static const _databaseVersion = 1;
   DatabaseHelper._privateConstructor();
@@ -180,7 +176,7 @@ class DatabaseHelper {
       );
     ''');
 
-    /*await db.execute('''
+    await db.execute('''
   INSERT INTO user (nom, prenom, cin, date_naissance, address, taille, poids, email, password, tele, blood, gender, image)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ''', [
@@ -197,7 +193,7 @@ class DatabaseHelper {
       utili.blood,
       utili.gender,
       imageBytes
-    ]);*/
+    ]);
 
     print("creating tables!!!!!!!!");
   }
@@ -247,13 +243,18 @@ class DatabaseHelper {
   }
 
   // Rendez-Vous
-  Future<List<RendezVous>> allRendezVous() async {
+  Future<List<Rendezvous>> allRendezVous() async {
     await init();
-    List<RendezVous> rendezVous = [];
+    List<Rendezvous> rendezVous = [];
     for (Map<String, dynamic> item in await _db.query("rendezVous")) {
-      rendezVous.add(RendezVous.fromMap(item));
+      rendezVous.add(Rendezvous.fromMap(item));
     }
     return rendezVous;
+  }
+
+  Future<int> insertRendezVous(Map<String, dynamic> row) async {
+    Database _db = await instance.database;
+    return await _db.insert("rendezVous", row);
   }
 
   // medecin service !!
@@ -975,9 +976,16 @@ class DatabaseHelper {
     return id2;
   }
 
-  Future<void> insertAll() async {
+  Future<void> insertAll(
+      List<Tracker> trackers,
+      List<Medicament> medicaments,
+      List<Doze> dozes,
+      List<Mesure> mesures,
+      List<Medcin> medecins,
+      List<Rendezvous> rdvs,
+      List<HistoriqueDoze> histo) async {
     print("insertAll");
-    for (Tracker aa in await trackerController.getAllTrackers()) {
+    for (Tracker aa in trackers) {
       try {
         await insertTrackerSync(
             aa.id, aa.nom, aa.type, aa.dateDebut, aa.dateFin);
@@ -985,7 +993,7 @@ class DatabaseHelper {
         print(e);
       }
     }
-    for (Medicament aa in await medicamentController.getAllMedicaments()) {
+    for (Medicament aa in medicaments) {
       try {
         await insertMedicamentSync(aa.id, aa.title, aa.dateDebut, aa.dateFin,
             aa.type, aa.category, aa.forme);
@@ -994,17 +1002,38 @@ class DatabaseHelper {
       }
     }
 
-    for (Doze aa in await doseController.getAllDoses()) {
+    for (Doze aa in dozes) {
       try {
         await insertDoseSync(aa.id, aa.idMedicament, aa.heure, aa.suspend);
       } catch (e) {
         print(e);
       }
     }
-    for (Mesure aa in await mesureController.getAllMesures()) {
+    for (Mesure aa in mesures) {
       try {
         await insertMesureSync(
             aa.id, aa.idTracker, aa.value, aa.date, aa.heure);
+      } catch (e) {
+        print(e);
+      }
+    }
+    for (Medcin aa in medecins) {
+      try {
+        await insertMedecin(aa.toMap());
+      } catch (e) {
+        print(e);
+      }
+    }
+    for (Rendezvous aa in rdvs) {
+      try {
+        await insertRendezVous(aa.toMap());
+      } catch (e) {
+        print(e);
+      }
+    }
+    for (HistoriqueDoze aa in histo) {
+      try {
+        await insertHisto(aa.toMap());
       } catch (e) {
         print(e);
       }
@@ -1016,6 +1045,10 @@ class DatabaseHelper {
     await _db.rawDelete('DELETE FROM mesure');
     await _db.rawDelete('DELETE FROM medicament');
     await _db.rawDelete('DELETE FROM tracker');
+    await _db.rawDelete('DELETE FROM medcin');
+    await _db.rawDelete('DELETE FROM rendezVous');
+    await _db.rawDelete('DELETE FROM historiqueDoze');
+    await _db.rawDelete('DELETE FROM user');
   }
 
   Future<void> doPasse() async {
@@ -1026,87 +1059,66 @@ class DatabaseHelper {
     var naissance = motdepasse[0]['date_naissance'];
     Rappel rap = Rappel();
     rap.motDePasse = passe;
+    rap.userId = motdepasse[0]["id"];
     rap.telephone = tele;
     rap.nomUtilisateur = nom;
     rap.dateNaissance = naissance;
     MyEncryptionDecryption();
   }
 
-  Future<void> synchronizeAll() async {
-    print("2 2");
-    await init();
-    await doPasse();
-    List<Doze> doses = [];
-    List<Tracker> trackers = [];
-    List<Mesure> mesures = [];
-    List<Medicament> medicaments = [];
-    print("2 3");
-    for (Map<String, dynamic> item in await _db.query("tracker")) {
-      print("2 4");
-      trackers.add(Tracker.fromMap(item));
-    }
-    for (Map<String, dynamic> item in await _db.query("medicament")) {
-      medicaments.add(Medicament.fromMap(item));
-    }
-    for (Map<String, dynamic> item in await _db.query("doze")) {
-      doses.add(Doze.fromMap(item));
-    }
-    for (Map<String, dynamic> item in await _db.query("mesure")) {
-      mesures.add(Mesure.fromMap(item));
-    }
-    print("2 5");
-    for (Tracker aa in trackers) {
-      try {
-        print("youssefTracker");
-        await trackerController.createTracker(
-            aa.id,
-            MyEncryptionDecryption.encryptAES(aa.nom).base64,
-            MyEncryptionDecryption.encryptAES(aa.dateDebut).base64,
-            MyEncryptionDecryption.encryptAES(aa.dateFin).base64,
-            MyEncryptionDecryption.encryptAES(aa.type).base64);
-      } catch (e) {
-        print(e);
-      }
-    }
-    for (Mesure a in mesures) {
-      try {
-        await mesureController.createMesure(
-            a.id,
-            a.idTracker,
-            MyEncryptionDecryption.encryptAES(a.value).base64,
-            MyEncryptionDecryption.encryptAES(a.date).base64,
-            MyEncryptionDecryption.encryptAES(a.heure).base64);
-      } catch (e) {
-        print(e);
-      }
-    }
-    for (Medicament a in medicaments) {
-      try {
-        await medicamentController.createMedicament(
-            a.id,
-            MyEncryptionDecryption.encryptAES(a.title).base64,
-            MyEncryptionDecryption.encryptAES(a.dateDebut).base64,
-            MyEncryptionDecryption.encryptAES(a.dateFin).base64,
-            MyEncryptionDecryption.encryptAES(a.type).base64,
-            MyEncryptionDecryption.encryptAES(a.category).base64,
-            MyEncryptionDecryption.encryptAES(a.forme).base64);
-      } catch (e) {
-        print(e);
-      }
-    }
-    for (Doze a in doses) {
-      try {
-        await doseController.createDose(a.id, a.idMedicament,
-            MyEncryptionDecryption.encryptAES(a.heure).base64, a.suspend);
-      } catch (e) {
-        print(e);
-      }
-    }
-  }
+  // Future<void> synchronizeAll() async {
+  //   print("2 2");
+  //   await init();
+  //   await doPasse();
+  //   List<Doze> doses = [];
+  //   List<Tracker> trackers = [];
+  //   List<Mesure> mesures = [];
+  //   List<Medicament> medicaments = [];
+  //   print("2 3");
+  //   for (Map<String, dynamic> item in await _db.query("tracker")) {
+  //     print("2 4");
+  //   trackers.add(Tracker.fromMap(item));
+  //   }
+  //   for (Map<String, dynamic> item in await _db.query("medicament")) {
+  //   medicaments.add(Medicament.fromMap(item));
+  //   }
+  //   for (Map<String, dynamic> item in await _db.query("doze")) {
+  //     doses.add(Doze.fromMap(item));
+  //   }
+  //   for (Map<String, dynamic> item in await _db.query("mesure")) {
+  //     mesures.add(Mesure.fromMap(item));
+  //   }
+  //   print("2 5");
+  //   for(Tracker aa in trackers){
+  //     try{
+  //       print("youssefTracker");
+  //       await trackerController.createTracker(aa.id,MyEncryptionDecryption.encryptAES(aa.nom).base64,MyEncryptionDecryption.encryptAES(aa.dateDebut).base64,MyEncryptionDecryption.encryptAES(aa.dateFin).base64,MyEncryptionDecryption.encryptAES(aa.type).base64);
+  //     }catch (e) {
+  //       print(e);
+  //     }
+  //   }
+  //   for(Mesure a in mesures){
+  //     try{
+  //       await mesureController.createMesure(a.id,a.idTracker,MyEncryptionDecryption.encryptAES(a.value).base64,MyEncryptionDecryption.encryptAES(a.date).base64,MyEncryptionDecryption.encryptAES(a.heure).base64);
+  //     }catch (e) {
+  //       print(e);
+  //     }
+  //   }
+  //   for(Medicament a in medicaments){
+  //     try{
+  //       await medicamentController.createMedicament(a.id,MyEncryptionDecryption.encryptAES(a.title).base64,MyEncryptionDecryption.encryptAES(a.dateDebut).base64,MyEncryptionDecryption.encryptAES(a.dateFin).base64,MyEncryptionDecryption.encryptAES(a.type).base64,MyEncryptionDecryption.encryptAES(a.category).base64,MyEncryptionDecryption.encryptAES(a.forme).base64);
+  //     }catch (e) {
+  //       print(e);
+  //     }
 
-  void setPasse(String password) {
-    Rappel rap = Rappel();
-    rap.motDePasse = password;
-    MyEncryptionDecryption();
-  }
+  //   }
+  //   for(Doze a in doses){
+  //     try{
+  //       await doseController.createDose(a.id, a.idMedicament, MyEncryptionDecryption.encryptAES(a.heure).base64, a.suspend);
+  //     }catch (e) {
+  //       print(e);
+  //     }
+  //   }
+
+  // }
 }

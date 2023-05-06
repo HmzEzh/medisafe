@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:intl/date_symbol_data_file.dart';
-import 'package:medisafe/helpers/MyEncryptionDecryption.dart';
-import 'package:medisafe/models/Rappel.dart';
-import 'package:medisafe/models/RendezVous.dart';
 import 'package:medisafe/provider/HomeProvider.dart';
 import 'package:medisafe/screens/flashscreen.dart';
 import 'package:medisafe/screens/homeScreen/HomeScreen.dart';
@@ -19,17 +15,18 @@ import 'package:medisafe/service/notification_service.dart';
 import 'package:medisafe/service/notifService.dart';
 import 'package:medisafe/service/serviceLocator.dart';
 import 'package:provider/provider.dart';
+
 import 'controller/DoseController.dart';
+import 'controller/HistoriqueDozeController.dart';
+import 'controller/MedecinController.dart';
 import 'controller/MedicamentController.dart';
 import 'controller/MesureController.dart';
+import 'controller/RendezVousController.dart';
 import 'controller/TrackerController.dart';
 import 'helpers/DatabaseHelper.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
-import 'models/Doze.dart';
-import 'models/Mesure.dart';
-import 'models/Tracker.dart';
-
+import 'models/RendezVous.dart';
 
 var dbHelper = DatabaseHelper.instance;
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -37,13 +34,13 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 NotifService notifService = new NotifService();
 
-
 @pragma('vm:entry-point')
 void rendezVousTask() async {
+ 
   final DateTime now = DateTime.now();
   final int isolateId = Isolate.current.hashCode;
   try {
-    RendezVous? rv = await notifService.sendRendezVousNotif();
+    Rendezvous? rv = await notifService.sendRendezVousNotif();
     if (rv != null) {
       print(rv.nom);
       Noti.showBigTextNotification(
@@ -71,7 +68,7 @@ void rendezVousTask() async {
 }
 
 Future<void> main() async {
-  setup();
+  await setup();
   dbHelper = DatabaseHelper.instance;
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -79,30 +76,38 @@ Future<void> main() async {
   // initialize the database
   await AndroidAlarmManager.initialize();
   final int notifAlarmID = 0;
-  await AndroidAlarmManager.periodic(const Duration(minutes: 1), notifAlarmID, rendezVousTask);
+  DateTime now = DateTime.now();
+  DateTime currentDateTime =
+      DateTime(now.year, now.month, now.day, now.hour, now.minute + 1, 0);
   await AndroidAlarmManager.periodic(
-      const Duration(seconds: 5), 4, insertAll);
+      const Duration(minutes: 1), notifAlarmID, rendezVousTask,
+      startAt: currentDateTime);
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  // await AndroidAlarmManager.periodic(
+  //     const Duration(seconds: 5), 4, insertAll);
+
   await dbHelper.init();
   await Noti.initialize(flutterLocalNotificationsPlugin);
   // Define the task constraints
-  setup();
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => HomeProvider()),
   ], child: const MyApp()));
 
   Medicament.addCat();
 }
+
 void insertAll() async {
-  setup();
+ 
   print("haha");
   DatabaseHelper database = DatabaseHelper.instance;
   print("sunc 1");
-  await database.synchronizeAll();
-
+  //await database.synchronizeAll();
 }
+
 enum LogMode { loggedin, loggedOut, flashscreen }
 
 class MyApp extends StatefulWidget {
@@ -177,9 +182,13 @@ class _MyHomePageState extends State<MyHomePage> {
   late int nbr = 0;
   _MyHomePageState();
   late int _selectedIndex = nbr;
+  final DatabaseHelper database = DatabaseHelper.instance;
+  
+
   @override
-  void initState() {
+  void initState()  {
     dbHelper.doPasse();
+    
     // Workmanager().registerPeriodicTask(
     //   'mTask',
     //   'mTask',
@@ -204,7 +213,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         // appBar: AppBar(
         //   title: Text(appbar[_selectedIndex]),

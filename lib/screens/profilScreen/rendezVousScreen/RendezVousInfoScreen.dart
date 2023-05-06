@@ -14,7 +14,7 @@ class RendezVousInfoScreen extends StatefulWidget {
     Key? key,
     required this.rendezVous,
   }) : super(key: key);
-  final RendezVous rendezVous;
+  final Rendezvous rendezVous;
   @override
   State<RendezVousInfoScreen> createState() => _RendezVousInfoScreenState();
 }
@@ -505,7 +505,7 @@ class _RendezVousInfoScreenState extends State<RendezVousInfoScreen> {
                   splashFactory: NoSplash.splashFactory,
                 ),
                 onPressed: () async {
-                  RendezVous rendezVous = RendezVous(
+                  Rendezvous rendezVous = Rendezvous(
                     id: widget.rendezVous.id,
                     medecinId: medecin.id,
                     nom: nomController.text,

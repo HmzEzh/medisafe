@@ -7,18 +7,18 @@ part 'user.g.dart';
 @JsonSerializable()
 class User {
   late int id;
-  late String? nom;
-  late String? prenom;
-  late String? cin;
-  late String? date_naissance;
-  late String? address;
-  late String? taille;
-  late String? poids;
+  late String nom;
+  late String prenom;
+  late String cin;
+  late String date_naissance;
+  late String address;
+  late String taille;
+  late String poids;
   late String email;
   late String password;
-  late String? tele;
-  late String? blood;
-  late String? gender;
+  late String tele;
+  late String blood;
+  late String gender;
   late Uint8List image;
 
   User(
