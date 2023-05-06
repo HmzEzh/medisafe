@@ -120,7 +120,7 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
                         );
                       },
                       child: const Text(
-                        'new \u2192',
+                        'nouveau \u2192',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           
@@ -186,7 +186,7 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
                        );
                      },
                         child: const Text(
-                          'new \u2192',
+                          'nouveau \u2192',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             
@@ -229,11 +229,11 @@ class _DesignCourseHomeScreenState extends State<DesignHomeScreen> {
   Widget getButtonUI(CategoryType categoryTypeData, bool isSelected) {
     String txt = '';
     if (CategoryType.ui == categoryTypeData) {
-      txt = 'All';
+      txt = 'Tous';
     } else if (CategoryType.coding == categoryTypeData) {
-      txt = 'Active';
+      txt = 'Actives';
     } else if (CategoryType.basic == categoryTypeData) {
-      txt = 'Désactive';
+      txt = 'Désactives';
     }
     return Expanded(
       child: Container(

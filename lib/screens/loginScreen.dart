@@ -9,7 +9,9 @@ import 'package:medisafe/service/UserServices/UserService.dart';
 import '../controller/user/loginController.dart';
 import '../helpers/MyEncryptionDecryption.dart';
 import '../main.dart';
+import '../models/Mesure.dart';
 import '../models/Rappel.dart';
+import '../models/Tracker.dart';
 import '../models/Users/user.dart';
 import '../network/dioClient.dart';
 import '../network/dioException.dart';
@@ -66,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ));
       try {
         //TODO:
-        dbHelper.setPasse(passwordController.text);
+        dbHelper.setPasse(passwordController.text.trim());
         //MyEncryptionDecryption.passe = passwordController.text;
         Map _user = await loginController.login(
             MyEncryptionDecryption.encryptAES(emailController.text.trim())
@@ -133,11 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
             MaterialPageRoute(builder: (context) => MyHomePage()),
             (route) => false);
 
-        var motdepasse = await dbHelper.getUsers();
-        var passe = motdepasse[0]["password"];
-        Rappel rap = Rappel();
-        rap.motDePasse = passe;
-        MyEncryptionDecryption();
+        dbHelper.setPasse(passwordController.text.trim());
         database.insertAll();
       } on DioExceptions catch (e) {
         Navigator.pop(context);
@@ -535,17 +533,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(height: size.height * 0.04),
-                        // Center(
-                        //   child: Container(
-                        //     margin: const EdgeInsets.only(
-                        //       bottom: 8,
-                        //     ),
-                        //     width: 128,
-                        //     child: Image(
-                        //         image: AssetImage("assets/images/logo_.png")),
-                        //   ),
-                        // ),
-                        // SizedBox(height: size.height * 0.08),
+                        Center(
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              bottom: 8,
+                            ),
+                            width: 128,
+                            child: Image(
+                                image:
+                                    AssetImage("assets/images/medisafe.png")),
+                          ),
+                        ),
+                        //SizedBox(height: size.height * 0.08),
                         Center(
                             child: Text(
                           "Medisafe",
@@ -701,7 +700,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             CreateUserScreen()));
                               },
                               child: Text(
-                                "Vous débutez chez Lablib ? Créér un compte",
+                                "Vous n'avez pas un compte ? Créer un",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.indigo, fontSize: 16),

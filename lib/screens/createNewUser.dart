@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medisafe/helpers/MyEncryptionDecryption.dart';
+import 'package:medisafe/main.dart';
 import 'package:medisafe/models/Rappel.dart';
 
 import '../controller/user/createUserController.dart';
@@ -52,9 +53,8 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
               ));
       try {
         //TODO:
-        Rappel rap = Rappel();
-        rap.motDePasse = passwordController.text;
-        MyEncryptionDecryption();
+
+        dbHelper.setPasse(passwordController.text.trim());
 
         dynamic response = await craeteUserController.createuser(
             MyEncryptionDecryption.encryptAES(lastnameController.text.trim())
@@ -263,16 +263,16 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        // Center(
-                        //   child: Container(
-                        //       margin: const EdgeInsets.only(bottom: 8, ),
-                        //       width: 128,
-
-                        //     child: Image(image: AssetImage(
-                        //                   "assets/images/logo_.png")),
-                        //     ),
-                        // ),
-                        // SizedBox(height: size.height * 0.08),
+                        Center(
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 8, top: 12),
+                            width: 128,
+                            child: Image(
+                                image:
+                                    AssetImage("assets/images/medisafe.png")),
+                          ),
+                        ),
+                        //SizedBox(height: size.height * 0.08),
                         const Center(
                           child: Text(
                             "Medisafe",

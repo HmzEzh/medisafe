@@ -72,7 +72,7 @@ if(rap.horaires != null) {
               padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
               child: Center(
                 child: Text(
-                  "Rappel's data",
+                  "Informations du Rappel",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -100,7 +100,7 @@ if(rap.horaires != null) {
               padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.03),
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.3,
-                child: Text("category  :",
+                child: Text("categorie  :",
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
               ),
             ),
@@ -191,46 +191,27 @@ if(rap.horaires != null) {
                     width: 150.0,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                      _addMedi();
-                      //Medicament.addCat();
-
-
-                   //changes.setChanges();
-
-                    // Navigator.push<dynamic>(
-                    //   context,
-                    //   MaterialPageRoute<dynamic>(
-                    //     builder: (BuildContext context) => MyApp( nbr: 2,),
-                    //   ),
-                    // );
-
-                     Navigator.pop(context);
-                     Navigator.pop(context);
-                     Navigator.pop(context);
-                     Navigator.pop(context);
-
+                    _addMedi();
+                    changes.setChanges();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
-                  icon: Flexible(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Flexible(child: Text('INSERT')),
-                      ],
-                    ),
+                  icon: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('Ajouter'),
+                    ],
                   ),
-                  label: Flexible(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Flexible(child: Icon(Icons.verified_user)),
-
-                      ],
-                    ),
+                  label: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(Icons.verified_user),
+                    ],
                   ),
                 )
-              ),),
+
+                ),),
             ],
           ))
   

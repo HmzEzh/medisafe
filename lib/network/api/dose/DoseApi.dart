@@ -12,10 +12,12 @@ class DoseApi {
       final Response response = await dioClient.post(Endpoints.createDose,
           data: {
             "id": id,
-            "idMedicament":idMedicament,
+            "idMedicament":{"id":idMedicament},
             "heure": heure,
             "suspend": suspend,
-            "user":1
+            "user":{
+              "id":1,
+            }
           }
       );
       return response;

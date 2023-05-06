@@ -13,14 +13,15 @@ class TrackerApi {
           data: {
             "id": id,
             "nom":nom,
-            "debut": dateDebut,
-            "fin": dateFin,
-            "type_track":type,
+            "dateDebut": dateDebut,
+            "dateFin": dateFin,
+            "type":type,
             "user":{
               "id":1,
             }
           }
       );
+      print(response);
       return response;
     } catch (e) {
       rethrow;

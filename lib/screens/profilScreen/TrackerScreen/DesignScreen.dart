@@ -76,7 +76,7 @@ class _DesignScreenState extends State<DesignScreen> with TickerProviderStateMix
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 27, 62, 92), // Set background color of AppBar
-        title: Text('My Health Tracker',style: TextStyle(
+        title: Text('Tracker De Santé',style: TextStyle(
           fontStyle: FontStyle.italic,
         ),), // Set the title of the AppBar
         centerTitle: true, // Center the title of the AppBar
@@ -177,13 +177,13 @@ class _DesignScreenState extends State<DesignScreen> with TickerProviderStateMix
                                               borderRadius: BorderRadius.circular(10),
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
+                                                  color: Colors.grey.withOpacity(0.1),
                                                   spreadRadius: 5,
                                                   blurRadius: 7,
                                                   offset: Offset(0, 3), // changes the position of the shadow
                                                 ),
                                               ],
-                                              color: Color(0xFF1E90FF).withOpacity(0.3),
+                                              color: Color(0xFF1E90FF).withOpacity(0.1),
                                             ),
                                           ),
                                         ),
@@ -243,28 +243,29 @@ class _DesignScreenState extends State<DesignScreen> with TickerProviderStateMix
                                                                // initialize the input text variable
                                                               String inputText = "";
                                                               return AlertDialog(
-                                                                title: Text('Today\'s mesure '),
+                                                                title: Text('Mesure d\'aujourd\'hui'),
                                                                 content: TextField(
                                                                   onChanged: (value) {
                                                                     valueP = double.parse(value); // update the input text variable when the user types
                                                                   },
                                                                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                                                                   decoration: InputDecoration(
-                                                                    hintText: 'Enter value',
+                                                                    hintText: 'Entrer la valeur',
                                                                   ),
                                                                 ),
                                                                 actions: [
                                                                   TextButton(
-                                                                    child: Text('Save'),
+                                                                    child: Text('Sauvegarder'),
                                                                     onPressed: () async {
                                                                       trackerservice.insertMesure(idPrincipale,valueP );
+
                                                                       ScaffoldMessenger.of(context)
                                                                           .showSnackBar(SnackBar(
                                                                         content: Container(
                                                                             padding: EdgeInsets.only(
                                                                                 top: 0, bottom: 2),
                                                                             child: Text(
-                                                                              "Mesure inserted successfully",
+                                                                              "Mesure insérer avec succès",
                                                                               style: TextStyle(
                                                                                   fontSize: 16,
                                                                                   fontWeight: FontWeight.w500,
@@ -478,7 +479,7 @@ class _DesignScreenState extends State<DesignScreen> with TickerProviderStateMix
               children: [
                 const Expanded(
                   child: Text(
-                    'Today\'s Trackers',
+                    'Trackers d\'aujourd\'hui',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -538,7 +539,7 @@ class _DesignScreenState extends State<DesignScreen> with TickerProviderStateMix
                           if (snapshot.data!.isEmpty) {
                             return Center(
                               child: Text(
-                                'No Tracker in ToFill List',
+                                'Aucun tracker pour aujourd\'hui',
                                 style: TextStyle(
                                   color: Colors.grey.withOpacity(0.3),
                                   fontSize: 16,
@@ -653,7 +654,7 @@ class _DesignScreenState extends State<DesignScreen> with TickerProviderStateMix
                                                               crossAxisAlignment: CrossAxisAlignment.center,
                                                               children: <Widget>[
                                                                  Text(
-                                                                  'End :',
+                                                                  'Délai :',
                                                                   textAlign: TextAlign.right,
                                                                   style: TextStyle(
                                                                     fontWeight: FontWeight.bold,
