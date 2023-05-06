@@ -134,7 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => MyHomePage()),
             (route) => false);
-
         dbHelper.setPasse(passwordController.text.trim());
         database.insertAll();
       } on DioExceptions catch (e) {

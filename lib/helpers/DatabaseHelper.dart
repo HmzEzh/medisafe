@@ -1033,13 +1033,16 @@ class DatabaseHelper {
   }
 
   Future<void> synchronizeAll() async {
+    print("2 2");
     await init();
     await doPasse();
     List<Doze> doses = [];
     List<Tracker> trackers = [];
     List<Mesure> mesures = [];
     List<Medicament> medicaments = [];
+    print("2 3");
     for (Map<String, dynamic> item in await _db.query("tracker")) {
+      print("2 4");
       trackers.add(Tracker.fromMap(item));
     }
     for (Map<String, dynamic> item in await _db.query("medicament")) {
@@ -1051,8 +1054,10 @@ class DatabaseHelper {
     for (Map<String, dynamic> item in await _db.query("mesure")) {
       mesures.add(Mesure.fromMap(item));
     }
+    print("2 5");
     for (Tracker aa in trackers) {
       try {
+        print("youssefTracker");
         await trackerController.createTracker(
             aa.id,
             MyEncryptionDecryption.encryptAES(aa.nom).base64,
