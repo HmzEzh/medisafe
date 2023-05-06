@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:medisafe/helpers/MyEncryptionDecryption.dart';
 import 'package:medisafe/screens/profilScreen/rendezVousScreen/RendezVousListScreen.dart';
 import 'package:medisafe/screens/profilScreen/reportMedicaments/reportMedicaments.dart';
 import 'package:platform_device_id/platform_device_id.dart';

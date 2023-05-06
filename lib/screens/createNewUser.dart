@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:medisafe/helpers/MyEncryptionDecryption.dart';
+import 'package:medisafe/models/Rappel.dart';
 
 import '../controller/user/createUserController.dart';
 import '../network/dioClient.dart';
@@ -50,11 +52,19 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
               ));
       try {
         //TODO:
+        Rappel rap = Rappel();
+        rap.motDePasse = passwordController.text;
+        MyEncryptionDecryption();
+
         dynamic response = await craeteUserController.createuser(
-            lastnameController.text,
-            firstnameController.text,
-            emailController.text,
-            passwordController.text);
+            MyEncryptionDecryption.encryptAES(lastnameController.text.trim())
+                .base64,
+            MyEncryptionDecryption.encryptAES(firstnameController.text.trim())
+                .base64,
+            MyEncryptionDecryption.encryptAES(emailController.text.trim())
+                .base64,
+            MyEncryptionDecryption.encryptAES(passwordController.text.trim())
+                .base64);
         Navigator.pop(context);
         showDialog(
             context: context,

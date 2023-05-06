@@ -66,8 +66,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ));
       try {
         //TODO:
+        dbHelper.setPasse(passwordController.text);
+        //MyEncryptionDecryption.passe = passwordController.text;
         Map _user = await loginController.login(
-            emailController.text, passwordController.text);
+            MyEncryptionDecryption.encryptAES(emailController.text.trim())
+                .base64,
+            MyEncryptionDecryption.encryptAES(passwordController.text.trim())
+                .base64);
+
+        /*Map _user = await loginController.login(
+            emailController.text, passwordController.text);*/
+
         print(_user);
         print("the nom of the user is ${_user["nom"]}");
         print("the prenom of the user is ${_user["prenom"]}");
@@ -99,12 +108,16 @@ class _LoginScreenState extends State<LoginScreen> {
             image: base64.decode(_user["image"]));*/
 
         User user = User.fromJson(_user);
+
+        print(user.toMap());
+
+        user = userService.decryptUser(user);
         print("The user id before is ${user.id}");
         user.id = 1;
         print("The user id after is ${user.id}");
-        print(user);
+        print(user.toMap());
 
-        User enc = userService.encryptUser(user);
+        //User enc = userService.encryptUser(user);
         //User dec = userService.decryptUser(enc);
 
         //print(enc.toMap());
@@ -119,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => MyHomePage()),
             (route) => false);
-      }on DioExceptions catch (e) {
+
         var motdepasse = await dbHelper.getUsers();
         var passe = motdepasse[0]["password"];
         Rappel rap = Rappel();

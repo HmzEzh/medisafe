@@ -984,4 +984,10 @@ class DatabaseHelper {
     rap.motDePasse = passe;
     MyEncryptionDecryption();
   }
+
+  void setPasse(String password) {
+    Rappel rap = Rappel();
+    rap.motDePasse = password;
+    MyEncryptionDecryption();
+  }
 }
